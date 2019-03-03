@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>http://blog.luoren.top/2014/11/17/welcome-to-jekyll/</loc>
+<lastmod>2014-11-17T13:31:01+08:00</lastmod>
+</url>
+<url>
+<loc>http://blog.luoren.top/2016/08/27/how-to-use-this-jekyll-theme/</loc>
+<lastmod>2016-08-27T01:08:00+08:00</lastmod>
+</url>
+<url>
+<loc>http://blog.luoren.top/books/</loc>
+</url>
+<url>
+<loc>http://blog.luoren.top/categories/</loc>
+</url>
+<url>
+<loc>http://blog.luoren.top/tag/</loc>
+</url>
+<url>
+<loc>http://blog.luoren.top/</loc>
+</url>
+<url>
+<loc>http://blog.luoren.top/reference/</loc>
+</url>
+</urlset>
