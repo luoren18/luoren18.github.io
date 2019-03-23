@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Cloud服务的消费者(Feign) - REN博客</title>
+    <meta name="author"  content="REN">
+    <meta name="description" content="Spring Cloud服务的消费者(Feign)">
+    <meta name="keywords"  content="java, SpringBoot, SpringCloud">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Spring Cloud服务的消费者(Feign) - REN博客">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/03/22/Spring-Cloud-Service-Consumer-Feign.html">
+    <meta property="og:description" content="个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。">
+    <meta property="og:site_name" content="REN博客">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">home</a></li>
+            
+            <li><a href="/tags.html">tags</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-overlappingCircles bgcolor-default post-no-cover"
+    data-theme="default">
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+        
+        <a href="http://localhost:4000/tags#java" class="post-tag">java</a>
+        
+        <a href="http://localhost:4000/tags#SpringBoot" class="post-tag">SpringBoot</a>
+        
+        <a href="http://localhost:4000/tags#SpringCloud" class="post-tag">SpringCloud</a>
+        
+        
+      </div>
+      <h1>Spring Cloud服务的消费者(Feign)</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i
+            class="iconfont icon-author"></i>REN</span>
+        <time class="post-meta-item" datetime="19-03-22"><i
+            class="iconfont icon-date"></i>22 Mar 2019</time>
+      </div>
+    </div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+    <h2 class="post-subtitle">Spring Cloud</h2>
+    
+
+    <article class="markdown-body">
+      <blockquote>
+  <p>声明：本文内容大量的参考和借鉴 <a href="http://blog.csdn.net/forezp/article/details/70148833">http://blog.csdn.net/forezp/article/details/70148833</a> 的内容。非常感谢原文作者<a href="http://blog.csdn.net/forezp">方志朋的博客</a>提供的优秀的SpringCloud 的教程。</p>
+</blockquote>
+
+<h3 id="一feign简介">一、Feign简介</h3>
+
+<p>Feign是一个声明式的伪Http客户端，它使得写Http客户端变得更简单。使用Feign，只需要创建一个接口并注解。它具有可插拔的注解特性，可使用Feign 注解和JAX-RS注解。Feign支持可插拔的编码器和解码器。Feign默认集成了Ribbon，并和Eureka结合，默认实现了负载均衡的效果。</p>
+
+<p>简而言之：</p>
+
+<ul>
+  <li>Feign 采用的是基于接口的注解</li>
+  <li>Feign 整合了ribbon，具有负载均衡的能力</li>
+  <li>整合了Hystrix，具有熔断的能力</li>
+</ul>
+
+<h3 id="二准备工作">二、准备工作</h3>
+
+<p>在8081端口下启动eureka-server, 在8082 和 8083 端口下启动eureka-client</p>
+
+<h3 id="三创建一个服务的消费者feign">三、创建一个服务的消费者(Feign)</h3>
+
+<h4 id="1引入相关依赖">1.引入相关依赖</h4>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">"http://maven.apache.org/POM/4.0.0"</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+	<span class="na">xsi:schemaLocation=</span><span class="s">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+	<span class="nt">&lt;parent&gt;</span>
+		<span class="nt">&lt;groupId&gt;</span>top.luoren.springcloud<span class="nt">&lt;/groupId&gt;</span>
+		<span class="nt">&lt;artifactId&gt;</span>spring-cloud-study<span class="nt">&lt;/artifactId&gt;</span>
+		<span class="nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+		<span class="nt">&lt;relativePath/&gt;</span>
+	<span class="nt">&lt;/parent&gt;</span>
+	<span class="nt">&lt;groupId&gt;</span>top.luoren.springcloud<span class="nt">&lt;/groupId&gt;</span>
+	<span class="nt">&lt;artifactId&gt;</span>service-feign<span class="nt">&lt;/artifactId&gt;</span>
+	<span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+	<span class="nt">&lt;name&gt;</span>service-feign<span class="nt">&lt;/name&gt;</span>
+	<span class="nt">&lt;description&gt;</span>Demo project for Spring Boot<span class="nt">&lt;/description&gt;</span>
+
+	<span class="nt">&lt;dependencies&gt;</span>
+		<span class="nt">&lt;dependency&gt;</span>
+			<span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+			<span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-netflix-eureka-client<span class="nt">&lt;/artifactId&gt;</span>
+		<span class="nt">&lt;/dependency&gt;</span>
+		<span class="nt">&lt;dependency&gt;</span>
+			<span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+			<span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-openfeign<span class="nt">&lt;/artifactId&gt;</span>
+		<span class="nt">&lt;/dependency&gt;</span>
+		<span class="nt">&lt;dependency&gt;</span>
+			<span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+			<span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="nt">&lt;/artifactId&gt;</span>
+		<span class="nt">&lt;/dependency&gt;</span>
+	<span class="nt">&lt;/dependencies&gt;</span>
+
+	<span class="nt">&lt;build&gt;</span>
+		<span class="nt">&lt;plugins&gt;</span>
+			<span class="nt">&lt;plugin&gt;</span>
+				<span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+				<span class="nt">&lt;artifactId&gt;</span>spring-boot-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+			<span class="nt">&lt;/plugin&gt;</span>
+		<span class="nt">&lt;/plugins&gt;</span>
+	<span class="nt">&lt;/build&gt;</span>
+
+	<span class="nt">&lt;repositories&gt;</span>
+		<span class="c">&lt;!--阿里云主仓库，代理了maven central和jcenter仓库--&gt;</span>
+		<span class="nt">&lt;repository&gt;</span>
+			<span class="nt">&lt;id&gt;</span>aliyun<span class="nt">&lt;/id&gt;</span>
+			<span class="nt">&lt;name&gt;</span>aliyun<span class="nt">&lt;/name&gt;</span>
+			<span class="nt">&lt;url&gt;</span>https://maven.aliyun.com/repository/public<span class="nt">&lt;/url&gt;</span>
+			<span class="nt">&lt;releases&gt;</span>
+				<span class="nt">&lt;enabled&gt;</span>true<span class="nt">&lt;/enabled&gt;</span>
+			<span class="nt">&lt;/releases&gt;</span>
+			<span class="nt">&lt;snapshots&gt;</span>
+				<span class="nt">&lt;enabled&gt;</span>false<span class="nt">&lt;/enabled&gt;</span>
+			<span class="nt">&lt;/snapshots&gt;</span>
+		<span class="nt">&lt;/repository&gt;</span>
+		<span class="c">&lt;!--阿里云代理Spring 官方仓库--&gt;</span>
+		<span class="nt">&lt;repository&gt;</span>
+			<span class="nt">&lt;id&gt;</span>spring-milestones<span class="nt">&lt;/id&gt;</span>
+			<span class="nt">&lt;name&gt;</span>Spring Milestones<span class="nt">&lt;/name&gt;</span>
+			<span class="nt">&lt;url&gt;</span>https://maven.aliyun.com/repository/spring<span class="nt">&lt;/url&gt;</span>
+			<span class="nt">&lt;releases&gt;</span>
+				<span class="nt">&lt;enabled&gt;</span>true<span class="nt">&lt;/enabled&gt;</span>
+			<span class="nt">&lt;/releases&gt;</span>
+			<span class="nt">&lt;snapshots&gt;</span>
+				<span class="nt">&lt;enabled&gt;</span>false<span class="nt">&lt;/enabled&gt;</span>
+			<span class="nt">&lt;/snapshots&gt;</span>
+		<span class="nt">&lt;/repository&gt;</span>
+	<span class="nt">&lt;/repositories&gt;</span>
+<span class="nt">&lt;/project&gt;</span>
+</code></pre></div></div>
+
+<h4 id="2进行基础配置applicationyml">2.进行基础配置(application.yml)</h4>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">eureka</span><span class="pi">:</span>
+  <span class="na">client</span><span class="pi">:</span>
+    <span class="na">serviceUrl</span><span class="pi">:</span>
+      <span class="na">defaultZone</span><span class="pi">:</span> <span class="s">http://localhost:8081/eureka/</span>
+<span class="na">server</span><span class="pi">:</span>
+  <span class="na">port</span><span class="pi">:</span> <span class="s">8085</span>
+<span class="na">spring</span><span class="pi">:</span>
+  <span class="na">application</span><span class="pi">:</span>
+    <span class="na">name</span><span class="pi">:</span> <span class="s">service-feign</span>
+</code></pre></div></div>
+
+<h4 id="3开启feign功能">3.开启Feign功能</h4>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@SpringBootApplication</span>
+<span class="nd">@EnableEurekaClient</span>
+<span class="nd">@EnableDiscoveryClient</span>
+<span class="nd">@EnableFeignClients</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ServiceFeignApplication</span> <span class="o">{</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">ServiceFeignApplication</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="4定义一个feign-接口">4.定义一个Feign 接口</h4>
+
+<p>通过@ FeignClient（“服务名”），来指定调用哪个服务。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@FeignClient</span><span class="o">(</span><span class="s">"service-client"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">HelloService</span> <span class="o">{</span>
+    <span class="cm">/**
+     * 定义一个feign接口，通过@ FeignClient（“服务名”），来指定调用哪个服务
+     * @param name
+     * @return
+     */</span>
+    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/hi"</span><span class="o">,</span><span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
+    <span class="n">String</span> <span class="nf">hello</span><span class="o">(</span><span class="nd">@RequestParam</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"name"</span><span class="o">)</span> <span class="n">String</span> <span class="n">name</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="5通过controller-向外部暴露一个可调用的接口">5.通过controller 向外部暴露一个可调用的接口</h4>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RestController</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloController</span> <span class="o">{</span>
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">HelloService</span> <span class="n">helloService</span><span class="o">;</span>
+
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"/hi"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">hello</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">){</span>
+        <span class="k">return</span> <span class="n">helloService</span><span class="o">.</span><span class="na">hello</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="6启动程序访问httplocalhost8085hinamekaikai">6.启动程序访问<a href="http://localhost:8085/hi?name=kaikai">http://localhost:8085/hi?name=kaikai</a></h4>
+
+<p>就能在页面上交替的看到8082 和 8083 端口响应请求</p>
+
+<pre><code class="language-reStructuredText">hi forezp ,i am from port:8082
+hi forezp ,i am from port:8083
+</code></pre>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <!-- <img src="http://localhost:4000/assets/img/profile.png" alt=""> -->
+        <img src="/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">REN</div>
+      <div class="bio">
+        <p>码农，JAVA程序员，爱下厨，假装热爱技术&生活稍微过过也能活下去，哪有那么多要求</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/lawren18" target="_blank">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="mailto:luoren96@gmail.com" target="_blank">
+            <i class="iconfont icon-email"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//twitter.com/kaiorren" target="_blank">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/luoren18" target="_blank">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2019/03/22/Spring-Cloud-Service-Consumer-Ribbon.html" class="read-next-link"></a>
+        <section>
+          <span>Spring Cloud服务的消费者(Ribbon)</span>
+          <p>  声明：本文内容大量的参考和借鉴 http://blog.csdn.net/forezp/article/det...</p>
+        </section>
+        
+      </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/03/22/Registration-and-Discovering-of-Spring-Cloud-Services-Eureka.html" class="read-next-link"></a>
+        <section>
+          <span>Spring Cloud服务的注册和发现(Eureka)</span>
+          <p>  声明：本文内容大量的参考和借鉴 http://blog.csdn.net/forezp/article/det...</p>
+        </section>
+        
+      </div>
+      
+    </section>
+    
+  </section>
+
+  <footer class="g-footer">
+  <section>REN博客 ©
+  
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+      socialShare('.social-share', {
+        sites: [
+          
+            'wechat'
+            ,
+            
+          
+            'weibo'
+            ,
+            
+          
+            'douban'
+            ,
+            
+          
+            'twitter'
+            
+          
+        ],
+        wechatQrcodeTitle: "分享到微信朋友圈",
+        wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+      });
+    </script>
+
+  <!--  -->
+  
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+</body>
+
+</html>

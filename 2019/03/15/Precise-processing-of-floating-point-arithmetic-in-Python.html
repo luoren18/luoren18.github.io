@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在Python精确处理浮点数运算 - REN博客</title>
+    <meta name="author"  content="REN">
+    <meta name="description" content="在Python精确处理浮点数运算">
+    <meta name="keywords"  content="Python">
+    <!-- Open Graph -->
+    <meta property="og:title" content="在Python精确处理浮点数运算 - REN博客">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/03/15/Precise-processing-of-floating-point-arithmetic-in-Python.html">
+    <meta property="og:description" content="个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。">
+    <meta property="og:site_name" content="REN博客">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">home</a></li>
+            
+            <li><a href="/tags.html">tags</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-overlappingCircles bgcolor-default post-no-cover"
+    data-theme="default">
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+        
+        <a href="http://localhost:4000/tags#Python" class="post-tag">Python</a>
+        
+        
+      </div>
+      <h1>在Python精确处理浮点数运算</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i
+            class="iconfont icon-author"></i>REN</span>
+        <time class="post-meta-item" datetime="19-03-15"><i
+            class="iconfont icon-date"></i>15 Mar 2019</time>
+      </div>
+    </div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+    <h2 class="post-subtitle">精确处理浮点数运算</h2>
+    
+
+    <article class="markdown-body">
+      <h2 id="在python精确处理浮点数运算">在Python精确处理浮点数运算</h2>
+
+<h4 id="简要说明">简要说明</h4>
+
+<p>在Python中内置了浮点数运算模块<code class="highlighter-rouge">decimal</code>,相较于<code class="highlighter-rouge">float</code>它有以下几个优点：</p>
+
+<ul>
+  <li>它的设计基于浮点模型</li>
+  <li>相较于float 它能更精确的表示</li>
+  <li>可自定义精度，默认精确到28位</li>
+  <li>具体详情参考<a href="https://docs.python.org/2/library/decimal.html">官方文档</a></li>
+</ul>
+
+<h4 id="导入decimal-模块定义decimal-类型数据">导入decimal 模块，定义Decimal 类型数据</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span> <span class="c1">#导入decimal 模块
+</span><span class="n">price</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#定义一个Decimal 类型的数据
+</span></code></pre></div></div>
+
+<h4 id="具体使用">具体使用</h4>
+
+<p>设置精度和模式。更多的方法说明参考<a href="https://docs.python.org/2/library/decimal.html">官方文档</a>。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="nv">a</span><span class="o">=</span>1
+<span class="o">&gt;&gt;&gt;</span> <span class="nv">b</span><span class="o">=</span>3
+<span class="o">&gt;&gt;&gt;</span> a/b
+0
+<span class="o">&gt;&gt;&gt;</span> <span class="nv">a</span><span class="o">=</span>Decimal<span class="o">(</span>1<span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nv">b</span><span class="o">=</span>Decimal<span class="o">(</span>3<span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> a/b
+Decimal<span class="o">(</span><span class="s1">'0.3333333333333333333333333333'</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">(</span>a/b<span class="o">)</span>.quantize<span class="o">(</span>Decimal<span class="o">(</span><span class="s1">'.000001'</span><span class="o">)</span>, <span class="nv">rounding</span><span class="o">=</span><span class="s1">'ROUND_UP'</span><span class="o">)</span>
+Decimal<span class="o">(</span><span class="s1">'0.333334'</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">(</span>a/b<span class="o">)</span>.quantize<span class="o">(</span>Decimal<span class="o">(</span><span class="s1">'.000001'</span><span class="o">)</span>, <span class="nv">rounding</span><span class="o">=</span><span class="s1">'ROUND_DOWN'</span><span class="o">)</span>
+Decimal<span class="o">(</span><span class="s1">'0.333333'</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">(</span>a/b<span class="o">)</span>.quantize<span class="o">(</span>Decimal<span class="o">(</span><span class="s1">'.000001'</span><span class="o">)</span>, <span class="nv">rounding</span><span class="o">=</span><span class="s1">'ROUND_CEILING'</span><span class="o">)</span>
+Decimal<span class="o">(</span><span class="s1">'0.333334'</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">(</span>a/b<span class="o">)</span>.quantize<span class="o">(</span>Decimal<span class="o">(</span><span class="s1">'.000001'</span><span class="o">)</span>, <span class="nv">rounding</span><span class="o">=</span><span class="s1">'ROUND_FLOOR'</span><span class="o">)</span>
+Decimal<span class="o">(</span><span class="s1">'0.333333'</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">(</span>a/b<span class="o">)</span>.quantize<span class="o">(</span>Decimal<span class="o">(</span><span class="s1">'.000001'</span><span class="o">)</span>, <span class="nv">rounding</span><span class="o">=</span><span class="s1">'ROUND_HALF_DOWN'</span><span class="o">)</span>
+Decimal<span class="o">(</span><span class="s1">'0.333333'</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">(</span>a/b<span class="o">)</span>.quantize<span class="o">(</span>Decimal<span class="o">(</span><span class="s1">'.000001'</span><span class="o">)</span>, <span class="nv">rounding</span><span class="o">=</span><span class="s1">'ROUND_HALF_EVEN'</span><span class="o">)</span>
+Decimal<span class="o">(</span><span class="s1">'0.333333'</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">(</span>a/b<span class="o">)</span>.quantize<span class="o">(</span>Decimal<span class="o">(</span><span class="s1">'.000001'</span><span class="o">)</span>, <span class="nv">rounding</span><span class="o">=</span><span class="s1">'ROUND_HALF_UP'</span><span class="o">)</span>
+Decimal<span class="o">(</span><span class="s1">'0.333333'</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">(</span>a/b<span class="o">)</span>.quantize<span class="o">(</span>Decimal<span class="o">(</span><span class="s1">'.000001'</span><span class="o">)</span>, <span class="nv">rounding</span><span class="o">=</span><span class="s1">'ROUND_05UP'</span><span class="o">)</span>
+Decimal<span class="o">(</span><span class="s1">'0.333333'</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nv">a</span><span class="o">=</span>Decimal<span class="o">(</span>5<span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nv">b</span><span class="o">=</span>Decimal<span class="o">(</span>6<span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">(</span>a/b<span class="o">)</span>.quantize<span class="o">(</span>Decimal<span class="o">(</span><span class="s1">'.000001'</span><span class="o">)</span>, <span class="nv">rounding</span><span class="o">=</span><span class="s1">'ROUND_05UP'</span><span class="o">)</span>
+Decimal<span class="o">(</span><span class="s1">'0.833333'</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">(</span>a/b<span class="o">)</span>.quantize<span class="o">(</span>Decimal<span class="o">(</span><span class="s1">'.000001'</span><span class="o">)</span>, <span class="nv">rounding</span><span class="o">=</span><span class="s1">'ROUND_HALF_UP'</span><span class="o">)</span>
+Decimal<span class="o">(</span><span class="s1">'0.833333'</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nv">a</span><span class="o">=</span>Decimal<span class="o">(</span>4<span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nv">b</span><span class="o">=</span>Decimal<span class="o">(</span>9<span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">(</span>a/b<span class="o">)</span>.quantize<span class="o">(</span>Decimal<span class="o">(</span><span class="s1">'.000001'</span><span class="o">)</span>, <span class="nv">rounding</span><span class="o">=</span><span class="s1">'ROUND_HALF_UP'</span><span class="o">)</span>
+Decimal<span class="o">(</span><span class="s1">'0.444444'</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">(</span>a/b<span class="o">)</span>.quantize<span class="o">(</span>Decimal<span class="o">(</span><span class="s1">'.000001'</span><span class="o">)</span>, <span class="nv">rounding</span><span class="o">=</span><span class="s1">'ROUND_05UP'</span><span class="o">)</span>
+Decimal<span class="o">(</span><span class="s1">'0.444444'</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">(</span>a/b<span class="o">)</span>.quantize<span class="o">(</span>Decimal<span class="o">(</span><span class="s1">'.000001'</span><span class="o">)</span>, <span class="nv">rounding</span><span class="o">=</span><span class="s1">'ROUND_HALF_EVEN'</span><span class="o">)</span>
+Decimal<span class="o">(</span><span class="s1">'0.444444'</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">(</span>a/b<span class="o">)</span>.quantize<span class="o">(</span>Decimal<span class="o">(</span><span class="s1">'1.'</span><span class="o">)</span>, <span class="nv">rounding</span><span class="o">=</span><span class="s1">'ROUND_05UP'</span><span class="o">)</span>
+Decimal<span class="o">(</span><span class="s1">'1'</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">(</span>a/b<span class="o">)</span>.quantize<span class="o">(</span>Decimal<span class="o">(</span><span class="s1">'1.'</span><span class="o">)</span>, <span class="nv">rounding</span><span class="o">=</span><span class="s1">'ROUND_HALF_UP'</span><span class="o">)</span>
+Decimal<span class="o">(</span><span class="s1">'0'</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">(</span>a/b<span class="o">)</span>.quantize<span class="o">(</span>Decimal<span class="o">(</span><span class="s1">'.0001'</span><span class="o">)</span>, <span class="nv">rounding</span><span class="o">=</span><span class="s1">'ROUND_UP'</span><span class="o">)</span>
+Decimal<span class="o">(</span><span class="s1">'0.4445'</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> 
+</code></pre></div></div>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <!-- <img src="http://localhost:4000/assets/img/profile.png" alt=""> -->
+        <img src="/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">REN</div>
+      <div class="bio">
+        <p>码农，JAVA程序员，爱下厨，假装热爱技术&生活稍微过过也能活下去，哪有那么多要求</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/lawren18" target="_blank">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="mailto:luoren96@gmail.com" target="_blank">
+            <i class="iconfont icon-email"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//twitter.com/kaiorren" target="_blank">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/luoren18" target="_blank">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2019/03/15/git-tips.html" class="read-next-link"></a>
+        <section>
+          <span>Git 的一些常用命令</span>
+          <p>Git 强制覆盖本地文件</p>
+        </section>
+        
+      </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/03/14/use-jekyll-to-build-a-static-website.html" class="read-next-link"></a>
+        <section>
+          <span>使用Jekyll搭建一个个人博客</span>
+          <p>  初始化一个Jekyll 项目</p>
+        </section>
+        
+        <div class="filter"></div>
+        <img src="/screenshot/2019-03-14-github+jekyll.png" alt="">
+        
+      </div>
+      
+    </section>
+    
+  </section>
+
+  <footer class="g-footer">
+  <section>REN博客 ©
+  
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+      socialShare('.social-share', {
+        sites: [
+          
+            'wechat'
+            ,
+            
+          
+            'weibo'
+            ,
+            
+          
+            'douban'
+            ,
+            
+          
+            'twitter'
+            
+          
+        ],
+        wechatQrcodeTitle: "分享到微信朋友圈",
+        wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+      });
+    </script>
+
+  <!--  -->
+  
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+</body>
+
+</html>

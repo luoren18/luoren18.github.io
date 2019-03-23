@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Cloud服务的注册和发现(Eureka) - REN博客</title>
+    <meta name="author"  content="REN">
+    <meta name="description" content="Spring Cloud服务的注册和发现(Eureka)">
+    <meta name="keywords"  content="java, SpringBoot, SpringCloud">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Spring Cloud服务的注册和发现(Eureka) - REN博客">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/03/22/Registration-and-Discovering-of-Spring-Cloud-Services-Eureka.html">
+    <meta property="og:description" content="个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。">
+    <meta property="og:site_name" content="REN博客">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">home</a></li>
+            
+            <li><a href="/tags.html">tags</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-overlappingCircles bgcolor-default post-no-cover"
+    data-theme="default">
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+        
+        <a href="http://localhost:4000/tags#java" class="post-tag">java</a>
+        
+        <a href="http://localhost:4000/tags#SpringBoot" class="post-tag">SpringBoot</a>
+        
+        <a href="http://localhost:4000/tags#SpringCloud" class="post-tag">SpringCloud</a>
+        
+        
+      </div>
+      <h1>Spring Cloud服务的注册和发现(Eureka)</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i
+            class="iconfont icon-author"></i>REN</span>
+        <time class="post-meta-item" datetime="19-03-22"><i
+            class="iconfont icon-date"></i>22 Mar 2019</time>
+      </div>
+    </div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+    <h2 class="post-subtitle">Spring Cloud</h2>
+    
+
+    <article class="markdown-body">
+      <blockquote>
+  <p>声明：本文内容大量的参考和借鉴 <a href="http://blog.csdn.net/forezp/article/details/70148833">http://blog.csdn.net/forezp/article/details/70148833</a> 的内容。非常感谢原文作者<a href="http://blog.csdn.net/forezp">方志朋的博客</a>提供的优秀的SpringCloud 的教程。</p>
+</blockquote>
+
+<h3 id="一创建maven主工程">一、创建Maven主工程</h3>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/image-20190320155422621.png" alt="" /></p>
+
+<h3 id="二初始pom-文件引入相关依赖">二、初始POM 文件，引入相关依赖</h3>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">"http://maven.apache.org/POM/4.0.0"</span>
+         <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+         <span class="na">xsi:schemaLocation=</span><span class="s">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+
+    <span class="nt">&lt;groupId&gt;</span>top.luoren.springcloud<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-study<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;packaging&gt;</span>pom<span class="nt">&lt;/packaging&gt;</span>
+
+    <span class="nt">&lt;parent&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;version&gt;</span>2.0.3.RELEASE<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;relativePath/&gt;</span>
+    <span class="nt">&lt;/parent&gt;</span>
+    <span class="nt">&lt;modules&gt;</span>
+        <span class="nt">&lt;module&gt;</span>eureka-server<span class="nt">&lt;/module&gt;</span>
+        <span class="nt">&lt;module&gt;</span>eureka-client<span class="nt">&lt;/module&gt;</span>
+    <span class="nt">&lt;/modules&gt;</span>
+    <span class="nt">&lt;properties&gt;</span>
+        <span class="nt">&lt;project.build.sourceEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.build.sourceEncoding&gt;</span>
+        <span class="nt">&lt;project.reporting.outputEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.reporting.outputEncoding&gt;</span>
+        <span class="nt">&lt;java.version&gt;</span>1.8<span class="nt">&lt;/java.version&gt;</span>
+        <span class="nt">&lt;spring-cloud.version&gt;</span>Finchley.RELEASE<span class="nt">&lt;/spring-cloud.version&gt;</span>
+    <span class="nt">&lt;/properties&gt;</span>
+
+    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;/dependencies&gt;</span>
+    <span class="nt">&lt;dependencyManagement&gt;</span>
+        <span class="nt">&lt;dependencies&gt;</span>
+            <span class="nt">&lt;dependency&gt;</span>
+                <span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+                <span class="nt">&lt;artifactId&gt;</span>spring-cloud-dependencies<span class="nt">&lt;/artifactId&gt;</span>
+                <span class="nt">&lt;version&gt;</span>${spring-cloud.version}<span class="nt">&lt;/version&gt;</span>
+                <span class="nt">&lt;type&gt;</span>pom<span class="nt">&lt;/type&gt;</span>
+                <span class="nt">&lt;scope&gt;</span>import<span class="nt">&lt;/scope&gt;</span>
+            <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;/dependencies&gt;</span>
+    <span class="nt">&lt;/dependencyManagement&gt;</span>
+    <span class="nt">&lt;repositories&gt;</span>
+        <span class="c">&lt;!--阿里云主仓库，代理了maven central和jcenter仓库--&gt;</span>
+        <span class="nt">&lt;repository&gt;</span>
+            <span class="nt">&lt;id&gt;</span>aliyun<span class="nt">&lt;/id&gt;</span>
+            <span class="nt">&lt;name&gt;</span>aliyun<span class="nt">&lt;/name&gt;</span>
+            <span class="nt">&lt;url&gt;</span>https://maven.aliyun.com/repository/public<span class="nt">&lt;/url&gt;</span>
+            <span class="nt">&lt;releases&gt;</span>
+                <span class="nt">&lt;enabled&gt;</span>true<span class="nt">&lt;/enabled&gt;</span>
+            <span class="nt">&lt;/releases&gt;</span>
+            <span class="nt">&lt;snapshots&gt;</span>
+                <span class="nt">&lt;enabled&gt;</span>false<span class="nt">&lt;/enabled&gt;</span>
+            <span class="nt">&lt;/snapshots&gt;</span>
+        <span class="nt">&lt;/repository&gt;</span>
+        <span class="c">&lt;!--阿里云代理Spring 官方仓库--&gt;</span>
+        <span class="nt">&lt;repository&gt;</span>
+            <span class="nt">&lt;id&gt;</span>spring-milestones<span class="nt">&lt;/id&gt;</span>
+            <span class="nt">&lt;name&gt;</span>Spring Milestones<span class="nt">&lt;/name&gt;</span>
+            <span class="nt">&lt;url&gt;</span>https://maven.aliyun.com/repository/spring<span class="nt">&lt;/url&gt;</span>
+            <span class="nt">&lt;releases&gt;</span>
+                <span class="nt">&lt;enabled&gt;</span>true<span class="nt">&lt;/enabled&gt;</span>
+            <span class="nt">&lt;/releases&gt;</span>
+            <span class="nt">&lt;snapshots&gt;</span>
+                <span class="nt">&lt;enabled&gt;</span>false<span class="nt">&lt;/enabled&gt;</span>
+            <span class="nt">&lt;/snapshots&gt;</span>
+        <span class="nt">&lt;/repository&gt;</span>
+    <span class="nt">&lt;/repositories&gt;</span>
+    <span class="nt">&lt;pluginRepositories&gt;</span>
+        <span class="c">&lt;!--阿里云代理Spring 插件仓库--&gt;</span>
+        <span class="nt">&lt;pluginRepository&gt;</span>
+            <span class="nt">&lt;id&gt;</span>spring-plugin<span class="nt">&lt;/id&gt;</span>
+            <span class="nt">&lt;name&gt;</span>spring-plugin<span class="nt">&lt;/name&gt;</span>
+            <span class="nt">&lt;url&gt;</span>https://maven.aliyun.com/repository/spring-plugin<span class="nt">&lt;/url&gt;</span>
+            <span class="nt">&lt;releases&gt;</span>
+                <span class="nt">&lt;enabled&gt;</span>true<span class="nt">&lt;/enabled&gt;</span>
+            <span class="nt">&lt;/releases&gt;</span>
+            <span class="nt">&lt;snapshots&gt;</span>
+                <span class="nt">&lt;enabled&gt;</span>false<span class="nt">&lt;/enabled&gt;</span>
+            <span class="nt">&lt;/snapshots&gt;</span>
+        <span class="nt">&lt;/pluginRepository&gt;</span>
+    <span class="nt">&lt;/pluginRepositories&gt;</span>
+<span class="nt">&lt;/project&gt;</span>
+</code></pre></div></div>
+
+<h3 id="三创建一个服务注册中心eureka-server">三、创建一个服务注册中心(eureka-server)</h3>
+
+<h4 id="1创建一个组件">1.创建一个组件</h4>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/image-20190320160357820.png" alt="" /></p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/image-20190320160706148.png" alt="" /></p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20190322220243.png" alt="" /></p>
+
+<h4 id="2修改pom文件将默认的parent-改成从主工程的pom-文件集成">2.修改pom文件，将默认的parent 改成从主工程的pom 文件集成</h4>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">"http://maven.apache.org/POM/4.0.0"</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+	<span class="na">xsi:schemaLocation=</span><span class="s">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+	<span class="nt">&lt;parent&gt;</span>
+		<span class="nt">&lt;groupId&gt;</span>top.luoren.springcloud<span class="nt">&lt;/groupId&gt;</span>
+		<span class="nt">&lt;artifactId&gt;</span>spring-cloud-study<span class="nt">&lt;/artifactId&gt;</span>
+		<span class="nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+		<span class="nt">&lt;relativePath/&gt;</span> <span class="c">&lt;!-- lookup parent from repository --&gt;</span>
+	<span class="nt">&lt;/parent&gt;</span>
+	<span class="nt">&lt;groupId&gt;</span>top.luoren.springcloud<span class="nt">&lt;/groupId&gt;</span>
+	<span class="nt">&lt;artifactId&gt;</span>eureka-server<span class="nt">&lt;/artifactId&gt;</span>
+	<span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+	<span class="nt">&lt;packaging&gt;</span>jar<span class="nt">&lt;/packaging&gt;</span>
+	<span class="nt">&lt;name&gt;</span>eureka-server<span class="nt">&lt;/name&gt;</span>
+	<span class="nt">&lt;description&gt;</span>Demo project for Spring Boot<span class="nt">&lt;/description&gt;</span>
+	<span class="nt">&lt;dependencies&gt;</span>
+		<span class="nt">&lt;dependency&gt;</span>
+			<span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+			<span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-netflix-eureka-server<span class="nt">&lt;/artifactId&gt;</span>
+		<span class="nt">&lt;/dependency&gt;</span>
+	<span class="nt">&lt;/dependencies&gt;</span>
+	<span class="nt">&lt;build&gt;</span>
+		<span class="nt">&lt;plugins&gt;</span>
+			<span class="nt">&lt;plugin&gt;</span>
+				<span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+				<span class="nt">&lt;artifactId&gt;</span>spring-boot-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+			<span class="nt">&lt;/plugin&gt;</span>
+		<span class="nt">&lt;/plugins&gt;</span>
+	<span class="nt">&lt;/build&gt;</span>
+<span class="nt">&lt;/project&gt;</span>
+
+</code></pre></div></div>
+
+<h4 id="3开启服务注册">3.开启服务注册</h4>
+
+<p>在Application 入口类上加上<code class="highlighter-rouge">@EnableEurekaServer</code></p>
+
+<h4 id="4在applicationyml中完成eurekaserver的相关配置">4.在application.yml中完成EurekaServer的相关配置</h4>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">server</span><span class="pi">:</span>
+  <span class="na">port</span><span class="pi">:</span> <span class="s">8081</span>
+<span class="c1"># 默认情况下erureka server也是一个eureka client</span>
+<span class="c1"># 通过eureka.client.registerWithEureka：false</span>
+<span class="c1"># 和fetchRegistry：false来表明自己是一个eureka server</span>
+<span class="na">eureka</span><span class="pi">:</span>
+  <span class="na">instance</span><span class="pi">:</span>
+    <span class="na">hostname</span><span class="pi">:</span> <span class="s">localhost</span>
+  <span class="na">client</span><span class="pi">:</span>
+    <span class="na">registerWithEureka</span><span class="pi">:</span> <span class="no">false</span>
+    <span class="na">fetchRegistry</span><span class="pi">:</span> <span class="no">false</span>
+    <span class="na">serviceUrl</span><span class="pi">:</span>
+      <span class="na">defaultZone</span><span class="pi">:</span> <span class="s">http://${eureka.instance.hostname}:${server.port}/eureka/</span>
+<span class="na">spring</span><span class="pi">:</span>
+  <span class="na">application</span><span class="pi">:</span>
+    <span class="na">name</span><span class="pi">:</span> <span class="s">eureka-server</span>
+</code></pre></div></div>
+
+<p>5.启动项目，访问localhost:8081  就能访问到注册中的页面</p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/image-20190320162607286.png" alt="" /></p>
+
+<h3 id="四创建一个服务提供者eureka-client">四、创建一个服务提供者(Eureka-client)</h3>
+
+<h4 id="1继续创建一个组件">1.继续创建一个组件</h4>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/image-20190320163954620.png" alt="" /></p>
+
+<h4 id="2继续对pom-文件稍作修改">2.继续对pom 文件稍作修改</h4>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">"http://maven.apache.org/POM/4.0.0"</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+         <span class="na">xsi:schemaLocation=</span><span class="s">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+    <span class="nt">&lt;parent&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>top.luoren.springcloud<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>spring-cloud-study<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;relativePath/&gt;</span> <span class="c">&lt;!-- lookup parent from repository --&gt;</span>
+    <span class="nt">&lt;/parent&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>top.luoren.springcloud<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>eureka-client<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;packaging&gt;</span>jar<span class="nt">&lt;/packaging&gt;</span>
+    <span class="nt">&lt;name&gt;</span>eureka-client<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;description&gt;</span>Demo project for Spring Boot<span class="nt">&lt;/description&gt;</span>
+    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-netflix-eureka-client<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;/dependencies&gt;</span>
+    <span class="nt">&lt;build&gt;</span>
+        <span class="nt">&lt;plugins&gt;</span>
+            <span class="nt">&lt;plugin&gt;</span>
+                <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+                <span class="nt">&lt;artifactId&gt;</span>spring-boot-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;/plugin&gt;</span>
+        <span class="nt">&lt;/plugins&gt;</span>
+    <span class="nt">&lt;/build&gt;</span>
+<span class="nt">&lt;/project&gt;</span>
+</code></pre></div></div>
+
+<h4 id="3开启服务提供">3.开启服务提供</h4>
+
+<p>在Application 入口类上加上<code class="highlighter-rouge">@EnableEurekaClient</code></p>
+
+<h4 id="4配置yml表明自己是一个服务提供者">4.配置yml，表明自己是一个服务提供者</h4>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">server</span><span class="pi">:</span>
+  <span class="na">port</span><span class="pi">:</span> <span class="s">8082</span>
+<span class="na">spring</span><span class="pi">:</span>
+  <span class="na">application</span><span class="pi">:</span>
+    <span class="na">name</span><span class="pi">:</span> <span class="s">service-client</span>
+<span class="na">eureka</span><span class="pi">:</span>
+  <span class="na">client</span><span class="pi">:</span>
+    <span class="na">serviceUrl</span><span class="pi">:</span>
+      <span class="na">defaultZone</span><span class="pi">:</span> <span class="s">http://localhost:8081/eureka/</span>  <span class="c1"># 注册中心地址</span>
+</code></pre></div></div>
+
+<p>启动应用，访问http://localhost:8081/eureka/，便可以在注册中心找到我们的服务</p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/image-20190320165001052.png" alt="" /></p>
+
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <!-- <img src="http://localhost:4000/assets/img/profile.png" alt=""> -->
+        <img src="/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">REN</div>
+      <div class="bio">
+        <p>码农，JAVA程序员，爱下厨，假装热爱技术&生活稍微过过也能活下去，哪有那么多要求</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/lawren18" target="_blank">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="mailto:luoren96@gmail.com" target="_blank">
+            <i class="iconfont icon-email"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//twitter.com/kaiorren" target="_blank">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/luoren18" target="_blank">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2019/03/22/Spring-Cloud-Service-Consumer-Feign.html" class="read-next-link"></a>
+        <section>
+          <span>Spring Cloud服务的消费者(Feign)</span>
+          <p>  声明：本文内容大量的参考和借鉴 http://blog.csdn.net/forezp/article/det...</p>
+        </section>
+        
+      </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/03/15/git-tips.html" class="read-next-link"></a>
+        <section>
+          <span>Git 的一些常用命令</span>
+          <p>Git 强制覆盖本地文件</p>
+        </section>
+        
+      </div>
+      
+    </section>
+    
+  </section>
+
+  <footer class="g-footer">
+  <section>REN博客 ©
+  
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+      socialShare('.social-share', {
+        sites: [
+          
+            'wechat'
+            ,
+            
+          
+            'weibo'
+            ,
+            
+          
+            'douban'
+            ,
+            
+          
+            'twitter'
+            
+          
+        ],
+        wechatQrcodeTitle: "分享到微信朋友圈",
+        wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+      });
+    </script>
+
+  <!--  -->
+  
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+</body>
+
+</html>
