@@ -5,8 +5,8 @@
     <description>个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 23 Mar 2019 11:30:39 +0800</pubDate>
-    <lastBuildDate>Sat, 23 Mar 2019 11:30:39 +0800</lastBuildDate>
+    <pubDate>Mon, 25 Mar 2019 16:24:51 +0800</pubDate>
+    <lastBuildDate>Mon, 25 Mar 2019 16:24:51 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -760,7 +760,6 @@ git pull
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;git-push-出现fatal-unable-to-access-httpsgithubcomluoren18renbloggit-libressl-ssl_connect-ssl_error_syscall-in-connection-to-githubcom443&quot;&gt;git push 出现fatal: unable to access ‘https://github.com/luoren18/renblog.git/’: LibreSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443&lt;/h3&gt;
-
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git config --global --unset http.proxy
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
