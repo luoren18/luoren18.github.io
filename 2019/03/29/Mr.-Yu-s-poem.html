@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>救赎 - REN博客</title>
+    <title>刚好而已 - REN博客</title>
     <meta name="author"  content="REN">
-    <meta name="description" content="救赎">
+    <meta name="description" content="刚好而已">
     <meta name="keywords"  content="沧溟先生诗, 诗词">
     <!-- Open Graph -->
-    <meta property="og:title" content="救赎 - REN博客">
+    <meta property="og:title" content="刚好而已 - REN博客">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:4000/2019/03/13/Mr.-Yu-s-poem.html">
+    <meta property="og:url" content="http://localhost:4000/2019/03/29/Mr.-Yu-s-poem.html">
     <meta property="og:description" content="个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。">
     <meta property="og:site_name" content="REN博客">
     <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="/assets/css/share.min.css">
     <link rel="stylesheet" href="/assets/css/app.min.css">
     <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
     
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
 	
@@ -110,7 +112,7 @@ Author: Ray-Eldath
 
 
   <header
-    class="g-banner post-header post-pattern-overlappingCircles bgcolor-default "
+    class="g-banner post-header post-pattern-overlappingCircles bgcolor-default post-no-cover"
     data-theme="default">
     <div class="post-wrapper">
       <div class="post-tags">
@@ -122,17 +124,14 @@ Author: Ray-Eldath
         
         
       </div>
-      <h1>救赎</h1>
+      <h1>刚好而已</h1>
       <div class="post-meta">
         <span class="post-meta-item"><i
             class="iconfont icon-author"></i>REN</span>
-        <time class="post-meta-item" datetime="19-03-13"><i
-            class="iconfont icon-date"></i>13 Mar 2019</time>
+        <time class="post-meta-item" datetime="19-03-29"><i
+            class="iconfont icon-date"></i>29 Mar 2019</time>
       </div>
     </div>
-    
-    <div class="filter"></div>
-    <div class="post-cover" style="background: url('http://noteimg.luoren.top/markdown_img/20190325150313.jpg') center no-repeat; background-size: cover;"></div>
     
   </header>
 
@@ -142,21 +141,23 @@ Author: Ray-Eldath
     
 
     <article class="markdown-body">
-      <h2 id="救赎">《救赎》</h2>
+      <h2 id="刚好而已">《刚好而已》</h2>
 
-<p>即使紧闭双眼，</p>
+<p>你路过我的时候，</p>
 
-<p>尘土，还是会落入我们的眼睛。</p>
+<p>我也刚好路过你。</p>
 
-<p>即使咬紧牙关，</p>
+<p>你看向我的时候，</p>
 
-<p>时间，还是会扭曲鲜艳的红唇。</p>
+<p>我也刚好看向你。</p>
 
-<p>在大河之外，</p>
+<p>没有什么难捱的岁月，</p>
 
-<p>我无法捞出其中的清澈，</p>
+<p>一呼一吸的光阴而已。</p>
 
-<p>有许多溺水者，也有更多的旁观者。。。</p>
+<p>渔火，醒来</p>
+
+<p>夜，将长眠……</p>
 
     </article>
 
@@ -210,20 +211,32 @@ Author: Ray-Eldath
     <section class="post-footer-item read-next">
       
       <div class="read-next-item">
-        <a href="/2019/03/14/use-jekyll-to-build-a-static-website.html" class="read-next-link"></a>
+        <a href="/2019/03/29/Spring-Cloud-Routing-Gateway-Zuul.html" class="read-next-link"></a>
         <section>
-          <span>使用Jekyll搭建一个个人博客</span>
-          <p>  初始化一个Jekyll 项目</p>
+          <span>Spring Cloud 路由网关(Zuul)（五）</span>
+          <p>  声明：本文内容大量的参考和借鉴 http://blog.csdn.net/forezp/article/det...</p>
         </section>
-        
-        <div class="filter"></div>
-        <img src="http://noteimg.luoren.top/markdown_img/20190325150355.png" alt="">
         
       </div>
       
 
       
+      <div class="read-next-item">
+        <a href="/2019/03/22/Spring-Cloud-circuit-breaker-Hystrix.html" class="read-next-link"></a>
+        <section>
+          <span>Spring Cloud 断路器（Hystrix)（四）</span>
+          <p>  声明：本文内容大量的参考和借鉴 http://blog.csdn.net/forezp/article/det...</p>
+        </section>
+        
+      </div>
+      
     </section>
+    
+    <section class="post-footer-item comment">
+      <!-- <div id="disqus_thread"></div> -->
+      <div id="gitalk-container"></div>
+    </section>
+    <!-- <div id="gitalk-container"></div> -->
     
   </section>
 
@@ -264,6 +277,21 @@ Author: Ray-Eldath
     </script>
 
   <!--  -->
+  
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+  <script>
+    const gitalk = new Gitalk({
+      clientID: '67b57f65cc4d670a72ab',
+      clientSecret: 'ec1ebc536274f62d4b9499d28bc7b3f2c018dca1',
+      repo: 'renblog',
+      owner: 'luoren18',
+      admin: 'luoren18',
+      id: '刚好而已',      // Ensure uniqueness and length less than 50
+      distractionFreeMode: false,  // Facebook-like distraction free mode
+      title: '刚好而已'
+    })
+    gitalk.render('gitalk-container')
+  </script>
   
 
   <script src="/assets/js/prism.js"></script>
