@@ -1,6 +1,12 @@
 [
   
     {
+      "title"    : "Spring Cloud Config 分布式配置中心（六）",
+      "tags"     : "java SpringBoot SpringCloud",
+      "url"      : "/2019/04/04/Spring-Cloud-Config-Distributed-Configuration-Center.html"
+    } ,
+  
+    {
       "title"    : "Spring Cloud 路由网关(Zuul)（五）",
       "tags"     : "java SpringBoot SpringCloud",
       "url"      : "/2019/03/29/Spring-Cloud-Routing-Gateway-Zuul.html"

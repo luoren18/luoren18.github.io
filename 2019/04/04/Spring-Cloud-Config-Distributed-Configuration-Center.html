@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Cloud Config 分布式配置中心（六） - REN博客</title>
+    <meta name="author"  content="REN">
+    <meta name="description" content="Spring Cloud Config 分布式配置中心（六）">
+    <meta name="keywords"  content="java, SpringBoot, SpringCloud">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Spring Cloud Config 分布式配置中心（六） - REN博客">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/04/04/Spring-Cloud-Config-Distributed-Configuration-Center.html">
+    <meta property="og:description" content="个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。">
+    <meta property="og:site_name" content="REN博客">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">home</a></li>
+            
+            <li><a href="/tags.html">tags</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-overlappingCircles bgcolor-default "
+    data-theme="default">
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+        
+        <a href="http://localhost:4000/tags#java" class="post-tag">java</a>
+        
+        <a href="http://localhost:4000/tags#SpringBoot" class="post-tag">SpringBoot</a>
+        
+        <a href="http://localhost:4000/tags#SpringCloud" class="post-tag">SpringCloud</a>
+        
+        
+      </div>
+      <h1>Spring Cloud Config 分布式配置中心（六）</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i
+            class="iconfont icon-author"></i>REN</span>
+        <time class="post-meta-item" datetime="19-04-04"><i
+            class="iconfont icon-date"></i>04 Apr 2019</time>
+      </div>
+    </div>
+    
+    <div class="filter"></div>
+    <div class="post-cover" style="background: url('https://i.loli.net/2019/04/04/5ca563b7626ae.png') center no-repeat; background-size: cover;"></div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+    <h2 class="post-subtitle">Spring Cloud</h2>
+    
+
+    <article class="markdown-body">
+      <blockquote>
+  <p>声明：本文内容大量的参考和借鉴 <a href="http://blog.csdn.net/forezp/article/details/70148833">http://blog.csdn.net/forezp/article/details/70148833</a> 的内容。非常感谢原文作者<a href="http://blog.csdn.net/forezp">方志朋的博客</a>提供的优秀的SpringCloud 的教程。</p>
+</blockquote>
+
+<h3 id="一简介">一、简介</h3>
+
+<p>在分布式系统中，由于服务数量巨多，为了方便服务配置文件统一管理，实时更新，所以需要分布式配置中心组件。在Spring Cloud中，有分布式配置中心组件spring cloud config ，它支持配置服务放在配置服务的内存中（即本地），也支持放在远程Git仓库中。在spring cloud config 组件中，分两个角色，一是config server，二是config client。</p>
+
+<h3 id="二config-server">二、Config Server</h3>
+
+<p>依旧使用之前的父类SpringCloudStudy。</p>
+
+<p>创建一个spring-boot项目config-server,引入相关依赖</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">"http://maven.apache.org/POM/4.0.0"</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+         <span class="na">xsi:schemaLocation=</span><span class="s">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+    <span class="nt">&lt;parent&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>top.luoren.springcloud<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>spring-cloud-study<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;relativePath/&gt;</span> <span class="c">&lt;!-- lookup parent from repository --&gt;</span>
+    <span class="nt">&lt;/parent&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>top.luoren.springcloud<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>config-server<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;name&gt;</span>config-server<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;description&gt;</span>Demo project for Spring Boot<span class="nt">&lt;/description&gt;</span>
+    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-cloud-config-server<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;/dependencies&gt;</span>
+    <span class="nt">&lt;build&gt;</span>
+        <span class="nt">&lt;plugins&gt;</span>
+            <span class="nt">&lt;plugin&gt;</span>
+                <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+                <span class="nt">&lt;artifactId&gt;</span>spring-boot-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;/plugin&gt;</span>
+        <span class="nt">&lt;/plugins&gt;</span>
+    <span class="nt">&lt;/build&gt;</span>
+<span class="nt">&lt;/project&gt;</span>
+</code></pre></div></div>
+
+<p>在程序的入口类添加<code class="highlighter-rouge">@EnableConfigServer</code>,开启config-server</p>
+
+<p>在application.properties 配置配置文件的源</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">spring.application.name=config-server</span>  <span class="c1">#服务名</span>
+<span class="s">server.port=8087</span>  <span class="c1">#端口号</span>
+<span class="s">spring.cloud.config.server.git.uri=https://github.com/luoren18/springcloudconfig.git</span>  <span class="c1">#配置文件的git地址</span>
+<span class="s">spring.cloud.config.server.git.searchPaths=respo</span> <span class="c1">#git上的路径</span>
+<span class="s">spring.cloud.config.label=master</span> <span class="c1">#git 分支</span>
+<span class="s">spring.cloud.config.server.git.username=luoren18</span> <span class="c1">#git用户名，如果为私有库</span>
+<span class="s">spring.cloud.config.server.git.password=********</span> <span class="c1">#git密码，如果为私有库</span>
+</code></pre></div></div>
+
+<p>在我的git仓库中有一个名为<strong>application-test.yml</strong>的配置文件，内容如下</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">age</span><span class="pi">:</span> <span class="s">22</span>
+<span class="na">app</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">kaikai</span>
+</code></pre></div></div>
+
+<p>启动程序，访问<a href="http://localhost:8087/application/test">http://localhost:8087/application/test</a></p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"application"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"profiles"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"test"</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"label"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"b33c8bef88f54dc643f9103fcee6a1f7c50b0f03"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"propertySources"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://github.com/luoren18/springcloudconfig.git/respo/application-test.yml"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"source"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"age"</span><span class="p">:</span><span class="w"> </span><span class="mi">22</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"app.name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"kaikai"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p><a href="http://localhost:8087/application-test.yml">http://localhost:8087/application-test.yml</a></p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">age</span><span class="pi">:</span> <span class="s">22</span>
+<span class="na">app</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">kaikai</span>
+</code></pre></div></div>
+
+<h3 id="三config-client">三、Config Client</h3>
+
+<p>创建一个spring-boot 项目 config-client。</p>
+
+<p>引入相关依赖</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="s">&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"</span>
+         <span class="s">xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;</span>
+    <span class="s">&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span>
+    <span class="s">&lt;parent&gt;</span>
+        <span class="s">&lt;groupId&gt;top.luoren.springcloud&lt;/groupId&gt;</span>
+        <span class="s">&lt;artifactId&gt;spring-cloud-study&lt;/artifactId&gt;</span>
+        <span class="s">&lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;</span>
+        <span class="s">&lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;</span>
+    <span class="s">&lt;/parent&gt;</span>
+    <span class="s">&lt;groupId&gt;top.luoren.springcloud&lt;/groupId&gt;</span>
+    <span class="s">&lt;artifactId&gt;config-client&lt;/artifactId&gt;</span>
+    <span class="s">&lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</span>
+    <span class="s">&lt;name&gt;config-client&lt;/name&gt;</span>
+    <span class="s">&lt;description&gt;Demo project for Spring Boot&lt;/description&gt;</span>
+
+    <span class="s">&lt;dependencies&gt;</span>
+        <span class="s">&lt;dependency&gt;</span>
+            <span class="s">&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span>
+            <span class="s">&lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</span>
+        <span class="s">&lt;/dependency&gt;</span>
+        <span class="s">&lt;dependency&gt;</span>
+            <span class="s">&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span>
+            <span class="s">&lt;artifactId&gt;spring-cloud-starter-config&lt;/artifactId&gt;</span>
+        <span class="s">&lt;/dependency&gt;</span>
+    <span class="s">&lt;/dependencies&gt;</span>
+    <span class="s">&lt;build&gt;</span>
+        <span class="s">&lt;plugins&gt;</span>
+            <span class="s">&lt;plugin&gt;</span>
+                <span class="s">&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span>
+                <span class="s">&lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</span>
+            <span class="s">&lt;/plugin&gt;</span>
+        <span class="s">&lt;/plugins&gt;</span>
+    <span class="s">&lt;/build&gt;</span>
+
+<span class="s">&lt;/project&gt;</span>
+</code></pre></div></div>
+
+<p>在<strong>bootstrap.properties</strong> 中进行相关配置，此处不是在<strong>application.properties</strong>中配置</p>
+
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">spring.application.name</span><span class="p">=</span><span class="s">application #配置文件名</span>
+<span class="py">spring.cloud.config.label</span><span class="p">=</span><span class="s">master  #分支</span>
+<span class="py">spring.cloud.config.profile</span><span class="p">=</span><span class="s">test #profile 环境</span>
+<span class="py">spring.cloud.config.uri</span><span class="p">=</span> <span class="s">http://localhost:8087/  #config-server 地址</span>
+<span class="py">server.port</span><span class="p">=</span><span class="s">8088  #端口号</span>
+</code></pre></div></div>
+
+<p>编写一个接口，用于测试从配置中心返回的数据</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RestController</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloController</span> <span class="o">{</span>
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${age}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">value</span><span class="o">;</span>
+
+    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"age"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">age</span><span class="o">(){</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>启动项目，访问<a href="http://localhost:8088/age">http://localhost:8088/age</a></p>
+
+<p>将会返回<strong>22</strong></p>
+
+<p>也就是说明  config-client 从 config-server获取到了 从 git上读取到的值，如下图</p>
+
+<p><img src="https://i.loli.net/2019/04/03/5ca47fca005d9.png" alt="" /></p>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <!-- <img src="https://i.loli.net/2019/03/25/5c9896d985ac7.png" alt=""> -->
+        <img src="https://i.loli.net/2019/03/25/5c9896d985ac7.png" alt="">
+      </div>
+      <div class="author-name" rel="author">REN</div>
+      <div class="bio">
+        <p>码农，JAVA程序员，爱下厨，假装热爱技术&生活稍微过过也能活下去，哪有那么多要求</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/lawren18" target="_blank">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="mailto:luoren96@gmail.com" target="_blank">
+            <i class="iconfont icon-email"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//twitter.com/kaiorren" target="_blank">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/luoren18" target="_blank">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/03/29/Spring-Cloud-Routing-Gateway-Zuul.html" class="read-next-link"></a>
+        <section>
+          <span>Spring Cloud 路由网关(Zuul)（五）</span>
+          <p>  声明：本文内容大量的参考和借鉴 http://blog.csdn.net/forezp/article/det...</p>
+        </section>
+        
+      </div>
+      
+    </section>
+    
+  </section>
+
+  <footer class="g-footer">
+  <section>REN博客 ©
+  
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+      socialShare('.social-share', {
+        sites: [
+          
+            'wechat'
+            ,
+            
+          
+            'weibo'
+            ,
+            
+          
+            'douban'
+            ,
+            
+          
+            'twitter'
+            
+          
+        ],
+        wechatQrcodeTitle: "分享到微信朋友圈",
+        wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+      });
+    </script>
+
+  <!--  -->
+  
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+</body>
+
+</html>
