@@ -318,6 +318,66 @@ Author: Ray-Eldath
 
 <p><img src="https://i.loli.net/2019/04/03/5ca47fca005d9.png" alt="" /></p>
 
+<h3 id="四高可用的分布式配置中心">四、高可用的分布式配置中心</h3>
+
+<p>当服务实例很多，都需要从配置中心读取文件的时候，可以讲配置中心做成一个微服务，将其集群化，从而达到高可用。</p>
+
+<p><img src="https://i.loli.net/2019/04/10/5cad3f66cd98a.png" alt="" /></p>
+
+<h4 id="1在之前的工程上做修改">1.在之前的工程上做修改</h4>
+
+<p>eureka-server 作为服务的注册中心</p>
+
+<h4 id="2改造config-server">2.改造config-Server</h4>
+
+<p>添加<code class="highlighter-rouge">spring-cloud-starter-netflix-eureka-client</code>的依赖</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+   <span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+   <span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-netflix-eureka-client<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></div>
+
+<p>在启动类上加上<code class="highlighter-rouge">@EnableEurekaClient</code>注解</p>
+
+<p>最后在配置文件application.properties 添加</p>
+
+<p><code class="highlighter-rouge">eureka.client.serviceUrl.defaultZone=http://localhost:8081/eureka/</code></p>
+
+<p>将该服务注册到服务注册中心</p>
+
+<h4 id="3改造config-client">3.改造config-client</h4>
+
+<p>同理，需要在pom.xml 中加入<code class="highlighter-rouge">spring-cloud-starter-netflix-eureka-client</code>的依赖，在启动类上加上<code class="highlighter-rouge">@EnableEurekaClient</code>注解，修改配置文件，此处的配置文件指的是<code class="highlighter-rouge">bootstrap.properties</code></p>
+
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">spring.application.name</span><span class="p">=</span><span class="s">application</span>
+<span class="py">spring.cloud.config.label</span><span class="p">=</span><span class="s">master</span>
+<span class="py">spring.cloud.config.profile</span><span class="p">=</span><span class="s">test</span>
+<span class="c">#spring.cloud.config.uri= http://localhost:8087/
+</span><span class="py">server.port</span><span class="p">=</span><span class="s">8088</span>
+
+
+<span class="c">#---------------------------------------高可用的分布式配置中心--------------------------------
+#服务注册中心地址
+</span><span class="py">eureka.client.serviceUrl.defaultZone</span><span class="p">=</span><span class="s">http://localhost:8081/eureka/</span>
+<span class="c">#开启从配置中心读取配置文件
+</span><span class="py">spring.cloud.config.discovery.enabled</span><span class="p">=</span><span class="s">true</span>
+<span class="c">#服务名
+</span><span class="py">spring.cloud.config.discovery.service-id</span><span class="p">=</span><span class="s">config-server</span>
+</code></pre></div></div>
+
+<h4 id="4效果">4、效果</h4>
+
+<p>依次启动 eureka-server,config-server,config-client</p>
+
+<p>访问<a href="http://localhost:8081">http://localhost:8081</a></p>
+
+<p><img src="https://i.loli.net/2019/04/10/5cad48fa165b1.png" alt="" /></p>
+
+<p>访问<a href="http://localhost:8088/age">http://localhost:8088/age</a> 返回<code class="highlighter-rouge">22</code></p>
+
+<p><strong>END</strong></p>
+
     </article>
 
     

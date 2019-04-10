@@ -5,8 +5,8 @@
     <description>个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 08 Apr 2019 08:05:51 +0800</pubDate>
-    <lastBuildDate>Mon, 08 Apr 2019 08:05:51 +0800</lastBuildDate>
+    <pubDate>Wed, 10 Apr 2019 09:43:38 +0800</pubDate>
+    <lastBuildDate>Wed, 10 Apr 2019 09:43:38 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -209,6 +209,66 @@
 &lt;p&gt;也就是说明  config-client 从 config-server获取到了 从 git上读取到的值，如下图&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2019/04/03/5ca47fca005d9.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;四高可用的分布式配置中心&quot;&gt;四、高可用的分布式配置中心&lt;/h3&gt;
+
+&lt;p&gt;当服务实例很多，都需要从配置中心读取文件的时候，可以讲配置中心做成一个微服务，将其集群化，从而达到高可用。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://i.loli.net/2019/04/10/5cad3f66cd98a.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;1在之前的工程上做修改&quot;&gt;1.在之前的工程上做修改&lt;/h4&gt;
+
+&lt;p&gt;eureka-server 作为服务的注册中心&lt;/p&gt;
+
+&lt;h4 id=&quot;2改造config-server&quot;&gt;2.改造config-Server&lt;/h4&gt;
+
+&lt;p&gt;添加&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-cloud-starter-netflix-eureka-client&lt;/code&gt;的依赖&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.cloud&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-cloud-starter-netflix-eureka-client&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在启动类上加上&lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableEurekaClient&lt;/code&gt;注解&lt;/p&gt;
+
+&lt;p&gt;最后在配置文件application.properties 添加&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;eureka.client.serviceUrl.defaultZone=http://localhost:8081/eureka/&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;将该服务注册到服务注册中心&lt;/p&gt;
+
+&lt;h4 id=&quot;3改造config-client&quot;&gt;3.改造config-client&lt;/h4&gt;
+
+&lt;p&gt;同理，需要在pom.xml 中加入&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-cloud-starter-netflix-eureka-client&lt;/code&gt;的依赖，在启动类上加上&lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableEurekaClient&lt;/code&gt;注解，修改配置文件，此处的配置文件指的是&lt;code class=&quot;highlighter-rouge&quot;&gt;bootstrap.properties&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-properties highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;py&quot;&gt;spring.application.name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;application&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;spring.cloud.config.label&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;master&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;spring.cloud.config.profile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;test&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#spring.cloud.config.uri= http://localhost:8087/
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;server.port&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;8088&lt;/span&gt;
+
+
+&lt;span class=&quot;c&quot;&gt;#---------------------------------------高可用的分布式配置中心--------------------------------
+#服务注册中心地址
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;eureka.client.serviceUrl.defaultZone&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;http://localhost:8081/eureka/&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#开启从配置中心读取配置文件
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;spring.cloud.config.discovery.enabled&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;true&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#服务名
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;spring.cloud.config.discovery.service-id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;config-server&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;4效果&quot;&gt;4、效果&lt;/h4&gt;
+
+&lt;p&gt;依次启动 eureka-server,config-server,config-client&lt;/p&gt;
+
+&lt;p&gt;访问&lt;a href=&quot;http://localhost:8081&quot;&gt;http://localhost:8081&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://i.loli.net/2019/04/10/5cad48fa165b1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;访问&lt;a href=&quot;http://localhost:8088/age&quot;&gt;http://localhost:8088/age&lt;/a&gt; 返回&lt;code class=&quot;highlighter-rouge&quot;&gt;22&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;END&lt;/strong&gt;&lt;/p&gt;
 </description>
         <pubDate>Thu, 04 Apr 2019 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2019/04/04/Spring-Cloud-Config-Distributed-Configuration-Center.html</link>
