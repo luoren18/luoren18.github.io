@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>晚归 - REN博客</title>
+    <title>消息总线(Spring cloud bus)（七） - REN博客</title>
     <meta name="author"  content="REN">
-    <meta name="description" content="晚归">
-    <meta name="keywords"  content="沧溟先生诗, 诗词">
+    <meta name="description" content="消息总线(Spring cloud bus)（七）">
+    <meta name="keywords"  content="java, SpringBoot, SpringCloud">
     <!-- Open Graph -->
-    <meta property="og:title" content="晚归 - REN博客">
+    <meta property="og:title" content="消息总线(Spring cloud bus)（七） - REN博客">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:4000/2019/04/07/Late-return.html">
+    <meta property="og:url" content="http://localhost:4000/2019/04/11/Spring-Cloud-Bus.html">
     <meta property="og:description" content="个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。">
     <meta property="og:site_name" content="REN博客">
     <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
@@ -20,8 +20,6 @@
     <link rel="stylesheet" href="/assets/css/share.min.css">
     <link rel="stylesheet" href="/assets/css/app.min.css">
     <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
     
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
 	
@@ -112,44 +110,115 @@ Author: Ray-Eldath
 
 
   <header
-    class="g-banner post-header post-pattern-overlappingCircles bgcolor-default post-no-cover"
+    class="g-banner post-header post-pattern-overlappingCircles bgcolor-default "
     data-theme="default">
     <div class="post-wrapper">
       <div class="post-tags">
         
         
-        <a href=/tags.html#沧溟先生诗 class="post-tag">沧溟先生诗</a>
+        <a href=/tags.html#java class="post-tag">java</a>
         
-        <a href=/tags.html#诗词 class="post-tag">诗词</a>
+        <a href=/tags.html#SpringBoot class="post-tag">SpringBoot</a>
+        
+        <a href=/tags.html#SpringCloud class="post-tag">SpringCloud</a>
         
         
       </div>
-      <h1>晚归</h1>
+      <h1>消息总线(Spring cloud bus)（七）</h1>
       <div class="post-meta">
         <span class="post-meta-item"><i
             class="iconfont icon-author"></i>REN</span>
-        <time class="post-meta-item" datetime="19-04-07"><i
-            class="iconfont icon-date"></i>07 Apr 2019</time>
+        <time class="post-meta-item" datetime="19-04-11"><i
+            class="iconfont icon-date"></i>11 Apr 2019</time>
       </div>
     </div>
+    
+    <div class="filter"></div>
+    <div class="post-cover" style="background: url('https://i.loli.net/2019/04/11/5caf04263f0dd.png') center no-repeat; background-size: cover;"></div>
     
   </header>
 
   <div class="post-content visible">
     
-    <h2 class="post-subtitle">沧溟先生诗<br/><转载></h2>
+    <h2 class="post-subtitle">Spring Cloud</h2>
     
 
     <article class="markdown-body">
-      <h2 id="晚归">《晚归》</h2>
+      <blockquote>
+  <p>声明：本文内容大量的参考和借鉴 <a href="http://blog.csdn.net/forezp/article/details/70148833">http://blog.csdn.net/forezp/article/details/70148833</a> 的内容。非常感谢原文作者<a href="http://blog.csdn.net/forezp">方志朋的博客</a>提供的优秀的SpringCloud 的教程。</p>
+</blockquote>
 
-<p>浓情浅意两微茫，</p>
+<blockquote>
+  <p>Spring Cloud Bus将分布式系统的节点与轻量级消息代理链接。这可以用于广播状态更改（例如配置更改）或其他管理指令。一个关键的想法是，Bus就像一个扩展的Spring Boot应用程序的分布式执行器，但也可以用作应用程序之间的通信渠道。当前唯一的实现是使用AMQP代理作为传输，但是相同的基本功能集（还有一些取决于传输）在其他传输的路线图上。</p>
+</blockquote>
 
-<p>影暗花明竹隐墙。</p>
+<h3 id="一快速开始">一、快速开始</h3>
 
-<p>巷陌寻常惟草树，</p>
+<h4 id="1安装rabbitmq">1.安装RabbitMQ</h4>
 
-<p>背烟垂首向斜阳。</p>
+<p>我用的的docker 安装RabbitMQ ，可以参考<a href="https://hub.docker.com/r/xiaochunping/rabbitmq">https://hub.docker.com/r/xiaochunping/rabbitmq</a></p>
+
+<h4 id="2改造config-client">2.改造config-client</h4>
+
+<p>首先引入bus相关依赖</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+  <span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-bus-amqp<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+   <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+   <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-actuator<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></div>
+
+<blockquote>
+  <h3 id="随机知识点">随机知识点</h3>
+
+  <h4 id="enablediscoveryclient与enableeurekaclient的区别">@EnableDiscoveryClient与@EnableEurekaClient的区别</h4>
+
+  <h6 id="1spring-cloud中discovery-service有许多种实现eurekaconsulzookeeper等等enablediscoveryclient基于spring-cloud-commons-enableeurekaclient基于spring-cloud-netflix">1.spring cloud中discovery service有许多种实现（eureka、consul、zookeeper等等），@EnableDiscoveryClient基于spring-cloud-commons, @EnableEurekaClient基于spring-cloud-netflix。</h6>
+
+  <h6 id="2如果选用的注册中心是eureka那么就推荐enableeurekaclient如果是其他的注册中心那么推荐使用enablediscoveryclient">2.如果选用的注册中心是eureka，那么就推荐@EnableEurekaClient，如果是其他的注册中心，那么推荐使用@EnableDiscoveryClient。</h6>
+</blockquote>
+
+<p>在<code class="highlighter-rouge">application.properties</code>完成rabbitMQ 和 bus 相关配置</p>
+
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">spring.rabbitmq.host</span><span class="p">=</span><span class="s">localhost</span>
+<span class="py">spring.rabbitmq.port</span><span class="p">=</span><span class="s">5672</span>
+<span class="py">spring.rabbitmq.username</span><span class="p">=</span><span class="s">guest</span>
+<span class="py">spring.rabbitmq.password</span><span class="p">=</span><span class="s">guest</span>
+
+<span class="py">spring.cloud.bus.enabled</span><span class="p">=</span><span class="s">true</span>
+<span class="py">spring.cloud.bus.trace.enabled</span><span class="p">=</span><span class="s">true</span>
+<span class="py">management.endpoints.web.exposure.include</span><span class="p">=</span><span class="s">bus-refresh</span>
+</code></pre></div></div>
+
+<p>在Controller 加上<code class="highlighter-rouge">@RefreshScope</code>注解</p>
+
+<h4 id="3验证效果">3.验证效果</h4>
+
+<p>依次启动Eureka-server,config-server,config-client</p>
+
+<p>访问<a href="http://localhost:8089/age">http://localhost:8089/age</a></p>
+
+<p>返回<code class="highlighter-rouge">22</code></p>
+
+<p>修改github上的配置文件将<code class="highlighter-rouge">age</code>改为<code class="highlighter-rouge">33</code></p>
+
+<p>发送Post请求<a href="http://localhost:8089/actuator/bus-refresh">http://localhost:8089/actuator/bus-refresh</a></p>
+
+<p>再次访问<a href="http://localhost:8089/age">http://localhost:8089/age</a></p>
+
+<p>返回<code class="highlighter-rouge">33</code></p>
+
+<h3 id="二分析">二、分析</h3>
+
+<p><img src="https://i.loli.net/2019/04/11/5caf04263f0dd.png" alt="" /></p>
+
+<p>当git文件更改的时候，通过pc端用post 向端口为8089的config-client发送请求/actuator/bus-refresh；此时8089端口会发送一个消息，由消息总线向其他服务传递，从而使整个微服务集群都达到更新配置文件。</p>
+
+<p><strong>END</strong></p>
 
     </article>
 
@@ -202,39 +271,18 @@ Author: Ray-Eldath
     </section>
     <section class="post-footer-item read-next">
       
-      <div class="read-next-item">
-        <a href="/2019/04/11/Spring-Cloud-Bus.html" class="read-next-link"></a>
-        <section>
-          <span>消息总线(Spring cloud bus)（七）</span>
-          <p>  声明：本文内容大量的参考和借鉴 http://blog.csdn.net/forezp/article/det...</p>
-        </section>
-        
-        <div class="filter"></div>
-        <img src="https://i.loli.net/2019/04/11/5caf04263f0dd.png" alt="">
-        
-      </div>
-      
 
       
       <div class="read-next-item">
-        <a href="/2019/04/04/Spring-Cloud-Config-Distributed-Configuration-Center.html" class="read-next-link"></a>
+        <a href="/2019/04/07/Late-return.html" class="read-next-link"></a>
         <section>
-          <span>Spring Cloud Config 分布式配置中心（六）</span>
-          <p>  声明：本文内容大量的参考和借鉴 http://blog.csdn.net/forezp/article/det...</p>
+          <span>晚归</span>
+          <p>《晚归》</p>
         </section>
-        
-        <div class="filter"></div>
-        <img src="https://i.loli.net/2019/04/04/5ca563b7626ae.png" alt="">
         
       </div>
       
     </section>
-    
-    <section class="post-footer-item comment">
-      <!-- <div id="disqus_thread"></div> -->
-      <div id="gitalk-container"></div>
-    </section>
-    <!-- <div id="gitalk-container"></div> -->
     
   </section>
 
@@ -275,21 +323,6 @@ Author: Ray-Eldath
     </script>
 
   <!--  -->
-  
-  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-  <script>
-    const gitalk = new Gitalk({
-      clientID: '67b57f65cc4d670a72ab',
-      clientSecret: 'ec1ebc536274f62d4b9499d28bc7b3f2c018dca1',
-      repo: 'luoren18.github.io',
-      owner: 'luoren18',
-      admin: 'luoren18',
-      id: '晚归',      // Ensure uniqueness and length less than 50
-      distractionFreeMode: false,  // Facebook-like distraction free mode
-      title: '晚归'
-    })
-    gitalk.render('gitalk-container')
-  </script>
   
 
   <script src="/assets/js/prism.js"></script>

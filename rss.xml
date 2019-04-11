@@ -5,9 +5,102 @@
     <description>个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 10 Apr 2019 09:43:38 +0800</pubDate>
-    <lastBuildDate>Wed, 10 Apr 2019 09:43:38 +0800</lastBuildDate>
+    <pubDate>Thu, 11 Apr 2019 17:19:20 +0800</pubDate>
+    <lastBuildDate>Thu, 11 Apr 2019 17:19:20 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>消息总线(Spring cloud bus)（七）</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;声明：本文内容大量的参考和借鉴 &lt;a href=&quot;http://blog.csdn.net/forezp/article/details/70148833&quot;&gt;http://blog.csdn.net/forezp/article/details/70148833&lt;/a&gt; 的内容。非常感谢原文作者&lt;a href=&quot;http://blog.csdn.net/forezp&quot;&gt;方志朋的博客&lt;/a&gt;提供的优秀的SpringCloud 的教程。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Spring Cloud Bus将分布式系统的节点与轻量级消息代理链接。这可以用于广播状态更改（例如配置更改）或其他管理指令。一个关键的想法是，Bus就像一个扩展的Spring Boot应用程序的分布式执行器，但也可以用作应用程序之间的通信渠道。当前唯一的实现是使用AMQP代理作为传输，但是相同的基本功能集（还有一些取决于传输）在其他传输的路线图上。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;一快速开始&quot;&gt;一、快速开始&lt;/h3&gt;
+
+&lt;h4 id=&quot;1安装rabbitmq&quot;&gt;1.安装RabbitMQ&lt;/h4&gt;
+
+&lt;p&gt;我用的的docker 安装RabbitMQ ，可以参考&lt;a href=&quot;https://hub.docker.com/r/xiaochunping/rabbitmq&quot;&gt;https://hub.docker.com/r/xiaochunping/rabbitmq&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;2改造config-client&quot;&gt;2.改造config-client&lt;/h4&gt;
+
+&lt;p&gt;首先引入bus相关依赖&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.cloud&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-cloud-starter-bus-amqp&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-starter-actuator&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;h3 id=&quot;随机知识点&quot;&gt;随机知识点&lt;/h3&gt;
+
+  &lt;h4 id=&quot;enablediscoveryclient与enableeurekaclient的区别&quot;&gt;@EnableDiscoveryClient与@EnableEurekaClient的区别&lt;/h4&gt;
+
+  &lt;h6 id=&quot;1spring-cloud中discovery-service有许多种实现eurekaconsulzookeeper等等enablediscoveryclient基于spring-cloud-commons-enableeurekaclient基于spring-cloud-netflix&quot;&gt;1.spring cloud中discovery service有许多种实现（eureka、consul、zookeeper等等），@EnableDiscoveryClient基于spring-cloud-commons, @EnableEurekaClient基于spring-cloud-netflix。&lt;/h6&gt;
+
+  &lt;h6 id=&quot;2如果选用的注册中心是eureka那么就推荐enableeurekaclient如果是其他的注册中心那么推荐使用enablediscoveryclient&quot;&gt;2.如果选用的注册中心是eureka，那么就推荐@EnableEurekaClient，如果是其他的注册中心，那么推荐使用@EnableDiscoveryClient。&lt;/h6&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;完成rabbitMQ 和 bus 相关配置&lt;/p&gt;
+
+&lt;div class=&quot;language-properties highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;py&quot;&gt;spring.rabbitmq.host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;localhost&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;spring.rabbitmq.port&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;5672&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;spring.rabbitmq.username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;guest&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;spring.rabbitmq.password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;guest&lt;/span&gt;
+
+&lt;span class=&quot;py&quot;&gt;spring.cloud.bus.enabled&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;true&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;spring.cloud.bus.trace.enabled&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;true&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;management.endpoints.web.exposure.include&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;bus-refresh&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在Controller 加上&lt;code class=&quot;highlighter-rouge&quot;&gt;@RefreshScope&lt;/code&gt;注解&lt;/p&gt;
+
+&lt;h4 id=&quot;3验证效果&quot;&gt;3.验证效果&lt;/h4&gt;
+
+&lt;p&gt;依次启动Eureka-server,config-server,config-client&lt;/p&gt;
+
+&lt;p&gt;访问&lt;a href=&quot;http://localhost:8089/age&quot;&gt;http://localhost:8089/age&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;返回&lt;code class=&quot;highlighter-rouge&quot;&gt;22&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;修改github上的配置文件将&lt;code class=&quot;highlighter-rouge&quot;&gt;age&lt;/code&gt;改为&lt;code class=&quot;highlighter-rouge&quot;&gt;33&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;发送Post请求&lt;a href=&quot;http://localhost:8089/actuator/bus-refresh&quot;&gt;http://localhost:8089/actuator/bus-refresh&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;再次访问&lt;a href=&quot;http://localhost:8089/age&quot;&gt;http://localhost:8089/age&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;返回&lt;code class=&quot;highlighter-rouge&quot;&gt;33&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;二分析&quot;&gt;二、分析&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://i.loli.net/2019/04/11/5caf04263f0dd.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;当git文件更改的时候，通过pc端用post 向端口为8089的config-client发送请求/actuator/bus-refresh；此时8089端口会发送一个消息，由消息总线向其他服务传递，从而使整个微服务集群都达到更新配置文件。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;END&lt;/strong&gt;&lt;/p&gt;
+</description>
+        <pubDate>Thu, 11 Apr 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/04/11/Spring-Cloud-Bus.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/04/11/Spring-Cloud-Bus.html</guid>
+        
+        <category>java</category>
+        
+        <category>SpringBoot</category>
+        
+        <category>SpringCloud</category>
+        
+        
+        <category>SpringCloud</category>
+        
+      </item>
     
       <item>
         <title>晚归</title>
@@ -1296,89 +1389,6 @@ git pull
         
         
         <category>git</category>
-        
-      </item>
-    
-      <item>
-        <title>在Python精确处理浮点数运算</title>
-        <description>&lt;h2 id=&quot;在python精确处理浮点数运算&quot;&gt;在Python精确处理浮点数运算&lt;/h2&gt;
-
-&lt;h4 id=&quot;简要说明&quot;&gt;简要说明&lt;/h4&gt;
-
-&lt;p&gt;在Python中内置了浮点数运算模块&lt;code class=&quot;highlighter-rouge&quot;&gt;decimal&lt;/code&gt;,相较于&lt;code class=&quot;highlighter-rouge&quot;&gt;float&lt;/code&gt;它有以下几个优点：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;它的设计基于浮点模型&lt;/li&gt;
-  &lt;li&gt;相较于float 它能更精确的表示&lt;/li&gt;
-  &lt;li&gt;可自定义精度，默认精确到28位&lt;/li&gt;
-  &lt;li&gt;具体详情参考&lt;a href=&quot;https://docs.python.org/2/library/decimal.html&quot;&gt;官方文档&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;导入decimal-模块定义decimal-类型数据&quot;&gt;导入decimal 模块，定义Decimal 类型数据&lt;/h4&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;decimal&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Decimal&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#导入decimal 模块
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;price&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Decimal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#定义一个Decimal 类型的数据
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;具体使用&quot;&gt;具体使用&lt;/h4&gt;
-
-&lt;p&gt;设置精度和模式。更多的方法说明参考&lt;a href=&quot;https://docs.python.org/2/library/decimal.html&quot;&gt;官方文档&lt;/a&gt;。&lt;/p&gt;
-
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;3
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; a/b
-0
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; a/b
-Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'0.3333333333333333333333333333'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;a/b&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.quantize&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.000001'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;rounding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ROUND_UP'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'0.333334'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;a/b&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.quantize&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.000001'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;rounding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ROUND_DOWN'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'0.333333'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;a/b&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.quantize&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.000001'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;rounding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ROUND_CEILING'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'0.333334'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;a/b&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.quantize&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.000001'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;rounding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ROUND_FLOOR'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'0.333333'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;a/b&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.quantize&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.000001'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;rounding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ROUND_HALF_DOWN'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'0.333333'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;a/b&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.quantize&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.000001'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;rounding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ROUND_HALF_EVEN'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'0.333333'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;a/b&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.quantize&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.000001'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;rounding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ROUND_HALF_UP'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'0.333333'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;a/b&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.quantize&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.000001'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;rounding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ROUND_05UP'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'0.333333'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;6&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;a/b&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.quantize&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.000001'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;rounding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ROUND_05UP'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'0.833333'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;a/b&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.quantize&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.000001'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;rounding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ROUND_HALF_UP'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'0.833333'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;4&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;9&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;a/b&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.quantize&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.000001'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;rounding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ROUND_HALF_UP'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'0.444444'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;a/b&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.quantize&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.000001'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;rounding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ROUND_05UP'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'0.444444'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;a/b&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.quantize&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.000001'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;rounding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ROUND_HALF_EVEN'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'0.444444'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;a/b&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.quantize&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'1.'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;rounding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ROUND_05UP'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'1'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;a/b&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.quantize&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'1.'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;rounding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ROUND_HALF_UP'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'0'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;a/b&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.quantize&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.0001'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;rounding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ROUND_UP'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-Decimal&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'0.4445'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-        <pubDate>Fri, 15 Mar 2019 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2019/03/15/Precise-processing-of-floating-point-arithmetic-in-Python.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/03/15/Precise-processing-of-floating-point-arithmetic-in-Python.html</guid>
-        
-        <category>Python</category>
-        
-        
-        <category>Python</category>
         
       </item>
     
