@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="/assets/css/app.min.css">
     <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
     
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
 	
 	<!--
@@ -372,6 +374,12 @@ hi forezp ,i am from port:8083
       
     </section>
     
+    <section class="post-footer-item comment">
+      <!-- <div id="disqus_thread"></div> -->
+      <div id="gitalk-container"></div>
+    </section>
+    <!-- <div id="gitalk-container"></div> -->
+    
   </section>
 
   <footer class="g-footer">
@@ -411,6 +419,21 @@ hi forezp ,i am from port:8083
     </script>
 
   <!--  -->
+  
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+  <script>
+    const gitalk = new Gitalk({
+      clientID: '67b57f65cc4d670a72ab',
+      clientSecret: 'ec1ebc536274f62d4b9499d28bc7b3f2c018dca1',
+      repo: 'luoren18.github.io',
+      owner: 'luoren18',
+      admin: 'luoren18',
+      id: 'Spring Cloud服务的消费者(Feign)（三）',      // Ensure uniqueness and length less than 50
+      distractionFreeMode: false,  // Facebook-like distraction free mode
+      title: 'Spring Cloud服务的消费者(Feign)（三）'
+    })
+    gitalk.render('gitalk-container')
+  </script>
   
 
   <script src="/assets/js/prism.js"></script>
