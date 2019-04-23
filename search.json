@@ -1,6 +1,12 @@
 [
   
     {
+      "title"    : "Maven依赖中的scope详解",
+      "tags"     : "maven",
+      "url"      : "/2019/04/23/maven-scope.html"
+    } ,
+  
+    {
       "title"    : "消息总线(Spring cloud bus)（七）",
       "tags"     : "java SpringBoot SpringCloud",
       "url"      : "/2019/04/11/Spring-Cloud-Bus.html"
