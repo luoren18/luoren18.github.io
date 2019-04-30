@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>晚归 - REN博客</title>
+    <title>os.path.getmtime与os.path.getctime的区别 - REN博客</title>
     <meta name="author"  content="REN">
-    <meta name="description" content="晚归">
-    <meta name="keywords"  content="沧溟先生诗, 诗词">
+    <meta name="description" content="os.path.getmtime与os.path.getctime的区别">
+    <meta name="keywords"  content="python">
     <!-- Open Graph -->
-    <meta property="og:title" content="晚归 - REN博客">
+    <meta property="og:title" content="os.path.getmtime与os.path.getctime的区别 - REN博客">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:4000/2019/04/07/Late-return.html">
+    <meta property="og:url" content="http://localhost:4000/2019/04/23/getmtime-and-getctime.html">
     <meta property="og:description" content="个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。">
     <meta property="og:site_name" content="REN博客">
     <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
@@ -20,8 +20,6 @@
     <link rel="stylesheet" href="/assets/css/share.min.css">
     <link rel="stylesheet" href="/assets/css/app.min.css">
     <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
     
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
 	
@@ -120,18 +118,16 @@ Author: Ray-Eldath
       <div class="post-tags">
         
         
-        <a href=/tags.html#沧溟先生诗 class="post-tag">沧溟先生诗</a>
-        
-        <a href=/tags.html#诗词 class="post-tag">诗词</a>
+        <a href=/tags.html#python class="post-tag">python</a>
         
         
       </div>
-      <h1>晚归</h1>
+      <h1>os.path.getmtime与os.path.getctime的区别</h1>
       <div class="post-meta">
         <span class="post-meta-item"><i
             class="iconfont icon-author"></i>REN</span>
-        <time class="post-meta-item" datetime="19-04-07"><i
-            class="iconfont icon-date"></i>07 Apr 2019</time>
+        <time class="post-meta-item" datetime="19-04-23"><i
+            class="iconfont icon-date"></i>23 Apr 2019</time>
       </div>
     </div>
     
@@ -139,19 +135,25 @@ Author: Ray-Eldath
 
   <div class="post-content visible">
     
-    <h2 class="post-subtitle">沧溟先生诗<br/><转载></h2>
+    <h2 class="post-subtitle">python</h2>
     
 
     <article class="markdown-body">
-      <h2 id="晚归">《晚归》</h2>
+      <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="nb">file</span><span class="o">=</span><span class="s">'/Volumes/Leopard/Users/Caroline/Desktop/1.mp4'</span>
+<span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getatime</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>   <span class="c1">#输出最近访问时间1318921018.0
+</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getctime</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>   <span class="c1">#输出文件创建时间
+</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>   <span class="c1">#输出最近修改时间
+</span><span class="n">time</span><span class="o">.</span><span class="n">gmtime</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="nb">file</span><span class="p">))</span>   <span class="c1">#以struct_time形式输出最近修改时间
+</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>    <span class="c1">#输出文件大小（字节为单位）
+</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>    <span class="c1">#输出绝对路径'/Volumes/Leopard/Users/Caroline/Desktop/1.mp4'
+</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>   <span class="c1">#输出'/Volumes/Leopard/Users/Caroline/Desktop/1.mp4'
+</span></code></pre></div></div>
 
-<p>浓情浅意两微茫，</p>
+<p>文章链接：<a href="https://www.qiansw.com/os-path-getmtime-and-os-path-getctime.html">https://www.qiansw.com/os-path-getmtime-and-os-path-getctime.html</a></p>
 
-<p>影暗花明竹隐墙。</p>
-
-<p>巷陌寻常惟草树，</p>
-
-<p>背烟垂首向斜阳。</p>
+<p><strong>END</strong></p>
 
     </article>
 
@@ -204,39 +206,18 @@ Author: Ray-Eldath
     </section>
     <section class="post-footer-item read-next">
       
-      <div class="read-next-item">
-        <a href="/2019/04/11/Spring-Cloud-Bus.html" class="read-next-link"></a>
-        <section>
-          <span>消息总线(Spring cloud bus)（七）</span>
-          <p>  声明：本文内容大量的参考和借鉴 http://blog.csdn.net/forezp/article/det...</p>
-        </section>
-        
-        <div class="filter"></div>
-        <img src="https://i.loli.net/2019/04/11/5caf04263f0dd.png" alt="">
-        
-      </div>
-      
 
       
       <div class="read-next-item">
-        <a href="/2019/04/04/Spring-Cloud-Config-Distributed-Configuration-Center.html" class="read-next-link"></a>
+        <a href="/2019/04/23/maven-scope.html" class="read-next-link"></a>
         <section>
-          <span>Spring Cloud Config 分布式配置中心（六）</span>
-          <p>  声明：本文内容大量的参考和借鉴 http://blog.csdn.net/forezp/article/det...</p>
+          <span>Maven依赖中的scope详解</span>
+          <p>转载：链接：https://blog.csdn.net/kimylrong/article/details/503...</p>
         </section>
-        
-        <div class="filter"></div>
-        <img src="https://i.loli.net/2019/04/04/5ca563b7626ae.png" alt="">
         
       </div>
       
     </section>
-    
-    <section class="post-footer-item comment">
-      <!-- <div id="disqus_thread"></div> -->
-      <div id="gitalk-container"></div>
-    </section>
-    <!-- <div id="gitalk-container"></div> -->
     
   </section>
 
@@ -277,21 +258,6 @@ Author: Ray-Eldath
     </script>
 
   <!--  -->
-  
-  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-  <script>
-    const gitalk = new Gitalk({
-      clientID: '67b57f65cc4d670a72ab',
-      clientSecret: 'ec1ebc536274f62d4b9499d28bc7b3f2c018dca1',
-      repo: 'luoren18.github.io',
-      owner: 'luoren18',
-      admin: 'luoren18',
-      id: '晚归',      // Ensure uniqueness and length less than 50
-      distractionFreeMode: false,  // Facebook-like distraction free mode
-      title: '晚归'
-    })
-    gitalk.render('gitalk-container')
-  </script>
   
 
   <script src="/assets/js/prism.js"></script>

@@ -1,6 +1,12 @@
 [
   
     {
+      "title"    : "os.path.getmtime与os.path.getctime的区别",
+      "tags"     : "python",
+      "url"      : "/2019/04/23/getmtime-and-getctime.html"
+    } ,
+  
+    {
       "title"    : "Maven依赖中的scope详解",
       "tags"     : "maven",
       "url"      : "/2019/04/23/maven-scope.html"
