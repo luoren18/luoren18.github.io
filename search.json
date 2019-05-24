@@ -1,6 +1,12 @@
 [
   
     {
+      "title"    : "Spring Boot 集成 Spring Security",
+      "tags"     : "java SpringBoot SpringSecurity",
+      "url"      : "/2019/05/23/SpringBoot-Integration-SpringSecurity.html"
+    } ,
+  
+    {
       "title"    : "os.path.getmtime与os.path.getctime的区别",
       "tags"     : "python",
       "url"      : "/2019/04/23/getmtime-and-getctime.html"
