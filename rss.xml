@@ -5,9 +5,107 @@
     <description>个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 24 May 2019 15:49:27 +0800</pubDate>
-    <lastBuildDate>Fri, 24 May 2019 15:49:27 +0800</lastBuildDate>
+    <pubDate>Wed, 17 Jul 2019 17:35:27 +0800</pubDate>
+    <lastBuildDate>Wed, 17 Jul 2019 17:35:27 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>问你</title>
+        <description>&lt;h2 id=&quot;问你&quot;&gt;《问你》&lt;/h2&gt;
+
+&lt;p&gt;作者: 王艺​&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;我用心底的泪水凝结成眩晕
+
+悬停给你一片彩虹
+
+你看了么
+
+
+
+我用岁月的皱纹写就诗行
+
+颤抖着给你一丝涟漪
+
+你读了么
+
+
+
+我用爱你的玫瑰提炼出芬芳
+
+匍匐着给你一路清香
+
+你想象了么
+
+
+
+我把想你的忧伤写满大地
+
+期待你纹织秋天的金黄
+
+你耕种了么
+
+
+
+我用等你的分秒集合成期待
+
+锻打出缠绵无尽的线条给你描绘梦幻啊
+
+你彷徨了么
+
+
+
+我用无边无际的思忿酿成美酒
+
+微苦着体会你唇际的张望
+
+你陶醉了么
+
+
+
+我用感伤的尘埃砌就坚强
+
+捧给你一种宁静
+
+你心定了么
+
+
+
+我把滚烫的话语冷却成蚕茧
+
+任你抽丝牵挂
+
+你紧张了么
+
+
+
+我将年轮的落叶洒满你的岁月
+
+希冀你踩着欢快歌唱
+
+你踏实了么
+
+
+
+我用生命的全部冲动喷发成岩浆
+
+熔化你的不安与慌张
+
+铸就你透明的水晶心啊
+
+你敞亮了么
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Wed, 17 Jul 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/07/17/%E9%97%AE%E4%BD%A0.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/07/17/%E9%97%AE%E4%BD%A0.html</guid>
+        
+        <category>诗词</category>
+        
+        
+        <category>诗词</category>
+        
+      </item>
     
       <item>
         <title>Spring Boot 集成 Spring Security</title>
@@ -837,8 +935,8 @@ public class Menu {
 &lt;p&gt;背烟垂首向斜阳。&lt;/p&gt;
 </description>
         <pubDate>Sun, 07 Apr 2019 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2019/04/07/Late-return.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/04/07/Late-return.html</guid>
+        <link>http://localhost:4000/2019/04/07/%E6%99%9A%E5%BD%92.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/04/07/%E6%99%9A%E5%BD%92.html</guid>
         
         <category>沧溟先生诗</category>
         
@@ -1101,6 +1199,39 @@ public class Menu {
       </item>
     
       <item>
+        <title>刚好而已</title>
+        <description>&lt;h2 id=&quot;刚好而已&quot;&gt;《刚好而已》&lt;/h2&gt;
+
+&lt;p&gt;你路过我的时候，&lt;/p&gt;
+
+&lt;p&gt;我也刚好路过你。&lt;/p&gt;
+
+&lt;p&gt;你看向我的时候，&lt;/p&gt;
+
+&lt;p&gt;我也刚好看向你。&lt;/p&gt;
+
+&lt;p&gt;没有什么难捱的岁月，&lt;/p&gt;
+
+&lt;p&gt;一呼一吸的光阴而已。&lt;/p&gt;
+
+&lt;p&gt;渔火，醒来&lt;/p&gt;
+
+&lt;p&gt;夜，将长眠……&lt;/p&gt;
+</description>
+        <pubDate>Fri, 29 Mar 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/03/29/%E5%88%9A%E5%A5%BD%E8%80%8C%E5%B7%B2.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/03/29/%E5%88%9A%E5%A5%BD%E8%80%8C%E5%B7%B2.html</guid>
+        
+        <category>沧溟先生诗</category>
+        
+        <category>诗词</category>
+        
+        
+        <category>诗词</category>
+        
+      </item>
+    
+      <item>
         <title>Spring Cloud 路由网关(Zuul)（五）</title>
         <description>&lt;blockquote&gt;
   &lt;p&gt;声明：本文内容大量的参考和借鉴 &lt;a href=&quot;http://blog.csdn.net/forezp/article/details/70148833&quot;&gt;http://blog.csdn.net/forezp/article/details/70148833&lt;/a&gt; 的内容。非常感谢原文作者&lt;a href=&quot;http://blog.csdn.net/forezp&quot;&gt;方志朋的博客&lt;/a&gt;提供的优秀的SpringCloud 的教程。&lt;/p&gt;
@@ -1315,39 +1446,6 @@ public class Menu {
       </item>
     
       <item>
-        <title>刚好而已</title>
-        <description>&lt;h2 id=&quot;刚好而已&quot;&gt;《刚好而已》&lt;/h2&gt;
-
-&lt;p&gt;你路过我的时候，&lt;/p&gt;
-
-&lt;p&gt;我也刚好路过你。&lt;/p&gt;
-
-&lt;p&gt;你看向我的时候，&lt;/p&gt;
-
-&lt;p&gt;我也刚好看向你。&lt;/p&gt;
-
-&lt;p&gt;没有什么难捱的岁月，&lt;/p&gt;
-
-&lt;p&gt;一呼一吸的光阴而已。&lt;/p&gt;
-
-&lt;p&gt;渔火，醒来&lt;/p&gt;
-
-&lt;p&gt;夜，将长眠……&lt;/p&gt;
-</description>
-        <pubDate>Fri, 29 Mar 2019 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2019/03/29/Mr.-Yu-s-poem.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/03/29/Mr.-Yu-s-poem.html</guid>
-        
-        <category>沧溟先生诗</category>
-        
-        <category>诗词</category>
-        
-        
-        <category>诗词</category>
-        
-      </item>
-    
-      <item>
         <title>Spring Cloud 断路器（Hystrix)（四）</title>
         <description>&lt;blockquote&gt;
   &lt;p&gt;声明：本文内容大量的参考和借鉴 &lt;a href=&quot;http://blog.csdn.net/forezp/article/details/70148833&quot;&gt;http://blog.csdn.net/forezp/article/details/70148833&lt;/a&gt; 的内容。非常感谢原文作者&lt;a href=&quot;http://blog.csdn.net/forezp&quot;&gt;方志朋的博客&lt;/a&gt;提供的优秀的SpringCloud 的教程。&lt;/p&gt;
@@ -1469,181 +1567,6 @@ public class Menu {
         <pubDate>Fri, 22 Mar 2019 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2019/03/22/Spring-Cloud-circuit-breaker-Hystrix.html</link>
         <guid isPermaLink="true">http://localhost:4000/2019/03/22/Spring-Cloud-circuit-breaker-Hystrix.html</guid>
-        
-        <category>java</category>
-        
-        <category>SpringBoot</category>
-        
-        <category>SpringCloud</category>
-        
-        
-        <category>SpringCloud</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring Cloud服务的消费者(Ribbon)（二）</title>
-        <description>&lt;blockquote&gt;
-  &lt;p&gt;声明：本文内容大量的参考和借鉴 &lt;a href=&quot;http://blog.csdn.net/forezp/article/details/70148833&quot;&gt;http://blog.csdn.net/forezp/article/details/70148833&lt;/a&gt; 的内容。非常感谢原文作者&lt;a href=&quot;http://blog.csdn.net/forezp&quot;&gt;方志朋的博客&lt;/a&gt;提供的优秀的SpringCloud 的教程。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;在微服务架构中，业务都会被拆分成一个独立的服务，服务与服务的通讯是基于http restful的。Spring cloud有两种服务调用方式，一种是ribbon+restTemplate，另一种是feign。&lt;/p&gt;
-
-&lt;h3 id=&quot;一ribbon-简介&quot;&gt;一、Ribbon 简介&lt;/h3&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Ribbon is a client side load balancer which gives you a lot of control over the behaviour of HTTP and TCP clients. Feign already uses Ribbon, so if you are using @FeignClient then this section also applies.&lt;/p&gt;
-
-  &lt;p&gt;—–摘自官网&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;ribbon是一个负载均衡客户端，可以很好的控制htt和tcp的一些行为。Feign默认集成了ribbon。&lt;/p&gt;
-
-&lt;p&gt;ribbon 已经默认实现了这些配置bean：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;IClientConfig ribbonClientConfig: DefaultClientConfigImpl&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;IRule ribbonRule: ZoneAvoidanceRule&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;IPing ribbonPing: NoOpPing&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;ServerList ribbonServerList: ConfigurationBasedServerList&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;ServerListFilter ribbonServerListFilter: ZonePreferenceServerListFilter&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;ILoadBalancer ribbonLoadBalancer: ZoneAwareLoadBalancer&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;二准备工作&quot;&gt;二、准备工作&lt;/h3&gt;
-
-&lt;p&gt;根据上一章节的代码，修改eureka-client 的端口号位8083，可以发现在注册中心出现了两个eureka-client的实例，分别占用端口8082和8083，这就相当于一个小的集群。&lt;/p&gt;
-
-&lt;p&gt;如何在idea下启动多个实例，请参照这篇文章：
-&lt;a href=&quot;https://blog.csdn.net/forezp/article/details/76408139&quot;&gt;https://blog.csdn.net/forezp/article/details/76408139&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://noteimg.luoren.top/markdown_img/image-20190321085500886.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;三创建一个服务的消费者&quot;&gt;三、创建一个服务的消费者&lt;/h3&gt;
-
-&lt;p&gt;1.同样的操作，先创建一个模块，命名为&lt;code class=&quot;highlighter-rouge&quot;&gt;service-ribbon&lt;/code&gt;，将该模块添加到主工程，修改pom文件&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;project&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://maven.apache.org/POM/4.0.0&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:xsi=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&lt;/span&gt;
-	&lt;span class=&quot;na&quot;&gt;xsi:schemaLocation=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;modelVersion&amp;gt;&lt;/span&gt;4.0.0&lt;span class=&quot;nt&quot;&gt;&amp;lt;/modelVersion&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;parent&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;top.luoren.springcloud&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-cloud-study&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.0-SNAPSHOT&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;relativePath/&amp;gt;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- lookup parent from repository --&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/parent&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;top.luoren.springcloud&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;service-ribbon&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;0.0.1-SNAPSHOT&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;service-ribbon&lt;span class=&quot;nt&quot;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;Demo project for Spring Boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependencies&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-starter-web&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.cloud&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-cloud-starter-netflix-eureka-client&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.cloud&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-cloud-starter-netflix-ribbon&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependencies&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;build&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;plugins&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;plugin&amp;gt;&lt;/span&gt;
-				&lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-				&lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-maven-plugin&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugin&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugins&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/build&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/project&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;2.在application.yml 中完成相关配置&lt;/p&gt;
-
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;eureka&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;serviceUrl&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;defaultZone&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://localhost:8081/eureka/&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;server&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;8084&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;spring&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;service-ribbon&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;3.在工程的启动类中,通过@EnableDiscoveryClient向服务中心注册；并且向程序的ioc注入一个bean: restTemplate;并通过@LoadBalanced注解表明这个restRemplate开启负载均衡的功能。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@SpringBootApplication
-@EnableEurekaClient
-@EnableDiscoveryClient
-public class ServiceRibbonApplication {
-
-   public static void main(String[] args) {
-      SpringApplication.run(ServiceRibbonApplication.class, args);
-   }
-
-   @Bean
-   @LoadBalanced
-   RestTemplate restTemplate(){
-      return new RestTemplate();
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;4.创建一个服务类，注入restTemplate来消费eureka-client 的/hi 接口&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Service&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HelloService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RestTemplate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;restTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;helloService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;restTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getForObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://SERVICE-CLIENT/hi?name=&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;5.编写一个controller 调用HelloService&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@RestController&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HelloController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HelloService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;helloService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@GetMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/hi&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;home&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;helloService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;helloService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;6.启动项目，在页面上多次访问&lt;a href=&quot;http://localhost:8084/hi?name=kaikai&quot;&gt;http://localhost:8084/hi?name=kaikai&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;就能在页面上交替的看到8082 和 8083 端口响应请求&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-reStructuredText&quot;&gt;hi forezp ,i am from port:8082
-hi forezp ,i am from port:8083
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-        <pubDate>Fri, 22 Mar 2019 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2019/03/22/Spring-Cloud-Service-Consumer-Ribbon.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/03/22/Spring-Cloud-Service-Consumer-Ribbon.html</guid>
         
         <category>java</category>
         
