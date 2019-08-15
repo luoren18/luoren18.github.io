@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HashMap 的一些问题 - REN博客</title>
+    <meta name="author"  content="REN">
+    <meta name="description" content="HashMap 的一些问题">
+    <meta name="keywords"  content="java">
+    <!-- Open Graph -->
+    <meta property="og:title" content="HashMap 的一些问题 - REN博客">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/08/15/HashMap.html">
+    <meta property="og:description" content="个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。">
+    <meta property="og:site_name" content="REN博客">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">home</a></li>
+            
+            <li><a href="/tags.html">tags</a></li>
+            
+            <li><a href="/rss.xml" target="_blank">RSS</a></li>
+            <li><a href="https://wangchujiang.com/linux-command/" target="_blank">COMMAND LINUX</a></li>
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-overlappingCircles bgcolor-default "
+    data-theme="default">
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+        
+        <a href=/tags.html#java class="post-tag">java</a>
+        
+        
+      </div>
+      <h1>HashMap 的一些问题</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i
+            class="iconfont icon-author"></i>luoren</span>
+        <time class="post-meta-item" datetime="19-08-15"><i
+            class="iconfont icon-date"></i>15 Aug 2019</time>
+      </div>
+    </div>
+    
+    <div class="filter"></div>
+    <div class="post-cover" style="background: url('http://noteimg.luoren.top/markdown_img/20190815162210.png') center no-repeat; background-size: cover;"></div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+    <h2 class="post-subtitle">HashMap</h2>
+    
+
+    <article class="markdown-body">
+      <h1 id="hashmap">HashMap</h1>
+
+<h2 id="什么是hashmap">什么是HashMap？</h2>
+
+<p>HashMap是一个用于存储key-value 键值对的集合，每一个键值对称作一个Entity。这些Entity分散存储在一个数组中。所以HashMap的底层还是一个数组。</p>
+
+<p>HashMap 数组的每一个初始元素的初始值都是Null。</p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20190815101236.png" alt="" /></p>
+
+<p>对于HashMap,我们最主要的两个方法是<strong>get</strong> 和 <strong>put</strong></p>
+
+<h2 id="hashput">Hash–&gt;put</h2>
+
+<p>调用<code class="highlighter-rouge">hashMap.put("apple",0)</code>，插入一个key为<strong>apple</strong>的元素，这时候需要使用一个hash函数来确定<strong>Entity</strong>的插入位置（index）:</p>
+
+<p><strong><em>index=Hash(“apple”)</em></strong></p>
+
+<p>假设最后计算出来的结果是2，那么结果就如下</p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20190815102448.png" alt="" /></p>
+
+<p>但是由于HashMap的长度有限，当插入的Entity越来越多的时候，就避免不了会出现index 冲突，</p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20190815103054.png" alt="" /></p>
+
+<p>此时可以使用链表来解决问题</p>
+
+<p>HashMap数组的每一个元素不只是一个Entity对象，也是一个链表的的头结点，每一个Entity对象通过next指针指向下一个Entity 节点。当出现hash冲突时，只要将对应的数据插入到相应的链表即可:</p>
+
+<p>下面是JAVA1.8以前的做法，采用的是<strong>头插法</strong></p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20190815103951.png" alt="" /></p>
+
+<p>通过分析源码可以得出</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">addEntry</span><span class="o">(</span><span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="n">K</span> <span class="n">key</span><span class="o">,</span> <span class="n">V</span> <span class="n">value</span><span class="o">,</span> <span class="kt">int</span> <span class="n">bucketIndex</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">table</span><span class="o">[</span><span class="n">bucketIndex</span><span class="o">];</span>
+    <span class="n">table</span><span class="o">[</span><span class="n">bucketIndex</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span><span class="c1">//创建一个新的节点，并将旧的头结点作为新节点的下一个节点，替换旧的头结点</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">size</span><span class="o">++</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="o">)</span>
+        <span class="n">resize</span><span class="o">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">table</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>JAVA1.8 采用的 <strong>尾插法</strong></p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20190815105901.png" alt="" /></p>
+
+<p>同样的从源码可以看出来，JAVA1.8是将新的节点作为链表的下一个节点，并将新节点的下一个节点置为空。</p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20190815110144.png" alt="" /></p>
+
+<h2 id="hashmapget">HashMap–&gt;get</h2>
+
+<p>get方法是根据key来查找对应的value值。</p>
+
+<p>根据对应的key得到index值：</p>
+
+<p><strong><em>index=hash(key)</em></strong></p>
+
+<p>根据index匹配到对应的Entity 然后顺着链表头的头结点，一个个向下查找，所以时间复杂度=O(1+n).</p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20190815114436.png" alt="" /></p>
+
+<h2 id="hashmap的初始长度是多少">HashMap的初始长度是多少？</h2>
+
+<p>可以确定的一点是，<strong>HashMap的默认初始长度是16</strong>，不仅默认长度是16 ，<strong>手动初始化和自动增长</strong>的长度也必须是<strong>2的整数次幂</strong>。之所以选择16是为了方便于从Key-&gt;Hash-&gt;Index 的hash算法。</p>
+
+<p>如何设计一个能均匀获取[0,length)的Hash函数：</p>
+
+<ol>
+  <li><strong><em>hash(key)%length</em></strong></li>
+  <li><strong><em>hash(key)&amp;(length-1)</em></strong></li>
+</ol>
+
+<p>第一种取模方式简单，但是相对于第二种的位运算来说，效率不是很高</p>
+
+<p>从源码可以看出，HashMap中也使用了第二种方式。</p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20190815115929.png" alt="" /></p>
+
+<h3 id="现在先默认初始长度就是16--keyhelloword">现在先默认初始长度就是16  key=”helloWord”</h3>
+
+<p><strong><em>hash=hashCode(key)</em></strong></p>
+
+<p><strong><em>hash=1196809641  二进制就是  1000111010101011101110110101001</em></strong></p>
+
+<p><strong><em>index=1000111010101011101110110101001 &amp; 1111</em></strong></p>
+
+<p><strong><em>index=1001 十进制就是9</em></strong></p>
+
+<h3 id="假使默认长度为10-会出现什么问题">假使默认长度为10 ，会出现什么问题？</h3>
+
+<p><strong><em>index=hash(key)&amp;1001</em></strong></p>
+
+<p>就会导致index 永远都不会出现 中间两位为1 的情况 也就是说 0110 、0101  等位置永远不会有值插入，除了导致空间浪费的问题，也不符合hash算法均匀分布的原则。</p>
+
+<h3 id="结论">结论</h3>
+
+<p>反观16 或者 2的整数次幂 数值-1 的二进制都是1，所以只需要保证hashCode是均匀分布的，hash算法的结果就是均匀的。</p>
+
+<p>结论就是：<strong>HashMap的默认长度是16,手动初始化和自动扩容的长度也必须是2的整数次幂</strong></p>
+
+<h2 id="高并发情况下为什么hashmap可能出现死锁">高并发情况下，为什么HashMap可能出现死锁？</h2>
+
+<p>该问题出现是在JAVA1.8以前的版本：对于出现的原因是因为HashMap扩容导致出现环，具体出现的原因我看了很多篇的博客，绝大部分使用了 3-&gt;7-&gt;5来做了例子，但是由于才疏学浅，看的云里雾里，直到看到了<a href="https://www.jianshu.com/p/1e9cf0ac07f4">https://www.jianshu.com/p/1e9cf0ac07f4</a>这篇博客，才明白其中的缘由。</p>
+
+<p>其实不止会出现死锁的情况，还会导致数据的丢失。</p>
+
+<p>在设计初衷来说，HashMap 本身就是非线程安全的，即使java1.8修复了导致死锁的原因，但是数据丢失的状况还是会出现，所以在高并发的情况下还是建议使用ConcurrentHashMap 或者 Collections.synchronizedMap()）</p>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <!-- <img src="http://noteimg.luoren.top/markdown_img/20190428084026.png" alt=""> -->
+        <img src="http://noteimg.luoren.top/markdown_img/20190428084026.png" alt="">
+      </div>
+      <div class="author-name" rel="author">REN</div>
+      <div class="bio">
+        <p>码农，JAVA程序员，爱下厨，假装热爱技术&生活稍微过过也能活下去，哪有那么多要求</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/lawren18" target="_blank">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="mailto:luoren96@gmail.com" target="_blank">
+            <i class="iconfont icon-email"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//twitter.com/kaiorren" target="_blank">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/luoren18" target="_blank">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2019/08/15/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98.html" class="read-next-link"></a>
+        <section>
+          <span>服务端相关问题</span>
+          <p>虚拟内存</p>
+        </section>
+        
+        <div class="filter"></div>
+        <img src="http://noteimg.luoren.top/markdown_img/20190815085549.png" alt="">
+        
+      </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/07/17/%E9%97%AE%E4%BD%A0.html" class="read-next-link"></a>
+        <section>
+          <span>问你</span>
+          <p>《问你》</p>
+        </section>
+        
+      </div>
+      
+    </section>
+    
+    <section class="post-footer-item comment">
+      <!-- <div id="disqus_thread"></div> -->
+      <div id="gitalk-container"></div>
+    </section>
+    <!-- <div id="gitalk-container"></div> -->
+    
+  </section>
+
+  <footer class="g-footer">
+  <section>REN博客 ©
+  
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+      socialShare('.social-share', {
+        sites: [
+          
+            'wechat'
+            ,
+            
+          
+            'weibo'
+            ,
+            
+          
+            'douban'
+            ,
+            
+          
+            'twitter'
+            
+          
+        ],
+        wechatQrcodeTitle: "分享到微信朋友圈",
+        wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+      });
+    </script>
+
+  <!--  -->
+  
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+  <script>
+    const gitalk = new Gitalk({
+      clientID: '67b57f65cc4d670a72ab',
+      clientSecret: 'ec1ebc536274f62d4b9499d28bc7b3f2c018dca1',
+      repo: 'luoren18.github.io',
+      owner: 'luoren18',
+      admin: 'luoren18',
+      id: 'HashMap 的一些问题',      // Ensure uniqueness and length less than 50
+      distractionFreeMode: false,  // Facebook-like distraction free mode
+      title: 'HashMap 的一些问题'
+    })
+    gitalk.render('gitalk-container')
+  </script>
+  
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+</body>
+
+</html>
