@@ -5,9 +5,108 @@
     <description>个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 08 Aug 2019 16:47:29 +0800</pubDate>
-    <lastBuildDate>Thu, 08 Aug 2019 16:47:29 +0800</lastBuildDate>
+    <pubDate>Thu, 15 Aug 2019 08:56:16 +0800</pubDate>
+    <lastBuildDate>Thu, 15 Aug 2019 08:56:16 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>服务端相关问题</title>
+        <description>&lt;h1 id=&quot;虚拟内存&quot;&gt;虚拟内存&lt;/h1&gt;
+
+&lt;h2 id=&quot;什么是内存&quot;&gt;什么是内存？&lt;/h2&gt;
+
+&lt;p&gt;计算机中所有程序的运行都是在内存中进行的，因此内存的性能对计算机的影响非常大。内存(Memory)也被称为&lt;a href=&quot;https://baike.baidu.com/item/内存储器/834392&quot;&gt;内存储器&lt;/a&gt;和&lt;a href=&quot;https://baike.baidu.com/item/主存储器/10635399&quot;&gt;主存储器&lt;/a&gt;，其作用是用于暂时存放CPU中的运算数据，以及与&lt;a href=&quot;https://baike.baidu.com/item/硬盘/159825&quot;&gt;硬盘&lt;/a&gt;等&lt;a href=&quot;https://baike.baidu.com/item/外部存储器/4843180&quot;&gt;外部存储器&lt;/a&gt;交换的数据。内存的一个特点是断电后，它存储的数据就没有了&lt;/p&gt;
+
+&lt;h2 id=&quot;什么是虚拟内存&quot;&gt;什么是虚拟内存？&lt;/h2&gt;
+
+&lt;p&gt;虚拟内存就是把不是内存的东西当内存使用。通常指的是把外存当做内存使用。&lt;/p&gt;
+
+&lt;h2 id=&quot;虚拟内存的作用&quot;&gt;虚拟内存的作用&lt;/h2&gt;
+
+&lt;p&gt;可以再一定程度上拓展可用内存的大小，让电脑能运行更多的的程序。但是有一个矛盾的点是外存的存储速度相对于内存要慢很多，所以虚拟内存在一定程度上增加了可用内存的大小，但是总体上降低了内存的响应速度。因为增大虚拟内存的大小会导致数据写入虚拟内存的可能性增加，由于响应速度的悬殊，从而导致系统的平均响应速度会下降&lt;/p&gt;
+
+&lt;h1 id=&quot;http协议包括哪几种请求&quot;&gt;HTTP协议包括哪几种请求&lt;/h1&gt;
+
+&lt;h2 id=&quot;什么是http协议&quot;&gt;什么是HTTP协议？&lt;/h2&gt;
+
+&lt;p&gt;HTTP协议（超文本传输协议），是从服务器传输超文本到本地浏览器的传输协议。&lt;/p&gt;
+
+&lt;p&gt;HTTP是一个&lt;strong&gt;&lt;em&gt;基于TCP/IP&lt;/em&gt;&lt;/strong&gt;通信协议来传递数据&lt;/p&gt;
+
+&lt;p&gt;HTTP 是一个属于&lt;strong&gt;&lt;em&gt;应用层&lt;/em&gt;&lt;/strong&gt;的面向对象的协议&lt;/p&gt;
+
+&lt;h2 id=&quot;http协议的8种请求类型&quot;&gt;HTTP协议的8种请求类型&lt;/h2&gt;
+
+&lt;p&gt;OPTIONS：返回服务器针对特定资源所支持的HTTP请求方法。也可以利用向Web服务器发送’*‘的请求来测试服务器的功能性。 
+HEAD：向服务器索要与GET请求相一致的响应，只不过响应体将不会被返回。这一方法可以在不必传输整个响应内容的情况下，就可以获取包含在响应消息头中的元信息。 
+GET：向特定的资源发出请求。 
+POST：向指定资源提交数据进行处理请求（例如提交表单或者上传文件）。数据被包含在请求体中。POST请求可能会导致新的资源的创建和/或已有资源的修改。 
+PUT：向指定资源位置上传其最新内容。 
+DELETE：请求服务器删除Request-URI所标识的资源。 
+TRACE：回显服务器收到的请求，主要用于测试或诊断。&lt;/p&gt;
+
+&lt;h2 id=&quot;osi七层模型&quot;&gt;OSI七层模型&lt;/h2&gt;
+
+&lt;p&gt;物理层：物理媒介上以二进制形式传输数据&lt;/p&gt;
+
+&lt;p&gt;数据链路层：传输带有地址的数据段，具有错误检测功能&lt;/p&gt;
+
+&lt;p&gt;网络层：为数据包选择路由&lt;/p&gt;
+
+&lt;p&gt;传输层：为数据提供端对端的接口&lt;/p&gt;
+
+&lt;p&gt;会话层：解除和建立与其他接点的联系&lt;/p&gt;
+
+&lt;p&gt;表示层：数据处理&lt;/p&gt;
+
+&lt;p&gt;应用层 ：文件传输，电子邮件，文件服务…(FTP、HTTP、DNS…)&lt;/p&gt;
+
+&lt;h2 id=&quot;如何保证http请求幂等性&quot;&gt;如何保证HTTP请求幂等性&lt;/h2&gt;
+
+&lt;p&gt;幂等性表达的是N次变换与1次变换的结果相同。&lt;/p&gt;
+
+&lt;p&gt;GET/&lt;/p&gt;
+
+&lt;p&gt;PUT/&lt;/p&gt;
+
+&lt;p&gt;DELETE/&lt;/p&gt;
+
+&lt;p&gt;都是幂等的&lt;/p&gt;
+
+&lt;p&gt;POST/&lt;/p&gt;
+
+&lt;p&gt;不具备幂等性&lt;/p&gt;
+
+&lt;p&gt;POST和PUT的区别容易被简单地误认为“POST表示创建资源，PUT表示更新资源”；而实际上，二者均可用于创建资源，更为本质的差别是在幂等性方面。&lt;/p&gt;
+
+&lt;h2 id=&quot;从输入url到页面加载发生了什么&quot;&gt;从输入URL到页面加载发生了什么&lt;/h2&gt;
+
+&lt;p&gt;1.DNS解析&lt;/p&gt;
+
+&lt;p&gt;​	通过Host 找到请求的主机的IP地址&lt;/p&gt;
+
+&lt;p&gt;2.建立TCP 连接&lt;/p&gt;
+
+&lt;p&gt;3.建立HTTP连接&lt;/p&gt;
+
+&lt;p&gt;​	https=http+ssl&lt;/p&gt;
+
+&lt;p&gt;4.处理HTTP请求返回的报文&lt;/p&gt;
+
+&lt;p&gt;5.数据的渲染&lt;/p&gt;
+
+&lt;p&gt;6.断开连接&lt;/p&gt;
+</description>
+        <pubDate>Thu, 15 Aug 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/08/15/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/08/15/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98.html</guid>
+        
+        <category>other</category>
+        
+        
+        <category>other</category>
+        
+      </item>
     
       <item>
         <title>问你</title>
@@ -741,9 +840,7 @@ public class Menu {
         
         <category>java</category>
         
-        <category>SpringBoot</category>
-        
-        <category>SpringSecurity</category>
+        <category>Spring</category>
         
         
         <category>java</category>
@@ -822,7 +919,7 @@ public class Menu {
         <link>http://localhost:4000/2019/04/23/maven-scope.html</link>
         <guid isPermaLink="true">http://localhost:4000/2019/04/23/maven-scope.html</guid>
         
-        <category>maven</category>
+        <category>other</category>
         
         
         <category>maven</category>
@@ -913,9 +1010,7 @@ public class Menu {
         
         <category>java</category>
         
-        <category>SpringBoot</category>
-        
-        <category>SpringCloud</category>
+        <category>Spring</category>
         
         
         <category>SpringCloud</category>
@@ -937,8 +1032,6 @@ public class Menu {
         <pubDate>Sun, 07 Apr 2019 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2019/04/07/%E6%99%9A%E5%BD%92.html</link>
         <guid isPermaLink="true">http://localhost:4000/2019/04/07/%E6%99%9A%E5%BD%92.html</guid>
-        
-        <category>沧溟先生诗</category>
         
         <category>诗词</category>
         
@@ -1189,9 +1282,7 @@ public class Menu {
         
         <category>java</category>
         
-        <category>SpringBoot</category>
-        
-        <category>SpringCloud</category>
+        <category>Spring</category>
         
         
         <category>SpringCloud</category>
@@ -1221,8 +1312,6 @@ public class Menu {
         <pubDate>Fri, 29 Mar 2019 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2019/03/29/%E5%88%9A%E5%A5%BD%E8%80%8C%E5%B7%B2.html</link>
         <guid isPermaLink="true">http://localhost:4000/2019/03/29/%E5%88%9A%E5%A5%BD%E8%80%8C%E5%B7%B2.html</guid>
-        
-        <category>沧溟先生诗</category>
         
         <category>诗词</category>
         
@@ -1436,143 +1525,7 @@ public class Menu {
         
         <category>java</category>
         
-        <category>SpringBoot</category>
-        
-        <category>SpringCloud</category>
-        
-        
-        <category>SpringCloud</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring Cloud 断路器（Hystrix)（四）</title>
-        <description>&lt;blockquote&gt;
-  &lt;p&gt;声明：本文内容大量的参考和借鉴 &lt;a href=&quot;http://blog.csdn.net/forezp/article/details/70148833&quot;&gt;http://blog.csdn.net/forezp/article/details/70148833&lt;/a&gt; 的内容。非常感谢原文作者&lt;a href=&quot;http://blog.csdn.net/forezp&quot;&gt;方志朋的博客&lt;/a&gt;提供的优秀的SpringCloud 的教程。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;在微服务架构中，根据业务来拆分成一个个的服务，服务与服务之间可以相互调用（RPC），在Spring Cloud可以用RestTemplate+Ribbon和Feign来调用。为了保证其高可用，单个服务通常会集群部署。由于网络原因或者自身的原因，服务并不能保证100%可用，如果单个服务出现问题，调用这个服务就会出现线程阻塞，此时若有大量的请求涌入，Servlet容器的线程资源会被消耗完毕，导致服务瘫痪。服务与服务之间的依赖性，故障会传播，会对整个微服务系统造成灾难性的严重后果，这就是服务故障的“雪崩”效应。为了解决这个问题，业界提出了断路器模型。&lt;/p&gt;
-
-&lt;h3 id=&quot;一断路器简介&quot;&gt;一、断路器简介&lt;/h3&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Netflix has created a library called Hystrix that implements the circuit breaker pattern. In a microservice architecture it is common to have multiple layers of service calls.&lt;/p&gt;
-
-  &lt;p&gt;译：Netflix创建了一个名为Hystrix的库，用于实现断路器模式。在微服务架构中，通常有多层服务调用。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Netflix开源了Hystrix组件，实现了断路器模式，SpringCloud对这一组件进行了整合。 在微服务架构中，一个请求需要调用多个服务是非常常见的，如下图：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://noteimg.luoren.top/markdown_img/20190322160044.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;较底层的服务如果出现故障，会导致连锁故障。当对特定的服务的调用的不可用达到一个阀值（Hystric 是5秒20次） 断路器将会被打开。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://noteimg.luoren.top/markdown_img/20190322161126.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;断路打开后，可用避免连锁故障，fallback方法可以直接返回一个固定值。&lt;/p&gt;
-
-&lt;h3 id=&quot;二准备工作&quot;&gt;二、准备工作&lt;/h3&gt;
-
-&lt;p&gt;还是以上面的工程作为基础，启动Eureka-Server  和 Eureka-client&lt;/p&gt;
-
-&lt;h3 id=&quot;三在ribbon-中使用断路器&quot;&gt;三、在ribbon 中使用断路器&lt;/h3&gt;
-
-&lt;p&gt;改造service-ribbon 模块&lt;/p&gt;
-
-&lt;h4 id=&quot;1加入hystrix-的依赖&quot;&gt;1.加入Hystrix 的依赖&lt;/h4&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dependency&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;groupId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;org&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;springframework&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;cloud&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;groupId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;artifactId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spring&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cloud&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;starter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;netflix&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hystrix&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;artifactId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dependency&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;2开启hystrix&quot;&gt;2.开启Hystrix&lt;/h4&gt;
-
-&lt;p&gt;在启动类上加上&lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableHystrix&lt;/code&gt;注解，开启Hystrix 功能&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@SpringBootApplication&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@EnableEurekaClient&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@EnableDiscoveryClient&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@EnableHystrix&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ServiceRibbonApplication&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-   &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;SpringApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServiceRibbonApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-   &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
-   &lt;span class=&quot;nd&quot;&gt;@LoadBalanced&lt;/span&gt;
-   &lt;span class=&quot;n&quot;&gt;RestTemplate&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;restTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RestTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;4指定fallbackmethod熔断方法&quot;&gt;4.指定fallbackMethod熔断方法&lt;/h4&gt;
-
-&lt;p&gt;修改HelloService ,在helloService 方法上添加&lt;code class=&quot;highlighter-rouge&quot;&gt;@HystrixCommand&lt;/code&gt;注解,并指定&lt;code class=&quot;highlighter-rouge&quot;&gt;allbackMethod &lt;/code&gt;,创建&lt;code class=&quot;highlighter-rouge&quot;&gt;errorHandle&lt;/code&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;nd&quot;&gt;@HystrixCommand&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fallbackMethod&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;errorHandle&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;helloService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;restTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getForObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://SERVICE-CLIENT/hi?name=&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;errorHandle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Sorry,&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;,Server ERROR&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;5启动service-ribbon&quot;&gt;5.启动service-ribbon&lt;/h4&gt;
-
-&lt;p&gt;访问&lt;a href=&quot;http://localhost:8084/hi?name=kk&quot;&gt;http://localhost:8084/hi?name=kk&lt;/a&gt; 可以看到浏览器响应&lt;code class=&quot;highlighter-rouge&quot;&gt;hi kk ,i am from port:8082&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;停止eureka-client 再次访问 ，浏览器响应的就是&lt;code class=&quot;highlighter-rouge&quot;&gt;Sorry,kk,Server ERROR&lt;/code&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;四在feign中使用断路器&quot;&gt;四、在feign中使用断路器&lt;/h3&gt;
-
-&lt;p&gt;Feign是自带断路器的，在D版本的Spring Cloud之后，它没有默认打开。需要在配置文件中配置打开它，在配置文件加以下代码：&lt;/p&gt;
-
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;feign&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;hystrix&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;基于service-feign 修改项目。&lt;/p&gt;
-
-&lt;p&gt;修改HelloService 接口，在&lt;code class=&quot;highlighter-rouge&quot;&gt;@FeignClient&lt;/code&gt; 的fallback 指定类，该类需要实现HelloService 接口。&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@FeignClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;service-client&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fallback&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HelloServiceImpl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HelloService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;/**
-     * 定义一个feign接口，通过@ FeignClient（“服务名”），来指定调用哪个服务
-     * @param name
-     * @return
-     */&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;/hi&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;method&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RequestMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;GET&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;hello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@RequestParam&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HelloServiceImpl&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HelloService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;hello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Sorry,&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;,Server ERROR&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;分别在启动和关闭 Eureka-client 工程访问&lt;a href=&quot;http://localhost:8085/hi?name=kk&quot;&gt;http://localhost:8085/hi?name=kk&lt;/a&gt;，可以看到浏览器分别响应&lt;code class=&quot;highlighter-rouge&quot;&gt;hi kk ,i am from port:8082&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;Sorry,kk,Server ERROR&lt;/code&gt;&lt;/p&gt;
-</description>
-        <pubDate>Fri, 22 Mar 2019 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2019/03/22/Spring-Cloud-circuit-breaker-Hystrix.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/03/22/Spring-Cloud-circuit-breaker-Hystrix.html</guid>
-        
-        <category>java</category>
-        
-        <category>SpringBoot</category>
-        
-        <category>SpringCloud</category>
+        <category>Spring</category>
         
         
         <category>SpringCloud</category>

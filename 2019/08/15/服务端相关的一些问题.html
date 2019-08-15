@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>晚归 - REN博客</title>
+    <title>服务端相关问题 - REN博客</title>
     <meta name="author"  content="REN">
-    <meta name="description" content="晚归">
-    <meta name="keywords"  content="诗词">
+    <meta name="description" content="服务端相关问题">
+    <meta name="keywords"  content="other">
     <!-- Open Graph -->
-    <meta property="og:title" content="晚归 - REN博客">
+    <meta property="og:title" content="服务端相关问题 - REN博客">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:4000/2019/04/07/%E6%99%9A%E5%BD%92.html">
+    <meta property="og:url" content="http://localhost:4000/2019/08/15/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98.html">
     <meta property="og:description" content="个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。">
     <meta property="og:site_name" content="REN博客">
     <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
@@ -114,42 +114,121 @@ Author: Ray-Eldath
 
 
   <header
-    class="g-banner post-header post-pattern-overlappingCircles bgcolor-default post-no-cover"
+    class="g-banner post-header post-pattern-overlappingCircles bgcolor-default "
     data-theme="default">
     <div class="post-wrapper">
       <div class="post-tags">
         
         
-        <a href=/tags.html#诗词 class="post-tag">诗词</a>
+        <a href=/tags.html#other class="post-tag">other</a>
         
         
       </div>
-      <h1>晚归</h1>
+      <h1>服务端相关问题</h1>
       <div class="post-meta">
         <span class="post-meta-item"><i
-            class="iconfont icon-author"></i>REN</span>
-        <time class="post-meta-item" datetime="19-04-07"><i
-            class="iconfont icon-date"></i>07 Apr 2019</time>
+            class="iconfont icon-author"></i>luoren</span>
+        <time class="post-meta-item" datetime="19-08-15"><i
+            class="iconfont icon-date"></i>15 Aug 2019</time>
       </div>
     </div>
+    
+    <div class="filter"></div>
+    <div class="post-cover" style="background: url('http://noteimg.luoren.top/markdown_img/20190815085549.png') center no-repeat; background-size: cover;"></div>
     
   </header>
 
   <div class="post-content visible">
     
-    <h2 class="post-subtitle">沧溟先生诗<br/><转载></h2>
+    <h2 class="post-subtitle">服务端相关问题</h2>
     
 
     <article class="markdown-body">
-      <h2 id="晚归">《晚归》</h2>
+      <h1 id="虚拟内存">虚拟内存</h1>
 
-<p>浓情浅意两微茫，</p>
+<h2 id="什么是内存">什么是内存？</h2>
 
-<p>影暗花明竹隐墙。</p>
+<p>计算机中所有程序的运行都是在内存中进行的，因此内存的性能对计算机的影响非常大。内存(Memory)也被称为<a href="https://baike.baidu.com/item/内存储器/834392">内存储器</a>和<a href="https://baike.baidu.com/item/主存储器/10635399">主存储器</a>，其作用是用于暂时存放CPU中的运算数据，以及与<a href="https://baike.baidu.com/item/硬盘/159825">硬盘</a>等<a href="https://baike.baidu.com/item/外部存储器/4843180">外部存储器</a>交换的数据。内存的一个特点是断电后，它存储的数据就没有了</p>
 
-<p>巷陌寻常惟草树，</p>
+<h2 id="什么是虚拟内存">什么是虚拟内存？</h2>
 
-<p>背烟垂首向斜阳。</p>
+<p>虚拟内存就是把不是内存的东西当内存使用。通常指的是把外存当做内存使用。</p>
+
+<h2 id="虚拟内存的作用">虚拟内存的作用</h2>
+
+<p>可以再一定程度上拓展可用内存的大小，让电脑能运行更多的的程序。但是有一个矛盾的点是外存的存储速度相对于内存要慢很多，所以虚拟内存在一定程度上增加了可用内存的大小，但是总体上降低了内存的响应速度。因为增大虚拟内存的大小会导致数据写入虚拟内存的可能性增加，由于响应速度的悬殊，从而导致系统的平均响应速度会下降</p>
+
+<h1 id="http协议包括哪几种请求">HTTP协议包括哪几种请求</h1>
+
+<h2 id="什么是http协议">什么是HTTP协议？</h2>
+
+<p>HTTP协议（超文本传输协议），是从服务器传输超文本到本地浏览器的传输协议。</p>
+
+<p>HTTP是一个<strong><em>基于TCP/IP</em></strong>通信协议来传递数据</p>
+
+<p>HTTP 是一个属于<strong><em>应用层</em></strong>的面向对象的协议</p>
+
+<h2 id="http协议的8种请求类型">HTTP协议的8种请求类型</h2>
+
+<p>OPTIONS：返回服务器针对特定资源所支持的HTTP请求方法。也可以利用向Web服务器发送’*‘的请求来测试服务器的功能性。 
+HEAD：向服务器索要与GET请求相一致的响应，只不过响应体将不会被返回。这一方法可以在不必传输整个响应内容的情况下，就可以获取包含在响应消息头中的元信息。 
+GET：向特定的资源发出请求。 
+POST：向指定资源提交数据进行处理请求（例如提交表单或者上传文件）。数据被包含在请求体中。POST请求可能会导致新的资源的创建和/或已有资源的修改。 
+PUT：向指定资源位置上传其最新内容。 
+DELETE：请求服务器删除Request-URI所标识的资源。 
+TRACE：回显服务器收到的请求，主要用于测试或诊断。</p>
+
+<h2 id="osi七层模型">OSI七层模型</h2>
+
+<p>物理层：物理媒介上以二进制形式传输数据</p>
+
+<p>数据链路层：传输带有地址的数据段，具有错误检测功能</p>
+
+<p>网络层：为数据包选择路由</p>
+
+<p>传输层：为数据提供端对端的接口</p>
+
+<p>会话层：解除和建立与其他接点的联系</p>
+
+<p>表示层：数据处理</p>
+
+<p>应用层 ：文件传输，电子邮件，文件服务…(FTP、HTTP、DNS…)</p>
+
+<h2 id="如何保证http请求幂等性">如何保证HTTP请求幂等性</h2>
+
+<p>幂等性表达的是N次变换与1次变换的结果相同。</p>
+
+<p>GET/</p>
+
+<p>PUT/</p>
+
+<p>DELETE/</p>
+
+<p>都是幂等的</p>
+
+<p>POST/</p>
+
+<p>不具备幂等性</p>
+
+<p>POST和PUT的区别容易被简单地误认为“POST表示创建资源，PUT表示更新资源”；而实际上，二者均可用于创建资源，更为本质的差别是在幂等性方面。</p>
+
+<h2 id="从输入url到页面加载发生了什么">从输入URL到页面加载发生了什么</h2>
+
+<p>1.DNS解析</p>
+
+<p>​	通过Host 找到请求的主机的IP地址</p>
+
+<p>2.建立TCP 连接</p>
+
+<p>3.建立HTTP连接</p>
+
+<p>​	https=http+ssl</p>
+
+<p>4.处理HTTP请求返回的报文</p>
+
+<p>5.数据的渲染</p>
+
+<p>6.断开连接</p>
 
     </article>
 
@@ -202,29 +281,14 @@ Author: Ray-Eldath
     </section>
     <section class="post-footer-item read-next">
       
-      <div class="read-next-item">
-        <a href="/2019/04/11/Spring-Cloud-Bus.html" class="read-next-link"></a>
-        <section>
-          <span>消息总线(Spring cloud bus)（七）</span>
-          <p>  声明：本文内容大量的参考和借鉴 http://blog.csdn.net/forezp/article/det...</p>
-        </section>
-        
-        <div class="filter"></div>
-        <img src="https://i.loli.net/2019/04/11/5caf04263f0dd.png" alt="">
-        
-      </div>
-      
 
       
       <div class="read-next-item">
-        <a href="/2019/04/04/Spring-Cloud-Config-Distributed-Configuration-Center.html" class="read-next-link"></a>
+        <a href="/2019/07/17/%E9%97%AE%E4%BD%A0.html" class="read-next-link"></a>
         <section>
-          <span>Spring Cloud Config 分布式配置中心（六）</span>
-          <p>  声明：本文内容大量的参考和借鉴 http://blog.csdn.net/forezp/article/det...</p>
+          <span>问你</span>
+          <p>《问你》</p>
         </section>
-        
-        <div class="filter"></div>
-        <img src="https://i.loli.net/2019/04/04/5ca563b7626ae.png" alt="">
         
       </div>
       
@@ -284,9 +348,9 @@ Author: Ray-Eldath
       repo: 'luoren18.github.io',
       owner: 'luoren18',
       admin: 'luoren18',
-      id: '晚归',      // Ensure uniqueness and length less than 50
+      id: '服务端相关问题',      // Ensure uniqueness and length less than 50
       distractionFreeMode: false,  // Facebook-like distraction free mode
-      title: '晚归'
+      title: '服务端相关问题'
     })
     gitalk.render('gitalk-container')
   </script>
