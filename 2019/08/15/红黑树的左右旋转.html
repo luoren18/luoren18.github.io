@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>服务端相关问题 - REN博客</title>
+    <title>红黑树的左右旋转 - REN博客</title>
     <meta name="author"  content="REN">
-    <meta name="description" content="服务端相关问题">
-    <meta name="keywords"  content="other">
+    <meta name="description" content="红黑树的左右旋转">
+    <meta name="keywords"  content="python">
     <!-- Open Graph -->
-    <meta property="og:title" content="服务端相关问题 - REN博客">
+    <meta property="og:title" content="红黑树的左右旋转 - REN博客">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:4000/2019/08/15/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98.html">
+    <meta property="og:url" content="http://localhost:4000/2019/08/15/%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E5%B7%A6%E5%8F%B3%E6%97%8B%E8%BD%AC.html">
     <meta property="og:description" content="个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。">
     <meta property="og:site_name" content="REN博客">
     <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
@@ -20,8 +20,6 @@
     <link rel="stylesheet" href="/assets/css/share.min.css">
     <link rel="stylesheet" href="/assets/css/app.min.css">
     <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
     
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
 	
@@ -120,11 +118,11 @@ Author: Ray-Eldath
       <div class="post-tags">
         
         
-        <a href=/tags.html#other class="post-tag">other</a>
+        <a href=/tags.html#python class="post-tag">python</a>
         
         
       </div>
-      <h1>服务端相关问题</h1>
+      <h1>红黑树的左右旋转</h1>
       <div class="post-meta">
         <span class="post-meta-item"><i
             class="iconfont icon-author"></i>luoren</span>
@@ -134,101 +132,60 @@ Author: Ray-Eldath
     </div>
     
     <div class="filter"></div>
-    <div class="post-cover" style="background: url('http://noteimg.luoren.top/markdown_img/20190815085549.png') center no-repeat; background-size: cover;"></div>
+    <div class="post-cover" style="background: url('http://noteimg.luoren.top/markdown_img/20190816092929.png') center no-repeat; background-size: cover;"></div>
     
   </header>
 
   <div class="post-content visible">
     
-    <h2 class="post-subtitle">服务端相关问题</h2>
+    <h2 class="post-subtitle">数据结构</h2>
     
 
     <article class="markdown-body">
-      <h1 id="虚拟内存">虚拟内存</h1>
+      <h1 id="关于红黑树的左右旋转">关于红黑树的左右旋转</h1>
 
-<h2 id="什么是内存">什么是内存？</h2>
+<h2 id="左旋转">左旋转</h2>
 
-<p>计算机中所有程序的运行都是在内存中进行的，因此内存的性能对计算机的影响非常大。内存(Memory)也被称为<a href="https://baike.baidu.com/item/内存储器/834392">内存储器</a>和<a href="https://baike.baidu.com/item/主存储器/10635399">主存储器</a>，其作用是用于暂时存放CPU中的运算数据，以及与<a href="https://baike.baidu.com/item/硬盘/159825">硬盘</a>等<a href="https://baike.baidu.com/item/外部存储器/4843180">外部存储器</a>交换的数据。内存的一个特点是断电后，它存储的数据就没有了</p>
+<p>定义：左旋转就是将自己的右孩子和自己替换，将自己变成自己的左孩子。</p>
 
-<h2 id="什么是虚拟内存">什么是虚拟内存？</h2>
+<p>可以看出，在最左边和最右边的节点即A和C的位置其实没有发生变化，位置发生变化的只有B,</p>
 
-<p>虚拟内存就是把不是内存的东西当内存使用。通常指的是把外存当做内存使用。</p>
+<p>因为<strong><em>X&lt;B&lt;Y</em></strong> 所以当X和Y交换时，B就从Y的左节点变成X的右节点。</p>
 
-<h2 id="虚拟内存的作用">虚拟内存的作用</h2>
+<p><img src="http://noteimg.luoren.top/markdown_img/20190816092929.png" alt="" /></p>
 
-<p>可以再一定程度上拓展可用内存的大小，让电脑能运行更多的的程序。但是有一个矛盾的点是外存的存储速度相对于内存要慢很多，所以虚拟内存在一定程度上增加了可用内存的大小，但是总体上降低了内存的响应速度。因为增大虚拟内存的大小会导致数据写入虚拟内存的可能性增加，由于响应速度的悬殊，从而导致系统的平均响应速度会下降</p>
+<h2 id="右旋转">右旋转</h2>
 
-<h1 id="http协议包括哪几种请求">HTTP协议包括哪几种请求</h1>
+<p>定义:右旋转就是将自己和自己的左孩子替换，自己变成自己有的右孩子。</p>
 
-<h2 id="什么是http协议">什么是HTTP协议？</h2>
+<p><img src="http://noteimg.luoren.top/markdown_img/20190816100236.png" alt="" /></p>
 
-<p>HTTP协议（超文本传输协议），是从服务器传输超文本到本地浏览器的传输协议。</p>
+<p>右旋转就是对左旋转的一种还原。</p>
 
-<p>HTTP是一个<strong><em>基于TCP/IP</em></strong>通信协议来传递数据</p>
+<h2 id="代码实现">代码实现</h2>
 
-<p>HTTP 是一个属于<strong><em>应用层</em></strong>的面向对象的协议</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">BTree</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-<h2 id="http协议的8种请求类型">HTTP协议的8种请求类型</h2>
+    <span class="c1"># 初始化
+</span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>  <span class="c1"># 数据域
+</span>        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">left</span>  <span class="c1"># 左子树
+</span>        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">right</span>  <span class="c1"># 右子树
+</span>
+    <span class="k">def</span> <span class="nf">left_rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">sub</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
+        <span class="k">if</span> <span class="n">sub</span><span class="o">.</span><span class="n">left</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">left</span>
+        <span class="n">sub</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="n">sub</span>
 
-<p>OPTIONS：返回服务器针对特定资源所支持的HTTP请求方法。也可以利用向Web服务器发送’*‘的请求来测试服务器的功能性。 
-HEAD：向服务器索要与GET请求相一致的响应，只不过响应体将不会被返回。这一方法可以在不必传输整个响应内容的情况下，就可以获取包含在响应消息头中的元信息。 
-GET：向特定的资源发出请求。 
-POST：向指定资源提交数据进行处理请求（例如提交表单或者上传文件）。数据被包含在请求体中。POST请求可能会导致新的资源的创建和/或已有资源的修改。 
-PUT：向指定资源位置上传其最新内容。 
-DELETE：请求服务器删除Request-URI所标识的资源。 
-TRACE：回显服务器收到的请求，主要用于测试或诊断。</p>
+    <span class="k">def</span> <span class="nf">right_rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">sub</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span>
+        <span class="k">if</span> <span class="n">sub</span><span class="o">.</span><span class="n">right</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">right</span>
+        <span class="n">sub</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">self</span>
+</code></pre></div></div>
 
-<h2 id="osi七层模型">OSI七层模型</h2>
-
-<p>物理层：物理媒介上以二进制形式传输数据</p>
-
-<p>数据链路层：传输带有地址的数据段，具有错误检测功能</p>
-
-<p>网络层：为数据包选择路由</p>
-
-<p>传输层：为数据提供端对端的接口</p>
-
-<p>会话层：解除和建立与其他接点的联系</p>
-
-<p>表示层：数据处理</p>
-
-<p>应用层 ：文件传输，电子邮件，文件服务…(FTP、HTTP、DNS…)</p>
-
-<h2 id="如何保证http请求幂等性">如何保证HTTP请求幂等性</h2>
-
-<p>幂等性表达的是N次变换与1次变换的结果相同。</p>
-
-<p>GET/</p>
-
-<p>PUT/</p>
-
-<p>DELETE/</p>
-
-<p>都是幂等的</p>
-
-<p>POST/</p>
-
-<p>不具备幂等性</p>
-
-<p>POST和PUT的区别容易被简单地误认为“POST表示创建资源，PUT表示更新资源”；而实际上，二者均可用于创建资源，更为本质的差别是在幂等性方面。</p>
-
-<h2 id="从输入url到页面加载发生了什么">从输入URL到页面加载发生了什么</h2>
-
-<p>1.DNS解析</p>
-
-<p>​	通过Host 找到请求的主机的IP地址</p>
-
-<p>2.建立TCP 连接</p>
-
-<p>3.建立HTTP连接</p>
-
-<p>​	https=http+ssl</p>
-
-<p>4.处理HTTP请求返回的报文</p>
-
-<p>5.数据的渲染</p>
-
-<p>6.断开连接</p>
 
     </article>
 
@@ -281,39 +238,21 @@ TRACE：回显服务器收到的请求，主要用于测试或诊断。</p>
     </section>
     <section class="post-footer-item read-next">
       
-      <div class="read-next-item">
-        <a href="/2019/08/15/%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E5%B7%A6%E5%8F%B3%E6%97%8B%E8%BD%AC.html" class="read-next-link"></a>
-        <section>
-          <span>红黑树的左右旋转</span>
-          <p>关于红黑树的左右旋转</p>
-        </section>
-        
-        <div class="filter"></div>
-        <img src="http://noteimg.luoren.top/markdown_img/20190816092929.png" alt="">
-        
-      </div>
-      
 
       
       <div class="read-next-item">
-        <a href="/2019/08/15/HashMap.html" class="read-next-link"></a>
+        <a href="/2019/08/15/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98.html" class="read-next-link"></a>
         <section>
-          <span>HashMap 的一些问题</span>
-          <p>HashMap</p>
+          <span>服务端相关问题</span>
+          <p>虚拟内存</p>
         </section>
         
         <div class="filter"></div>
-        <img src="http://noteimg.luoren.top/markdown_img/20190815162210.png" alt="">
+        <img src="http://noteimg.luoren.top/markdown_img/20190815085549.png" alt="">
         
       </div>
       
     </section>
-    
-    <section class="post-footer-item comment">
-      <!-- <div id="disqus_thread"></div> -->
-      <div id="gitalk-container"></div>
-    </section>
-    <!-- <div id="gitalk-container"></div> -->
     
   </section>
 
@@ -354,21 +293,6 @@ TRACE：回显服务器收到的请求，主要用于测试或诊断。</p>
     </script>
 
   <!--  -->
-  
-  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-  <script>
-    const gitalk = new Gitalk({
-      clientID: '67b57f65cc4d670a72ab',
-      clientSecret: 'ec1ebc536274f62d4b9499d28bc7b3f2c018dca1',
-      repo: 'luoren18.github.io',
-      owner: 'luoren18',
-      admin: 'luoren18',
-      id: '服务端相关问题',      // Ensure uniqueness and length less than 50
-      distractionFreeMode: false,  // Facebook-like distraction free mode
-      title: '服务端相关问题'
-    })
-    gitalk.render('gitalk-container')
-  </script>
   
 
   <script src="/assets/js/prism.js"></script>
