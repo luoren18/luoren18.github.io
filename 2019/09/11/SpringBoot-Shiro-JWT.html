@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpringBoot+Shiro+JWT - REN博客</title>
+    <meta name="author"  content="REN">
+    <meta name="description" content="SpringBoot+Shiro+JWT">
+    <meta name="keywords"  content="Spring, java">
+    <!-- Open Graph -->
+    <meta property="og:title" content="SpringBoot+Shiro+JWT - REN博客">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/09/11/SpringBoot-Shiro-JWT.html">
+    <meta property="og:description" content="个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。">
+    <meta property="og:site_name" content="REN博客">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">home</a></li>
+            
+            <li><a href="/tags.html">tags</a></li>
+            
+            <li><a href="/rss.xml" target="_blank">RSS</a></li>
+            <li><a href="https://wangchujiang.com/linux-command/" target="_blank">COMMAND LINUX</a></li>
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-overlappingCircles bgcolor-default "
+    data-theme="default">
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+        
+        <a href=/tags.html#Spring class="post-tag">Spring</a>
+        
+        <a href=/tags.html#java class="post-tag">java</a>
+        
+        
+      </div>
+      <h1>SpringBoot+Shiro+JWT</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i
+            class="iconfont icon-author"></i>luoren</span>
+        <time class="post-meta-item" datetime="19-09-11"><i
+            class="iconfont icon-date"></i>11 Sep 2019</time>
+      </div>
+    </div>
+    
+    <div class="filter"></div>
+    <div class="post-cover" style="background: url('http://noteimg.luoren.top/markdown_img/20190911142542.png') center no-repeat; background-size: cover;"></div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+    <h2 class="post-subtitle">Shiro+JWT</h2>
+    
+
+    <article class="markdown-body">
+      <p>之前的时间尝试过多次，搭建一个springBoot+shiro+JWT 的简单Demo 但是总是在过程中遇到一些问题，没有在短时间内解决，所以最后还是不了了之。说到底还是功夫没有到家。近期不是很忙，打算好好了解一下这个Shiro,下面内容是我搭建这个Demo 的一个记录。</p>
+
+<p>源码地址：<a href="https://github.com/luoren18/base-sboot">https://github.com/luoren18/base-sboot</a></p>
+
+<h2 id="一程序逻辑">一、程序逻辑</h2>
+
+<p>1.通过 <code class="highlighter-rouge">/login</code>  接口执行登录操作，验证登录信息，通过即生成一个带有用户信息并通过加密的token,验证不通过则返回错误信息。</p>
+
+<p>2.之后用户访问的每一个接口均需要在请求的HEADER 中携带 <strong>Token</strong> 信息，即<code class="highlighter-rouge">Token:token</code></p>
+
+<p>3.在后台会对token 进行校验，校验不成功则会返回相应的错误信息。</p>
+
+<p>4.对接口进行权限校验或角色校验，对于权限不匹配的访问给予拒绝访问，并给出错误提示。</p>
+
+<h2 id="二表结构设计和数据准备">二、表结构设计和数据准备</h2>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20190910162047.png" alt="" /></p>
+
+<p>准备两条测试数据</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">INSERT</span> <span class="k">INTO</span> <span class="nv">`sys_menu`</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'系统用户'</span><span class="p">,</span> <span class="s1">'system/user'</span><span class="p">,</span> <span class="k">NULL</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'config'</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="k">NULL</span><span class="p">,</span> <span class="s1">'2019-09-05 03:38:48'</span><span class="p">,</span> <span class="k">NULL</span><span class="p">,</span> <span class="s1">'2019-09-05 03:38:48'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="nv">`sys_menu`</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'查看'</span><span class="p">,</span> <span class="k">NULL</span><span class="p">,</span> <span class="s1">'system:user:list,system:user:info'</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="k">NULL</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="k">NULL</span><span class="p">,</span> <span class="s1">'2019-09-05 03:38:48'</span><span class="p">,</span> <span class="k">NULL</span><span class="p">,</span> <span class="s1">'2019-09-05 03:38:48'</span><span class="p">);</span>
+
+</code></pre></div></div>
+
+<h2 id="三jwt">三、JWT</h2>
+
+<h3 id="1什么是jwt">1.什么是JWT</h3>
+
+<p>JSON Web Token（缩写 JWT）是目前最流行的跨域认证解决方案，其结构由<code class="highlighter-rouge">Header.Payload.Signature</code> 组成</p>
+
+<ul>
+  <li>Header（头部）</li>
+  <li>Payload（负载）</li>
+  <li>Signature（签名）</li>
+</ul>
+
+<p>具体长这样：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjgwODc2ODUsInVzZXJuYW1lIjoiYWRtaW4ifQ.oEndsDHnPawUYot_S0jHL-dSaWDFkl367a8wivSua7U
+</code></pre></div></div>
+
+<p>详细的说明可以参考阮一峰老师的这篇博客：<a href="https://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html">https://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html</a></p>
+
+<h3 id="2jwtutil-设计">2.JWTUtil 设计</h3>
+
+<p>POM</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!--JWT--&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>io.jsonwebtoken<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>jjwt<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>0.9.0<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></div>
+
+<p>代码实现（这部分内容在百度和Google 上均有大量参考）</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">JwtUtil</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">SECRET</span> <span class="o">=</span> <span class="s">"sboot:F\"0?O_Rr*******l)qdL]./KwtB*"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">EXPIRATION_TIME</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">1000</span><span class="o">;</span>
+
+
+    <span class="cm">/**
+     * 从数据声明生成令牌
+     *
+     * @param claims 数据声明
+     * @return 令牌
+     */</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">generateToken</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">claims</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Date</span> <span class="n">expirationDate</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Date</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">+</span> <span class="n">EXPIRATION_TIME</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">Jwts</span><span class="o">.</span><span class="na">builder</span><span class="o">().</span><span class="na">setClaims</span><span class="o">(</span><span class="n">claims</span><span class="o">).</span><span class="na">setExpiration</span><span class="o">(</span><span class="n">expirationDate</span><span class="o">).</span><span class="na">signWith</span><span class="o">(</span><span class="n">SignatureAlgorithm</span><span class="o">.</span><span class="na">HS512</span><span class="o">,</span> <span class="n">SECRET</span><span class="o">).</span><span class="na">compact</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 从令牌中获取数据声明
+     *
+     * @param token 令牌
+     * @return 数据声明
+     */</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Claims</span> <span class="nf">getClaimsFromToken</span><span class="o">(</span><span class="n">String</span> <span class="n">token</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Claims</span> <span class="n">claims</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">claims</span> <span class="o">=</span> <span class="n">Jwts</span><span class="o">.</span><span class="na">parser</span><span class="o">().</span><span class="na">setSigningKey</span><span class="o">(</span><span class="n">SECRET</span><span class="o">).</span><span class="na">parseClaimsJws</span><span class="o">(</span><span class="n">token</span><span class="o">).</span><span class="na">getBody</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">claims</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">claims</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 生成令牌
+     *
+     * @param username 用户
+     * @return 令牌
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">generateToken</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">roles</span><span class="o">,</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">permissions</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">claims</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;(</span><span class="mi">4</span><span class="o">);</span>
+        <span class="n">claims</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Claims</span><span class="o">.</span><span class="na">SUBJECT</span><span class="o">,</span> <span class="n">username</span><span class="o">);</span>
+        <span class="n">claims</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Claims</span><span class="o">.</span><span class="na">ISSUED_AT</span><span class="o">,</span> <span class="k">new</span> <span class="n">Date</span><span class="o">());</span>
+        <span class="n">claims</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"roles"</span><span class="o">,</span> <span class="n">roles</span><span class="o">);</span>
+        <span class="n">claims</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"permission"</span><span class="o">,</span> <span class="n">permissions</span><span class="o">);</span>
+        <span class="k">return</span> <span class="nf">generateToken</span><span class="o">(</span><span class="n">claims</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 生成令牌
+     *
+     * @param username 用户
+     * @return 令牌
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">generateToken</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">claims</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;(</span><span class="mi">4</span><span class="o">);</span>
+        <span class="n">claims</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Claims</span><span class="o">.</span><span class="na">SUBJECT</span><span class="o">,</span> <span class="n">username</span><span class="o">);</span>
+        <span class="n">claims</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Claims</span><span class="o">.</span><span class="na">ISSUED_AT</span><span class="o">,</span> <span class="k">new</span> <span class="n">Date</span><span class="o">());</span>
+        <span class="n">claims</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"roles"</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+        <span class="n">claims</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"permission"</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+        <span class="k">return</span> <span class="nf">generateToken</span><span class="o">(</span><span class="n">claims</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 从令牌中获取用户名
+     *
+     * @param token 令牌
+     * @return 用户名
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">getUsernameFromToken</span><span class="o">(</span><span class="n">String</span> <span class="n">token</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">username</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">Claims</span> <span class="n">claims</span> <span class="o">=</span> <span class="n">getClaimsFromToken</span><span class="o">(</span><span class="n">token</span><span class="o">);</span>
+            <span class="n">username</span> <span class="o">=</span> <span class="n">claims</span><span class="o">.</span><span class="na">getSubject</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">username</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">username</span><span class="o">;</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+     * 判断令牌是否过期
+     *
+     * @param token 令牌
+     * @return 是否过期
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Boolean</span> <span class="nf">isTokenExpired</span><span class="o">(</span><span class="n">String</span> <span class="n">token</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">Claims</span> <span class="n">claims</span> <span class="o">=</span> <span class="n">getClaimsFromToken</span><span class="o">(</span><span class="n">token</span><span class="o">);</span>
+            <span class="n">Date</span> <span class="n">expiration</span> <span class="o">=</span> <span class="n">claims</span><span class="o">.</span><span class="na">getExpiration</span><span class="o">();</span>
+            <span class="k">return</span> <span class="n">expiration</span><span class="o">.</span><span class="na">before</span><span class="o">(</span><span class="k">new</span> <span class="n">Date</span><span class="o">());</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 刷新令牌
+     *
+     * @param token 原令牌
+     * @return 新令牌
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">refreshToken</span><span class="o">(</span><span class="n">String</span> <span class="n">token</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">refreshedToken</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">Claims</span> <span class="n">claims</span> <span class="o">=</span> <span class="n">getClaimsFromToken</span><span class="o">(</span><span class="n">token</span><span class="o">);</span>
+            <span class="n">claims</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Claims</span><span class="o">.</span><span class="na">ISSUED_AT</span><span class="o">,</span> <span class="k">new</span> <span class="n">Date</span><span class="o">());</span>
+            <span class="n">refreshedToken</span> <span class="o">=</span> <span class="n">generateToken</span><span class="o">(</span><span class="n">claims</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">refreshedToken</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">refreshedToken</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 验证令牌
+     *
+     * @param token    令牌
+     * @param username 用户名
+     * @return 是否有效
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">validateToken</span><span class="o">(</span><span class="n">String</span> <span class="n">token</span><span class="o">,</span> <span class="n">String</span> <span class="n">username</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">getUsernameFromToken</span><span class="o">(</span><span class="n">token</span><span class="o">).</span><span class="na">equals</span><span class="o">(</span><span class="n">username</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">isTokenExpired</span><span class="o">(</span><span class="n">token</span><span class="o">));</span>
+    <span class="o">}</span>
+ <span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="四使用shiro-需要实现的几个类">四、使用Shiro 需要实现的几个类</h2>
+
+<p>pom</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>				<span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.apache.shiro<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>shiro-core<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>1.4.1<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.apache.shiro<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>shiro-spring<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>1.4.1<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></div>
+
+<h3 id="1realm">1.Realm</h3>
+
+<p>Realm是shiro认证信息的来源。当Subject调用login方法进行认证时， shiro内部会调用Realm获取认证信息（即AuthenticationInfo）。在集成shiro时，我们至少要给SecurityManager设置一个Realm。在开发过程中，我们通常集成<code class="highlighter-rouge">AuthorizingRealm</code> 重写<code class="highlighter-rouge">doGetAuthorizationInfo</code> 获取授权信息方法 和 <code class="highlighter-rouge">doGetAuthenticationInfo</code> 获取用户验证信息方法。</p>
+
+<p>具体实现：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ShiroRealm</span> <span class="kd">extends</span> <span class="n">AuthorizingRealm</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">UserService</span> <span class="n">userService</span><span class="o">;</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUserService</span><span class="o">(</span><span class="n">UserService</span> <span class="n">userService</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">userService</span> <span class="o">=</span> <span class="n">userService</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">supports</span><span class="o">(</span><span class="n">AuthenticationToken</span> <span class="n">token</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">token</span> <span class="k">instanceof</span> <span class="n">JwtToken</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 获取授权信息
+     *
+     * @param principalCollection
+     * @return
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="n">AuthorizationInfo</span> <span class="nf">doGetAuthorizationInfo</span><span class="o">(</span><span class="n">PrincipalCollection</span> <span class="n">principalCollection</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">username</span> <span class="o">=</span> <span class="n">JwtUtil</span><span class="o">.</span><span class="na">getUsernameFromToken</span><span class="o">(</span><span class="n">principalCollection</span><span class="o">.</span><span class="na">getPrimaryPrincipal</span><span class="o">().</span><span class="na">toString</span><span class="o">());</span>
+        <span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">userRolesSet</span> <span class="o">=</span> <span class="n">userService</span><span class="o">.</span><span class="na">getUserRolesSet</span><span class="o">(</span><span class="n">username</span><span class="o">);</span>
+        <span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">userPermissionsSet</span> <span class="o">=</span> <span class="n">userService</span><span class="o">.</span><span class="na">getUserPermissionsSet</span><span class="o">(</span><span class="n">username</span><span class="o">);</span>
+        <span class="n">SimpleAuthorizationInfo</span> <span class="n">simpleAuthorizationInfo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimpleAuthorizationInfo</span><span class="o">();</span>
+        <span class="n">simpleAuthorizationInfo</span><span class="o">.</span><span class="na">setRoles</span><span class="o">(</span><span class="n">userRolesSet</span><span class="o">);</span>
+        <span class="n">simpleAuthorizationInfo</span><span class="o">.</span><span class="na">setStringPermissions</span><span class="o">(</span><span class="n">userPermissionsSet</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">simpleAuthorizationInfo</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 获取身份验证信息
+     *
+     * @param authenticationToken
+     * @return
+     * @throws AuthenticationException
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="n">AuthenticationInfo</span> <span class="nf">doGetAuthenticationInfo</span><span class="o">(</span><span class="n">AuthenticationToken</span> <span class="n">authenticationToken</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">AuthenticationException</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">token</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">authenticationToken</span><span class="o">.</span><span class="na">getCredentials</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">username</span> <span class="o">=</span> <span class="n">JwtUtil</span><span class="o">.</span><span class="na">getUsernameFromToken</span><span class="o">(</span><span class="n">token</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">username</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">AuthenticationException</span><span class="o">(</span><span class="s">"token invalid"</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">userService</span><span class="o">.</span><span class="na">getUser</span><span class="o">(</span><span class="n">username</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">user</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">AuthenticationException</span><span class="o">(</span><span class="s">"User didn't existed!"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="kt">boolean</span> <span class="n">flag</span> <span class="o">=</span> <span class="n">JwtUtil</span><span class="o">.</span><span class="na">validateToken</span><span class="o">(</span><span class="n">token</span><span class="o">,</span> <span class="n">username</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">flag</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">AuthenticationException</span><span class="o">(</span><span class="s">""</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">SimpleAuthenticationInfo</span><span class="o">(</span><span class="n">token</span><span class="o">,</span> <span class="n">token</span><span class="o">,</span> <span class="s">"ShiroRealm"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>因为我们使用JWT 做为网站访问的用户凭证，所以我们需要自定义一个Token</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">JwtToken</span> <span class="kd">implements</span> <span class="n">AuthenticationToken</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">token</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">JwtToken</span><span class="o">(</span><span class="n">String</span> <span class="n">token</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">token</span> <span class="o">=</span> <span class="n">token</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">getPrincipal</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">token</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">getCredentials</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">token</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>因此在Realm的实现中才需要判断 AuthenticationToken的类型</p>
+
+<pre><code class="language-JAVA">@Override
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof JwtToken;
+    }
+</code></pre>
+
+<p>所以此处的token 其实就是String类型的JWT。</p>
+
+<h3 id="2自定义filter">2.自定义Filter</h3>
+
+<p>Shiro 内置了许多的默认的过滤器，比如身份验证、授权等相关的。默认过滤器可以参考 org.apache.shiro.web.filter.mgt.DefaultFilter 中的枚举过滤器：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>默认拦过滤名</th>
+      <th>过滤器类</th>
+      <th>说明（括号里的表示默认值）</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>身份验证相关的</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>authc</td>
+      <td>org.apache.shiro.web.filter.authc.FormAuthenticationFilter</td>
+      <td>基于表单的过滤器；如 “<code class="highlighter-rouge">/**=authc</code>”，如果没有登录会跳到相应的登录页面登录；主要属性：usernameParam：表单提交的用户名参数名（ username）；  passwordParam：表单提交的密码参数名（password）； rememberMeParam：表单提交的密码参数名（rememberMe）；  loginUrl：登录页面地址（/login.jsp）；successUrl：登录成功后的默认重定向地址； failureKeyAttribute：登录失败后错误信息存储 key（shiroLoginFailure）；</td>
+    </tr>
+    <tr>
+      <td>authcBasic</td>
+      <td>org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter</td>
+      <td>Basic HTTP 身份验证过滤器，主要属性： applicationName：弹出登录框显示的信息（application）；</td>
+    </tr>
+    <tr>
+      <td>logout</td>
+      <td>org.apache.shiro.web.filter.authc.LogoutFilter</td>
+      <td>退出过滤器，主要属性：redirectUrl：退出成功后重定向的地址（/）; 示例 “/logout=logout”</td>
+    </tr>
+    <tr>
+      <td>user</td>
+      <td>org.apache.shiro.web.filter.authc.UserFilter</td>
+      <td>用户过滤器，用户已经身份验证 / 记住我登录的都可；示例 “/**=user”</td>
+    </tr>
+    <tr>
+      <td>anon</td>
+      <td>org.apache.shiro.web.filter.authc.AnonymousFilter</td>
+      <td>匿名过滤器，即不需要登录即可访问；一般用于静态资源过滤；示例 “/static/**=anon”</td>
+    </tr>
+    <tr>
+      <td><strong>授权相关的</strong></td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>roles</td>
+      <td>org.apache.shiro.web.filter.authz.RolesAuthorizationFilter</td>
+      <td>角色授权过滤器，验证用户是否拥有所有角色；主要属性： loginUrl：登录页面地址（/login.jsp）；unauthorizedUrl：未授权后重定向的地址；示例 “/admin/**=roles[admin]”</td>
+    </tr>
+    <tr>
+      <td>perms</td>
+      <td>org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter</td>
+      <td>权限授权过滤器，验证用户是否拥有所有权限；属性和 roles 一样；示例 “/user/**=perms[“user:create”]”</td>
+    </tr>
+    <tr>
+      <td>port</td>
+      <td>org.apache.shiro.web.filter.authz.PortFilter</td>
+      <td>端口过滤器，主要属性：port（80）：可以通过的端口；示例 “/test= port[80]”，如果用户访问该页面是非 80，将自动将请求端口改为 80 并重定向到该 80 端口，其他路径 / 参数等都一样</td>
+    </tr>
+    <tr>
+      <td>rest</td>
+      <td>org.apache.shiro.web.filter.authz.HttpMethodPermissionFilter</td>
+      <td>rest 风格过滤器，自动根据请求方法构建权限字符串（GET=read, POST=create,PUT=update,DELETE=delete,HEAD=read,TRACE=read,OPTIONS=read, MKCOL=create）构建权限字符串；示例 “/users=rest[user]”，会自动拼出“user:read,user:create,user:update,user:delete” 权限字符串进行权限匹配（所有都得匹配，isPermittedAll）；</td>
+    </tr>
+    <tr>
+      <td>ssl</td>
+      <td>org.apache.shiro.web.filter.authz.SslFilter</td>
+      <td>SSL 过滤器，只有请求协议是 https 才能通过；否则自动跳转会 https 端口（443）；其他和 port 过滤器一样；</td>
+    </tr>
+    <tr>
+      <td><strong>其他</strong></td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>noSessionCreation</td>
+      <td>org.apache.shiro.web.filter.session.NoSessionCreationFilter</td>
+      <td>不创建会话过滤器，调用 subject.getSession(false) 不会有什么问题，但是如果 subject.getSession(true) 将抛出 DisabledSessionException 异常；</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>因为我们是基于Token来做身份的验证所以我们需要自定义一个token的过滤器，根据token 的有无来判断用户的行为，以及完成用户请求跨域的处理。</p>
+
+<p>下面是具体实现：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Slf4j</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JwtFilter</span> <span class="kd">extends</span> <span class="n">BasicHttpAuthenticationFilter</span> <span class="o">{</span>
+
+    <span class="cm">/**
+     * 判断是否允许用户访问
+     *
+     * @param request
+     * @param response
+     * @param mappedValue
+     * @return
+             */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">boolean</span> <span class="nf">isAccessAllowed</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Object</span> <span class="n">mappedValue</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">isLoginAttempt</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nf">executeLogin</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+ 
+    <span class="cm">/**
+     * 判断用户是否是尝试登录,此处的登录是指验证Token
+     *
+     * @param servletRequest  request
+     * @param servletResponse response
+     * @return
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">boolean</span> <span class="nf">isLoginAttempt</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">servletRequest</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">servletResponse</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">HttpServletRequest</span> <span class="n">request</span> <span class="o">=</span> <span class="o">(</span><span class="n">HttpServletRequest</span><span class="o">)</span> <span class="n">servletRequest</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">token</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getHeader</span><span class="o">(</span><span class="s">"Token"</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">token</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">boolean</span> <span class="nf">executeLogin</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">HttpServletRequest</span> <span class="n">httpServletRequest</span> <span class="o">=</span> <span class="o">(</span><span class="n">HttpServletRequest</span><span class="o">)</span> <span class="n">request</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">token</span> <span class="o">=</span> <span class="n">httpServletRequest</span><span class="o">.</span><span class="na">getHeader</span><span class="o">(</span><span class="s">"Token"</span><span class="o">);</span>
+        <span class="n">JwtToken</span> <span class="n">jwtToken</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JwtToken</span><span class="o">(</span><span class="n">token</span><span class="o">);</span>
+        <span class="c1">// 提交给realm进行登入，如果错误他会抛出异常并被捕获</span>
+        <span class="n">getSubject</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">).</span><span class="na">login</span><span class="o">(</span><span class="n">jwtToken</span><span class="o">);</span>
+        <span class="c1">// 如果没有抛出异常则代表登入成功，返回true</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+     * 添加对跨域的处理
+     *
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">boolean</span> <span class="nf">preHandle</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">HttpServletRequest</span> <span class="n">httpServletRequest</span> <span class="o">=</span> <span class="o">(</span><span class="n">HttpServletRequest</span><span class="o">)</span> <span class="n">request</span><span class="o">;</span>
+        <span class="n">HttpServletResponse</span> <span class="n">httpServletResponse</span> <span class="o">=</span> <span class="o">(</span><span class="n">HttpServletResponse</span><span class="o">)</span> <span class="n">response</span><span class="o">;</span>
+        <span class="n">httpServletResponse</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s">"Access-control-Allow-Origin"</span><span class="o">,</span> <span class="n">httpServletRequest</span><span class="o">.</span><span class="na">getHeader</span><span class="o">(</span><span class="s">"Origin"</span><span class="o">));</span>
+        <span class="n">httpServletResponse</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s">"Access-Control-Allow-Methods"</span><span class="o">,</span> <span class="s">"GET,POST,OPTIONS,PUT,DELETE"</span><span class="o">);</span>
+        <span class="n">httpServletResponse</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s">"Access-Control-Allow-Headers"</span><span class="o">,</span> <span class="n">httpServletRequest</span><span class="o">.</span><span class="na">getHeader</span><span class="o">(</span><span class="s">"Access-Control-Request-Headers"</span><span class="o">));</span>
+        <span class="c1">// 跨域时会首先发送一个option请求，这里我们给option请求直接返回正常状态</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">httpServletRequest</span><span class="o">.</span><span class="na">getMethod</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">RequestMethod</span><span class="o">.</span><span class="na">OPTIONS</span><span class="o">.</span><span class="na">name</span><span class="o">()))</span> <span class="o">{</span>
+            <span class="n">httpServletResponse</span><span class="o">.</span><span class="na">setStatus</span><span class="o">(</span><span class="n">HttpStatus</span><span class="o">.</span><span class="na">OK</span><span class="o">.</span><span class="na">value</span><span class="o">());</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">preHandle</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="五shiroconfig">五、ShiroConfig</h2>
+
+<h3 id="1三个bean">1.三个Bean</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Bean</span><span class="o">(</span><span class="s">"sessionManager"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">SessionManager</span> <span class="nf">sessionManager</span><span class="o">(){</span>
+    <span class="n">DefaultWebSessionManager</span> <span class="n">sessionManager</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DefaultWebSessionManager</span><span class="o">();</span>
+    <span class="n">sessionManager</span><span class="o">.</span><span class="na">setSessionValidationSchedulerEnabled</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+    <span class="n">sessionManager</span><span class="o">.</span><span class="na">setSessionIdCookieEnabled</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">sessionManager</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="nd">@Bean</span><span class="o">(</span><span class="s">"securityManager"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">SecurityManager</span> <span class="nf">securityManager</span><span class="o">(</span><span class="n">ShiroRealm</span> <span class="n">shiroRealm</span><span class="o">,</span> <span class="n">SessionManager</span> <span class="n">sessionManager</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">DefaultWebSecurityManager</span> <span class="n">securityManager</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DefaultWebSecurityManager</span><span class="o">();</span>
+    <span class="n">securityManager</span><span class="o">.</span><span class="na">setRealm</span><span class="o">(</span><span class="n">shiroRealm</span><span class="o">);</span>
+    <span class="n">securityManager</span><span class="o">.</span><span class="na">setSessionManager</span><span class="o">(</span><span class="n">sessionManager</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">securityManager</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="nd">@Bean</span><span class="o">(</span><span class="s">"shiroFilterFactoryBean"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">ShiroFilterFactoryBean</span> <span class="nf">factory</span><span class="o">(</span><span class="n">SecurityManager</span> <span class="n">securityManager</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">ShiroFilterFactoryBean</span> <span class="n">factory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ShiroFilterFactoryBean</span><span class="o">();</span>
+    <span class="n">factory</span><span class="o">.</span><span class="na">setSecurityManager</span><span class="o">(</span><span class="n">securityManager</span><span class="o">);</span>
+    <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Filter</span><span class="o">&gt;</span> <span class="n">filterMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;(</span><span class="mi">16</span><span class="o">);</span>
+    <span class="n">filterMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"jwtFilter"</span><span class="o">,</span> <span class="k">new</span> <span class="n">JwtFilter</span><span class="o">());</span>
+    <span class="n">factory</span><span class="o">.</span><span class="na">setFilters</span><span class="o">(</span><span class="n">filterMap</span><span class="o">);</span>
+    <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">filterChainDefinitionMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashMap</span><span class="o">&lt;&gt;();</span>
+    <span class="n">filterChainDefinitionMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"/**"</span><span class="o">,</span> <span class="s">"jwtFilter"</span><span class="o">);</span>
+    <span class="n">factory</span><span class="o">.</span><span class="na">setFilterChainDefinitionMap</span><span class="o">(</span><span class="n">filterChainDefinitionMap</span><span class="o">);</span>
+    <span class="n">factory</span><span class="o">.</span><span class="na">setFilterChainDefinitionMap</span><span class="o">(</span><span class="n">filterChainDefinitionMap</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">factory</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>1.SessionManager，关闭session,因为使用jwt作为认证令牌，所以将session 关闭，此处可以设置sessionDao 和 cacheManager  在分布式集群可以用到，实现session 统一。</p>
+
+<p>2.SecurityManager，设置sessionManager 和 Realm .</p>
+
+<p>3.ShiroFilterFactoryBean,设置SecurityManager 和自定义的Filter</p>
+
+<h3 id="2开启注解">2.开启注解</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Bean</span><span class="o">(</span><span class="s">"lifecycleBeanPostProcessor"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">LifecycleBeanPostProcessor</span> <span class="nf">lifecycleBeanPostProcessor</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">LifecycleBeanPostProcessor</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 这个方法需要注释掉，如果不注释掉会导致权限验证方法会被调用两次
+     * https://blog.csdn.net/qq_37164847/article/details/88075492
+     *
+     * @return
+     */</span>
+<span class="c1">//    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {</span>
+<span class="c1">//        DefaultAdvisorAutoProxyCreator proxyCreator = new DefaultAdvisorAutoProxyCreator();</span>
+<span class="c1">//        proxyCreator.setProxyTargetClass(true);</span>
+<span class="c1">//        return proxyCreator;</span>
+<span class="c1">//    }</span>
+
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">AuthorizationAttributeSourceAdvisor</span> <span class="nf">authorizationAttributeSourceAdvisor</span><span class="o">(</span><span class="n">SecurityManager</span> <span class="n">securityManager</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">AuthorizationAttributeSourceAdvisor</span> <span class="n">advisor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AuthorizationAttributeSourceAdvisor</span><span class="o">();</span>
+        <span class="n">advisor</span><span class="o">.</span><span class="na">setSecurityManager</span><span class="o">(</span><span class="n">securityManager</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">advisor</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>开启注解,@RequiresPermissions(“system:user:list”)才会生效</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * 列表
+ */</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/list"</span><span class="o">)</span>
+<span class="nd">@RequiresPermissions</span><span class="o">(</span><span class="s">"system:user:list"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">Result</span> <span class="nf">list</span><span class="o">(</span><span class="nd">@RequestParam</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">params</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">PageUtils</span> <span class="n">page</span> <span class="o">=</span> <span class="n">userService</span><span class="o">.</span><span class="na">queryPage</span><span class="o">(</span><span class="n">params</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="na">ok</span><span class="o">().</span><span class="na">data</span><span class="o">(</span><span class="n">page</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="end">END</h2>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <!-- <img src="http://noteimg.luoren.top/markdown_img/20190428084026.png" alt=""> -->
+        <img src="http://noteimg.luoren.top/markdown_img/20190428084026.png" alt="">
+      </div>
+      <div class="author-name" rel="author">REN</div>
+      <div class="bio">
+        <p>码农，JAVA程序员，爱下厨，假装热爱技术&生活稍微过过也能活下去，哪有那么多要求</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/lawren18" target="_blank">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="mailto:luoren96@gmail.com" target="_blank">
+            <i class="iconfont icon-email"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//twitter.com/kaiorren" target="_blank">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/luoren18" target="_blank">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/08/15/%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E5%B7%A6%E5%8F%B3%E6%97%8B%E8%BD%AC.html" class="read-next-link"></a>
+        <section>
+          <span>红黑树的左右旋转</span>
+          <p>关于红黑树的左右旋转</p>
+        </section>
+        
+        <div class="filter"></div>
+        <img src="http://noteimg.luoren.top/markdown_img/20190816092929.png" alt="">
+        
+      </div>
+      
+    </section>
+    
+  </section>
+
+  <footer class="g-footer">
+  <section>REN博客 ©
+  
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+      socialShare('.social-share', {
+        sites: [
+          
+            'wechat'
+            ,
+            
+          
+            'weibo'
+            ,
+            
+          
+            'douban'
+            ,
+            
+          
+            'twitter'
+            
+          
+        ],
+        wechatQrcodeTitle: "分享到微信朋友圈",
+        wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+      });
+    </script>
+
+  <!--  -->
+  
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+</body>
+
+</html>
