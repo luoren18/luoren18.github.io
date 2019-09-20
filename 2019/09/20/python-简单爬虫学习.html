@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>python 简单爬虫学习 - REN博客</title>
+    <meta name="author"  content="REN">
+    <meta name="description" content="python 简单爬虫学习">
+    <meta name="keywords"  content="python">
+    <!-- Open Graph -->
+    <meta property="og:title" content="python 简单爬虫学习 - REN博客">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/09/20/python-%E7%AE%80%E5%8D%95%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0.html">
+    <meta property="og:description" content="个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。">
+    <meta property="og:site_name" content="REN博客">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">home</a></li>
+            
+            <li><a href="/tags.html">tags</a></li>
+            
+            <li><a href="/rss.xml" target="_blank">RSS</a></li>
+            <li><a href="https://wangchujiang.com/linux-command/" target="_blank">COMMAND LINUX</a></li>
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-overlappingCircles bgcolor-default post-no-cover"
+    data-theme="default">
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+        
+        <a href=/tags.html#python class="post-tag">python</a>
+        
+        
+      </div>
+      <h1>python 简单爬虫学习</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i
+            class="iconfont icon-author"></i>luoren</span>
+        <time class="post-meta-item" datetime="19-09-20"><i
+            class="iconfont icon-date"></i>20 Sep 2019</time>
+      </div>
+    </div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+    <h2 class="post-subtitle">python 爬虫</h2>
+    
+
+    <article class="markdown-body">
+      <h2 id="什么是爬虫">什么是爬虫</h2>
+
+<p><strong><em>爬虫</em></strong>就是一段自动抓取互联网信息的程序，从互联网上抓取对于我们有价值的信息。</p>
+
+<h2 id="一个简单的示例">一个简单的示例</h2>
+
+<p>从 http://springboot.fun/ 爬取所有链接的link</p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20190917102055.png" alt="" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="n">html</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="s">'http://springboot.fun/'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s">'&lt;title&gt;(.+?)&lt;/title&gt;'</span><span class="p">,</span> <span class="n">html</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+<span class="n">links</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s">'href="(.+?)"'</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span>
+                   <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>  <span class="c1"># 因为这个段落在 HTML 中还夹杂着 tab, new line, 所以我们给一个 flags=re.DOTALL 来对这些 tab, new line 不敏感.
+</span><span class="k">print</span><span class="p">(</span><span class="n">links</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>其实这个流程很简单，就是通过<code class="highlighter-rouge">request</code>库发送请求打开一个url,<code class="highlighter-rouge">read()</code>读取url 对应页面的内容，然后使用<code class="highlighter-rouge">decode()</code>对页面进行编码。然后使用re库使用正则表达式提取href 的内容。</p>
+
+<h2 id="使用beautifulsoup-解析网页">使用BeautifulSoup 解析网页</h2>
+
+<p><a href="http://www.crummy.com/software/BeautifulSoup/">Beautiful Soup</a> 是一个可以从HTML或XML文件中提取数据的Python库.</p>
+
+<h3 id="安装">安装</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>beautifulsoup4
+pip <span class="nb">install </span>lxml
+</code></pre></div></div>
+
+<h3 id="使用find_all">使用find_all()</h3>
+
+<p>还是上面的那个例子</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">request</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+
+<span class="n">html_doc</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">'http://springboot.fun/'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">html_doc</span><span class="p">)</span>
+<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html_doc</span><span class="p">,</span> <span class="s">'lxml'</span><span class="p">)</span>
+<span class="c1"># print(soup.title.parent.find_all('meta'))
+</span><span class="n">a_s</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+<span class="n">a_s</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="s">'href'</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">a_s</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a_s</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="按attr-匹配">按attr 匹配</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a_s</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+<span class="n">a_s</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">,</span> <span class="p">{</span><span class="s">'rel'</span><span class="p">:</span> <span class="s">'external'</span><span class="p">})</span>
+<span class="c1"># 表示过滤出rel=external 的a标签
+</span></code></pre></div></div>
+
+<h3 id="通过正则匹配">通过正则匹配</h3>
+
+<p>使用正则表达式需要导入<code class="highlighter-rouge">re</code>库</p>
+
+<p>下面的代码是匹配出 href 是以 <code class="highlighter-rouge">https:// </code>开头的a标签</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a_a</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">,</span> <span class="p">{</span><span class="s">'href'</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="s">'^https://'</span><span class="p">)})</span>
+<span class="n">a_a</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="s">'href'</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">a_a</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a_a</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="一个小练习">一个小练习</h3>
+
+<p><strong>循环爬取百度百科的词条链接</strong></p>
+
+<p>百度词条链接的特点:href 的内容以<code class="highlighter-rouge">/item/</code>开头然后后面接着的是<code class="highlighter-rouge">%__</code></p>
+
+<p><code class="highlighter-rouge">&lt;a target="_blank" href="/item/%E5%9C%A3%E7%BB%8F"&gt;圣经&lt;/a&gt;</code></p>
+
+<p>所以可以通过正则表达式匹配<code class="highlighter-rouge">^/item/(%.{2}+$)</code></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 爬取百度百科的词条
+</span><span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">request</span><span class="p">,</span> <span class="n">parse</span>
+<span class="kn">import</span> <span class="nn">ssl</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">import</span> <span class="nn">re</span><span class="p">,</span> <span class="n">random</span>
+
+<span class="n">ssl</span><span class="o">.</span><span class="n">_create_default_https_context</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">_create_unverified_context</span>
+
+<span class="n">base_url</span> <span class="o">=</span> <span class="s">'https://baike.baidu.com'</span>
+<span class="n">his</span> <span class="o">=</span> <span class="p">[</span><span class="s">'/item/网络爬虫/5162711?fr=aladdin'</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">his</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="n">string</span><span class="o">.</span><span class="n">printable</span><span class="p">)</span>  <span class="c1"># 对url 进行编码
+</span>    <span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">html_doc</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span>
+    <span class="c1"># print(html_doc)
+</span>    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html_doc</span><span class="p">,</span> <span class="s">'lxml'</span><span class="p">)</span>
+    <span class="n">a_s</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">,</span> <span class="p">{</span><span class="s">'target'</span><span class="p">:</span> <span class="s">'_blank'</span><span class="p">,</span> <span class="s">'href'</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="s">'^/item/(</span><span class="si">%</span><span class="s">.{2})+$'</span><span class="p">)})</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">a_s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">his</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">a_s</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s">'href'</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">his</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">his</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>效果图：</p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20190918092255.png" alt="" /></p>
+
+<h2 id="使用requests">使用requests</h2>
+
+<p>Request对象的作用是与客户端交互，收集客户端的Form、Cookies、超链接，或者收集服务器端的环境变量。</p>
+
+<p>request对象是从客户端向服务器发出请求，包括用户提交的信息以及客户端的一些信息。客户端可通过HTML表单或在网页地址后面提供参数的方法提交数据，然后服务器通过request对象的相关方法来获取这些数据。request的各种方法主要用来处理客户端浏览器提交的请求中的各项参数和选项。</p>
+
+<h3 id="一个小栗子">一个小栗子</h3>
+
+<p>使用request 使用get请求获取网页的内容</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">session</span><span class="p">()</span>
+<span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s">'User-Agent'</span><span class="p">]</span> <span class="o">=</span> <span class="s">'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'</span>
+<span class="n">base_url</span> <span class="o">=</span> <span class="s">'https://baike.baidu.com/item/网络爬虫/5162711'</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">base_url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span>
+    <span class="s">'fr'</span><span class="p">:</span> <span class="s">'aladdin'</span>
+<span class="p">})</span>
+<span class="n">text</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+<span class="k">print</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="关于user-agent">关于User-Agent</h3>
+
+<p>User-Agent是浏览器的一个标识，网站会通过UA 来判断浏览器的类别从而判断返回不同风格的网页，某些网站会对UA 标识为空的访问进行重定向，最终导致报错。</p>
+
+<p>UA 包含了所使用的浏览器类型及版本、操作系统及版本、浏览器内核、等信息。</p>
+
+<h3 id="一个小练习-1">一个小练习</h3>
+
+<p>目标：从<a href="http://www.ngchina.com.cn">中国地理</a>的官网首页爬取 多媒体文件并下载到本地</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://www.ngchina.com.cn/'</span><span class="p">)</span>
+<span class="n">html_doc</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+<span class="k">print</span><span class="p">(</span><span class="n">html_doc</span><span class="p">)</span>
+<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html_doc</span><span class="p">,</span> <span class="s">'lxml'</span><span class="p">)</span>
+<span class="n">tabs</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">((</span><span class="s">'img'</span><span class="p">,</span> <span class="s">'video'</span><span class="p">),</span> <span class="p">{</span><span class="s">'src'</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="s">'^http://.*?(</span><span class="se">\\</span><span class="s">.)(jpg|png|mp4)$'</span><span class="p">)})</span>
+<span class="n">sources</span> <span class="o">=</span> <span class="p">[</span><span class="n">tab</span><span class="p">[</span><span class="s">'src'</span><span class="p">]</span> <span class="k">for</span> <span class="n">tab</span> <span class="ow">in</span> <span class="n">tabs</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">sources</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">:</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">image_name</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'/'</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'./resources/</span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">image_name</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'Saved </span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">image_name</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="使用多进程">使用多进程</h3>
+
+<p>还是使用上面的例子</p>
+
+<p>使用多进程我们需要导入一个包<code class="highlighter-rouge">import multiprocessing as mp</code></p>
+
+<p><a href="https://docs.python.org/zh-cn/3/library/multiprocessing.html#module-multiprocessing"><code class="highlighter-rouge">multiprocessing</code></a> 包同时提供本地和远程并发，使用子进程代替线程，有效避免 <a href="https://docs.python.org/zh-cn/3/glossary.html#term-global-interpreter-lock">Global Interpreter Lock</a> 带来的影响。因此， <a href="https://docs.python.org/zh-cn/3/library/multiprocessing.html#module-multiprocessing"><code class="highlighter-rouge">multiprocessing</code></a> 模块允许程序员充分利用机器上的多个核心。Unix 和 Windows 上都可以运行。</p>
+
+<p>代码</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="n">mp</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+
+
+<span class="k">def</span> <span class="nf">crawl_html</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://www.ngchina.com.cn/'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+
+
+<span class="k">def</span> <span class="nf">parse_html</span><span class="p">(</span><span class="n">html_doc</span><span class="p">):</span>
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html_doc</span><span class="p">,</span> <span class="s">'lxml'</span><span class="p">)</span>
+    <span class="n">tabs</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">((</span><span class="s">'img'</span><span class="p">,</span> <span class="s">'video'</span><span class="p">),</span> <span class="p">{</span><span class="s">'src'</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="s">'^http://.*?(</span><span class="se">\\</span><span class="s">.)(jpg|png|mp4)$'</span><span class="p">)})</span>
+    <span class="n">sources</span> <span class="o">=</span> <span class="p">[</span><span class="n">tab</span><span class="p">[</span><span class="s">'src'</span><span class="p">]</span> <span class="k">for</span> <span class="n">tab</span> <span class="ow">in</span> <span class="n">tabs</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">sources</span>
+
+
+<span class="k">def</span> <span class="nf">download_photo</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">image_name</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'/'</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'./resources_distributed/</span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">image_name</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'Saved </span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">image_name</span><span class="p">)</span>
+
+
+<span class="n">urls</span> <span class="o">=</span> <span class="p">[</span><span class="s">'http://www.ngchina.com.cn/photography/photocontest/2019'</span><span class="p">,</span> <span class="s">'http://www.ngchina.com.cn/'</span><span class="p">,</span>
+        <span class="s">'http://www.ngchina.com.cn/index.php?m=content&amp;c=index&amp;a=show&amp;catid=667&amp;id=241694'</span><span class="p">,</span>
+        <span class="s">'http://www.ngchina.com.cn/index.php?m=content&amp;c=index&amp;a=lists&amp;catid=685'</span><span class="p">]</span>
+<span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">html_docs_jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">pool</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">crawl_html</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">url</span><span class="p">,))</span> <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">]</span>
+<span class="n">html_docs</span> <span class="o">=</span> <span class="p">[</span><span class="n">j</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">html_docs_jobs</span><span class="p">]</span>
+<span class="n">parse_htmls_jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">pool</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">parse_html</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">html_doc</span><span class="p">,))</span> <span class="k">for</span> <span class="n">html_doc</span> <span class="ow">in</span> <span class="n">html_docs</span><span class="p">]</span>
+<span class="n">sources</span> <span class="o">=</span> <span class="p">[</span><span class="n">j</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">parse_htmls_jobs</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">sources</span><span class="p">)</span>
+<span class="n">download_photo_jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">pool</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">download_photo</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">url</span><span class="p">,))</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+</code></pre></div></div>
+
+<h2 id="使用scrapy-玩爬虫">使用scrapy 玩爬虫</h2>
+
+<p><a href="https://scrapy.org/"><code class="highlighter-rouge">scrapy</code></a>  是一个完善的爬虫框架，它整合了爬取网页，数据处理，数据存储的一条龙服务。</p>
+
+<p>安装<code class="highlighter-rouge">pip install scrapy</code></p>
+
+<p>爬取我网站的url</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">scrapy</span>
+
+
+<span class="k">class</span> <span class="nc">DemoScrapy</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Spider</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">'demo'</span>
+    <span class="n">domain</span> <span class="o">=</span> <span class="s">'https://blog.luoren.top'</span>
+    <span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span><span class="s">'https://blog.luoren.top'</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="p">{</span>  <span class="c1"># return some results
+</span>            <span class="s">'title'</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s">'title::text'</span><span class="p">)</span><span class="o">.</span><span class="n">extract_first</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s">'Missing'</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'"'</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+            <span class="s">'url'</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">url</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">urls</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s">'a::attr(href)'</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>  <span class="c1"># find all sub urls
+</span>        <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">response</span><span class="o">.</span><span class="n">follow</span><span class="p">(</span><span class="n">DemoScrapy</span><span class="o">.</span><span class="n">domain</span> <span class="o">+</span> <span class="n">url</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parse</span><span class="p">)</span>
+            
+ <span class="c1"># scrapy runspider demo_scrapy.py -o res.json -s FEED_EXPORT_ENCODING=utf-8
+</span></code></pre></div></div>
+
+<p>效果图</p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20190920104448.png" alt="" /></p>
+
+<h2 id="end">end</h2>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <!-- <img src="http://noteimg.luoren.top/markdown_img/20190428084026.png" alt=""> -->
+        <img src="http://noteimg.luoren.top/markdown_img/20190428084026.png" alt="">
+      </div>
+      <div class="author-name" rel="author">REN</div>
+      <div class="bio">
+        <p>码农，JAVA程序员，爱下厨，假装热爱技术&生活稍微过过也能活下去，哪有那么多要求</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/lawren18" target="_blank">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="mailto:luoren96@gmail.com" target="_blank">
+            <i class="iconfont icon-email"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//twitter.com/kaiorren" target="_blank">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/luoren18" target="_blank">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/09/11/SpringBoot-Shiro-JWT.html" class="read-next-link"></a>
+        <section>
+          <span>SpringBoot+Shiro+JWT</span>
+          <p>之前的时间尝试过多次，搭建一个springBoot+shiro+JWT 的简单Demo 但是总是在过程中遇到一些问...</p>
+        </section>
+        
+        <div class="filter"></div>
+        <img src="http://noteimg.luoren.top/markdown_img/20190911142542.png" alt="">
+        
+      </div>
+      
+    </section>
+    
+  </section>
+
+  <footer class="g-footer">
+  <section>REN博客 ©
+  
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+      socialShare('.social-share', {
+        sites: [
+          
+            'wechat'
+            ,
+            
+          
+            'weibo'
+            ,
+            
+          
+            'douban'
+            ,
+            
+          
+            'twitter'
+            
+          
+        ],
+        wechatQrcodeTitle: "分享到微信朋友圈",
+        wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+      });
+    </script>
+
+  <!--  -->
+  
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+</body>
+
+</html>
