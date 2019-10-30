@@ -1,6 +1,18 @@
 [
   
     {
+      "title"    : "Docker 和 Kubernetes  试着学学",
+      "tags"     : "other",
+      "url"      : "/2019/10/30/Docker-%E5%92%8C-Kubernetes-%E8%AF%95%E7%9D%80%E5%AD%A6%E5%AD%A6.html"
+    } ,
+  
+    {
+      "title"    : "霜降",
+      "tags"     : "other",
+      "url"      : "/2019/10/24/%E9%9C%9C%E9%99%8D.html"
+    } ,
+  
+    {
       "title"    : "python 简单爬虫学习",
       "tags"     : "python",
       "url"      : "/2019/09/20/python-%E7%AE%80%E5%8D%95%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0.html"

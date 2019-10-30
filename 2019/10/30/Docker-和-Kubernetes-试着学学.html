@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker 和 Kubernetes  试着学学 - REN博客</title>
+    <meta name="author"  content="REN">
+    <meta name="description" content="Docker 和 Kubernetes  试着学学">
+    <meta name="keywords"  content="other">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Docker 和 Kubernetes  试着学学 - REN博客">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/10/30/Docker-%E5%92%8C-Kubernetes-%E8%AF%95%E7%9D%80%E5%AD%A6%E5%AD%A6.html">
+    <meta property="og:description" content="个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。">
+    <meta property="og:site_name" content="REN博客">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">home</a></li>
+            
+            <li><a href="/tags.html">tags</a></li>
+            
+            <li><a href="/rss.xml" target="_blank">RSS</a></li>
+            <li><a href="https://wangchujiang.com/linux-command/" target="_blank">COMMAND LINUX</a></li>
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-overlappingCircles bgcolor-default post-no-cover"
+    data-theme="default">
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+        
+        <a href=/tags.html#other class="post-tag">other</a>
+        
+        
+      </div>
+      <h1>Docker 和 Kubernetes  试着学学</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i
+            class="iconfont icon-author"></i>luoren</span>
+        <time class="post-meta-item" datetime="19-10-30"><i
+            class="iconfont icon-date"></i>30 Oct 2019</time>
+      </div>
+    </div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+    <h2 class="post-subtitle">Docker 和 Kubernetes</h2>
+    
+
+    <article class="markdown-body">
+      <h2 id="快速部署一个简单的docker-应用">快速部署一个简单的docker 应用</h2>
+
+<p>1.创建一个简单的html页面</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Title<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>Welcome to Docker!<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>2.创建一个Dockerfile</p>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">FROM</span><span class="s"> nginx #使用nginx作为基础镜像</span>
+<span class="k">COPY</span><span class="s"> html/* /usr/share/nginx/html #将当前html 文件夹下面的内容复制到/usr/share/nginx/html</span>
+</code></pre></div></div>
+
+<p>3.使用如下的目录结构</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker
+	|--html
+		|--index.html
+	|--Dockerfile
+</code></pre></div></div>
+
+<p>4.构建镜像并运行</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build <span class="nt">-t</span> docker-demo:0.1 <span class="nb">.</span> <span class="o">&amp;&amp;</span> docker run <span class="nt">-p</span> 8080:80 <span class="nt">--name</span> test-docker docker-demo:0.1 
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+docker-demo         0.1                 6d438fc13c32        6 minutes ago       126MB
+nginx               latest              540a289bab6c        6 days ago          126MB
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                  NAMES
+afb4ba793a81        6d438fc13c32        "nginx -g 'daemon of…"   5 minutes ago       Up 5 minutes        0.0.0.0:8080-&gt;80/tcp   cocky_lichterman
+</code></pre></div></div>
+
+<p>使用<code class="highlighter-rouge">docker images</code> 就可看到我们构建好的镜像，使用<code class="highlighter-rouge">docker ps </code>就可以看到容器已经在运行</p>
+
+<p>使用浏览器访问<code class="highlighter-rouge">localhost:8080</code> 就可以看到 <code class="highlighter-rouge">Welcome to Docker!</code>  的欢迎提示。</p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20191029110546.png" style="zoom:50%;" /></p>
+
+<h2 id="kubernetes-安装">Kubernetes 安装</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>brew <span class="nb">install </span>kubectl     <span class="c"># Kubernetes 的命令行客户端 kubctl</span>
+<span class="nv">$ </span>brew cask <span class="nb">install </span>minikube <span class="c"># 本地单节点的Kubernetes 环境</span>
+</code></pre></div></div>
+
+<p><a href="https://www.virtualbox.org/">安装VirtualBox</a>,作为虚拟引擎</p>
+
+<h3 id="使用minikube-安装-kubernetes">使用minikube 安装 kubernetes</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>minikube start --registry-mirror=https://registry.docker-cn.com
+
+😄  minikube v1.2.0 on linux (amd64)
+⚠️  Please don't run minikube as root or with 'sudo' privileges. It isn't necessary.
+✅  using image repository registry.cn-hangzhou.aliyuncs.com/google_containers
+🔥  Creating virtualbox VM (CPUs=2, Memory=2048MB, Disk=20000MB) ...
+🐳  Configuring environment for Kubernetes v1.15.0 on Docker 18.09.6
+🚜  Pulling images ...
+🚀  Launching Kubernetes ... 
+⌛  Verifying: apiserver proxy etcd scheduler controller dns
+🏄  Done! kubectl is now configured to use "minikube"
+</code></pre></div></div>
+
+<p>查看当前的 Kubernetes 环境</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl config current-context
+minikube
+</code></pre></div></div>
+
+<p>查看minikube 节点</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl get nodes
+NAME       STATUS   ROLES    AGE     VERSION
+minikube   Ready    master   4m20s   v1.15.0
+</code></pre></div></div>
+
+<h2 id="在minikube-上部署一个单实例服务">在minikube 上部署一个单实例服务</h2>
+
+<p>Kubernetes 中部署的最小单位是pod。一个pod可以包含一个或多个docker 容器。淡出了有紧密耦合的情况下，通常一个pod中只有一个容器，这样方便不同富区各自独自的扩展。</p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20191029151720.png" alt="" /></p>
+
+<p>Pod运行在Node 之上。Node是kubernetes中的一个工作机器，通常是一个虚拟机或者物理机。每个Node呗Master管理。一个节点能有多个Pod，同时Kubernetes master 在集群之上自动调度Pod.</p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20191029152341.png" style="zoom:80%;" /></p>
+
+<p>切换到minikube 的docker运行环境</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">eval</span> <span class="k">$(</span>minikube docker-env<span class="k">)</span>
+</code></pre></div></div>
+
+<p>此时使用<code class="highlighter-rouge">docker images</code> 就不会看到外部桌面环境docker 的image 了，列出来的是minikube 内部的docker image。</p>
+
+<p>构建镜像</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build <span class="nt">-t</span> k8s-demo:0.1 <span class="nb">.</span> 
+</code></pre></div></div>
+
+<p>然后创建一个pod.yml 的定义文件:</p>
+
+<p>这里定义了一个叫k8s-demo 的pod ，使用上面构建的 k8s-demo:0.1 镜像。同时放开容器的80 端口。</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Pod</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">k8s-demo</span>
+  <span class="na">labels</span><span class="pi">:</span>
+    <span class="na">app</span><span class="pi">:</span> <span class="s">k8s-demo</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">containers</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">k8s-demo</span>
+      <span class="na">image</span><span class="pi">:</span> <span class="s">k8s-demo:0.1</span>
+      <span class="na">ports</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">containerPort</span><span class="pi">:</span> <span class="s">80</span>
+</code></pre></div></div>
+
+<p>创建一个pod:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl create <span class="nt">-f</span> pod.yml 
+pod/k8s-demo created
+</code></pre></div></div>
+
+<p>因为pod 运行在node中，也就是相当于运行在内网中，无法直接从外部直接访问到，所以需要把服务暴露出来，我们需要创建一个Service,Service 的作用有点像建立了一个反向代理和负载均衡器，负责把请求分发给后面的 pod。</p>
+
+<p>创建一个service的定义文件 svc.yml</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Service</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">k8s-demo-svc</span>
+  <span class="na">labels</span><span class="pi">:</span>
+    <span class="na">app</span><span class="pi">:</span> <span class="s">k8s-demo</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">type</span><span class="pi">:</span> <span class="s">NodePort</span>
+  <span class="na">ports</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">port</span><span class="pi">:</span> <span class="s">80</span>
+      <span class="na">nodePort</span><span class="pi">:</span> <span class="s">30050</span>
+  <span class="na">selector</span><span class="pi">:</span>
+    <span class="na">app</span><span class="pi">:</span> <span class="s">k8s-demo</span>
+</code></pre></div></div>
+
+<p>创建这个service</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl create <span class="nt">-f</span> svc.yml 
+service/k8s-demo-svc created
+</code></pre></div></div>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20191029155153.png" style="zoom:67%;" /></p>
+
+<p>使用 <code class="highlighter-rouge">minikube service list</code> 可以列出所以service  可以看出k8s-demo-svc 暴露出来的url,访问该url，就能看到我们之前创建的网页了。</p>
+
+<h2 id="横向拓展滚动更新版本回滚">横向拓展、滚动更新、版本回滚</h2>
+
+<p>在正式环境中，我们需要让一个服务不受单个节点故障的影响，并且还需要根据负载变化动态调整节点的数量，所以不能逐个管理Pod 。Kubernetes的用户通常是用<strong><em>Deployment</em></strong> 来管理服务的。一个deployment 可以创建指定数量的pod部署到各个node上，并可完成更新、回滚等操作。</p>
+
+<p>创建一个定义文件 deployment.yml</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">extensions/v1beta1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Deployment</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">k8s-demo-deployment</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">replicas</span><span class="pi">:</span> <span class="s">10</span>
+  <span class="na">template</span><span class="pi">:</span>
+    <span class="na">metadata</span><span class="pi">:</span>
+      <span class="na">labels</span><span class="pi">:</span>
+        <span class="na">app</span><span class="pi">:</span> <span class="s">k8s-demo</span>
+    <span class="na">spec</span><span class="pi">:</span>
+      <span class="na">containers</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">k8s-demo-pod</span>
+          <span class="na">image</span><span class="pi">:</span> <span class="s">k8s-demo:0.1</span>
+          <span class="na">ports</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="na">containerPort</span><span class="pi">:</span> <span class="s">80</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">replicas: 10</code> 指定了这个deployment 要有10个pod。</p>
+
+<p>创建这个deployment ：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl create <span class="nt">-f</span> deployment.yml 
+deployment.extensions/k8s-demo-deployment created
+</code></pre></div></div>
+
+<p>查看这个deployment 的副本集</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl get rs
+NAME                             DESIRED   CURRENT   READY   AGE
+k8s-demo-deployment-696fc9dc4b   10        10        10      44s
+</code></pre></div></div>
+
+<p>修改html 文件的内容，重新构建镜像：</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>Welcome to Docker!<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;h2&gt;</span>Welcome to Docker!<span class="nt">&lt;/h2&gt;</span>
+    <span class="nt">&lt;h3&gt;</span>Welcome to Docker!<span class="nt">&lt;/h3&gt;</span>
+    <span class="nt">&lt;h4&gt;</span>Welcome to Docker!<span class="nt">&lt;/h4&gt;</span>
+    <span class="nt">&lt;h5&gt;</span>Welcome to Docker!<span class="nt">&lt;/h5&gt;</span>
+    <span class="nt">&lt;h6&gt;</span>Welcome to Docker!<span class="nt">&lt;/h6&gt;</span>
+  	<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"http://noteimg.luoren.top/markdown_img/20191029152341.png"</span> <span class="na">style=</span><span class="s">"zoom:80%;"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">docker build -t k8s-demo:0.2</code></p>
+
+<p>然后更新deployment.yml:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">extensions/v1beta1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Deployment</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">k8s-demo-deployment</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="c1"># 副本个数</span>
+  <span class="na">replicas</span><span class="pi">:</span> <span class="s">10</span>
+  <span class="c1"># 最小就绪秒</span>
+  <span class="na">minReadySeconds</span><span class="pi">:</span> <span class="s">10</span>
+  <span class="na">strategy</span><span class="pi">:</span>
+    <span class="c1"># 滚动更新</span>
+    <span class="na">type</span><span class="pi">:</span> <span class="s">RollingUpdate</span>
+    <span class="na">rollingUpdate</span><span class="pi">:</span>
+      <span class="c1"># 最大不可用</span>
+      <span class="na">maxUnavailable</span><span class="pi">:</span> <span class="s">1</span>
+      <span class="c1"># 最大多余的Pod</span>
+      <span class="na">maxSurge</span><span class="pi">:</span> <span class="s">1</span>
+  <span class="na">template</span><span class="pi">:</span>
+    <span class="na">metadata</span><span class="pi">:</span>
+      <span class="na">labels</span><span class="pi">:</span>
+        <span class="na">app</span><span class="pi">:</span> <span class="s">k8s-demo</span>
+    <span class="na">spec</span><span class="pi">:</span>
+      <span class="na">containers</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">k8s-demo-pod</span>
+          <span class="na">image</span><span class="pi">:</span> <span class="s">k8s-demo:0.2</span>
+          <span class="na">ports</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="na">containerPort</span><span class="pi">:</span> <span class="s">80</span>
+</code></pre></div></div>
+
+<p>版本更新</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl apply <span class="nt">-f</span> deployment.yml <span class="nt">--record</span><span class="o">=</span><span class="nb">true
+</span>deployment.extensions/k8s-demo-deployment configured
+</code></pre></div></div>
+
+<p>这里的 <code class="highlighter-rouge">--record=true</code> 让 Kubernetes 把这行命令记到发布历史中备查。</p>
+
+<p>版本回滚</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl rollout undo deployment k8s-demo-deployment <span class="nt">--to-revision</span><span class="o">=</span>1
+</code></pre></div></div>
+
+<p>查看发布的实时状态</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl rollout status deployment k8s-demo-deployment
+Waiting <span class="k">for </span>deployment <span class="s2">"k8s-demo-deployment"</span> rollout to finish: 6 out of 10 new replicas have been updated...
+Waiting <span class="k">for </span>deployment <span class="s2">"k8s-demo-deployment"</span> rollout to finish: 6 out of 10 new replicas have been updated...
+Waiting <span class="k">for </span>deployment <span class="s2">"k8s-demo-deployment"</span> rollout to finish: 6 out of 10 new replicas have been updated...
+Waiting <span class="k">for </span>deployment <span class="s2">"k8s-demo-deployment"</span> rollout to finish: 8 out of 10 new replicas have been updated...
+Waiting <span class="k">for </span>deployment <span class="s2">"k8s-demo-deployment"</span> rollout to finish: 8 out of 10 new replicas have been updated...
+Waiting <span class="k">for </span>deployment <span class="s2">"k8s-demo-deployment"</span> rollout to finish: 8 out of 10 new replicas have been updated...
+Waiting <span class="k">for </span>deployment <span class="s2">"k8s-demo-deployment"</span> rollout to finish: 8 out of 10 new replicas have been updated...
+Waiting <span class="k">for </span>deployment <span class="s2">"k8s-demo-deployment"</span> rollout to finish: 8 out of 10 new replicas have been updated...
+Waiting <span class="k">for </span>deployment <span class="s2">"k8s-demo-deployment"</span> rollout to finish: 1 old replicas are pending termination...
+Waiting <span class="k">for </span>deployment <span class="s2">"k8s-demo-deployment"</span> rollout to finish: 1 old replicas are pending termination...
+Waiting <span class="k">for </span>deployment <span class="s2">"k8s-demo-deployment"</span> rollout to finish: 1 old replicas are pending termination...
+Waiting <span class="k">for </span>deployment <span class="s2">"k8s-demo-deployment"</span> rollout to finish: 1 old replicas are pending termination...
+deployment <span class="s2">"k8s-demo-deployment"</span> successfully rolled out
+</code></pre></div></div>
+
+<h2 id="kubernetes-中poddeploymentreplicasetservice-之间关系分析">kubernetes 中，Pod、Deployment、ReplicaSet、Service 之间关系分析</h2>
+
+<p>首先一点，Pod 是kubernetes 的最小调度单位。</p>
+
+<p><code class="highlighter-rouge">kubectl describe pod pod-name</code>,可以用来查看pod 的详情</p>
+
+<p>选取我们本机一个pod ，查看他的详情，其中有一个关键信息是<code class="highlighter-rouge">Controlled By:  ReplicaSet/k8s-demo-deployment-854d54b68</code>,也就是说该pod是受控于 一个名字为 k8s-demo-deployment-854d54b68 的 <strong><em>ReplicaSet</em></strong>。所以可以得出结论是 ReplicaSet 是 是比Pod 高级别的用来管理 Pod 的组件。</p>
+
+<p>同样的，可以使用<code class="highlighter-rouge">kubectl describe rs rs-name</code> 查看 replicaSet 的详情</p>
+
+<p>同样的可以看见一条：<code class="highlighter-rouge">Controlled By:  Deployment/k8s-demo-deployment</code>，说明 ReplicaSet 是受高一级别的Deployment 管理的。</p>
+
+<p>同样的方法产看 deployment 的状态，发现在deployment 级别上，不在受其他组件的控制。</p>
+
+<p><strong><em>各个组件在干什么？</em></strong></p>
+
+<p>在详情信息中有关<strong>Events</strong>的信息</p>
+
+<p>pod: 可以看出pod中是对容器的操作。镜像的拉取，容器的创建和启动。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Events:
+  Type    Reason     Age   From               Message
+  <span class="nt">----</span>    <span class="nt">------</span>     <span class="nt">----</span>  <span class="nt">----</span>               <span class="nt">-------</span>
+  Normal  Scheduled  12m   default-scheduler  Successfully assigned default/k8s-demo-deployment-854d54b68-bzn48 to minikube
+  Normal  Pulled     12m   kubelet, minikube  Container image <span class="s2">"k8s-demo:0.4"</span> already present on machine
+  Normal  Created    12m   kubelet, minikube  Created container k8s-demo-pod
+  Normal  Started    12m   kubelet, minikube  Started container k8s-demo-pod
+</code></pre></div></div>
+
+<p>ReplicaSet:都是对 Pod 的操作。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Events:
+  Type    Reason            Age   From                   Message
+  <span class="nt">----</span>    <span class="nt">------</span>            <span class="nt">----</span>  <span class="nt">----</span>                   <span class="nt">-------</span>
+  Normal  SuccessfulCreate  30m   replicaset-controller  Created pod: k8s-demo-deployment-854d54b68-bzn48
+  Normal  SuccessfulCreate  30m   replicaset-controller  Created pod: k8s-demo-deployment-854d54b68-8bp6k
+  Normal  SuccessfulCreate  29m   replicaset-controller  Created pod: k8s-demo-deployment-854d54b68-8kr7p
+  Normal  SuccessfulCreate  29m   replicaset-controller  Created pod: k8s-demo-deployment-854d54b68-jtdjc
+  Normal  SuccessfulCreate  29m   replicaset-controller  Created pod: k8s-demo-deployment-854d54b68-bf2zg
+  Normal  SuccessfulCreate  29m   replicaset-controller  Created pod: k8s-demo-deployment-854d54b68-nshfj
+  Normal  SuccessfulCreate  29m   replicaset-controller  Created pod: k8s-demo-deployment-854d54b68-q8fds
+  Normal  SuccessfulCreate  29m   replicaset-controller  Created pod: k8s-demo-deployment-854d54b68-nr6gp
+  Normal  SuccessfulCreate  29m   replicaset-controller  Created pod: k8s-demo-deployment-854d54b68-7m5x5
+  Normal  SuccessfulCreate  29m   replicaset-controller  <span class="o">(</span>combined from similar events<span class="o">)</span>: Created pod: k8s-demo-deployment-854d54b68-bjs62
+</code></pre></div></div>
+
+<p>Deployment: 创建服务，滚动升级一个服务，或者是操作 RS 伸缩 Pod 集群</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Events:
+  Type    Reason             Age                 From                   Message
+  <span class="nt">----</span>    <span class="nt">------</span>             <span class="nt">----</span>                <span class="nt">----</span>                   <span class="nt">-------</span>
+  Normal  ScalingReplicaSet  42m                 deployment-controller  Scaled up replica <span class="nb">set </span>k8s-demo-deployment-5554dd9f7c to 1
+  Normal  ScalingReplicaSet  42m                 deployment-controller  Scaled down replica <span class="nb">set </span>k8s-demo-deployment-696fc9dc4b to 9
+  Normal  ScalingReplicaSet  42m                 deployment-controller  Scaled up replica <span class="nb">set </span>k8s-demo-deployment-5554dd9f7c to 2
+  Normal  ScalingReplicaSet  42m                 deployment-controller  Scaled down replica <span class="nb">set </span>k8s-demo-deployment-696fc9dc4b to 7
+  Normal  ScalingReplicaSet  42m                 deployment-controller  Scaled up replica <span class="nb">set </span>k8s-demo-deployment-5554dd9f7c to 4
+  Normal  ScalingReplicaSet  42m                 deployment-controller  Scaled down replica <span class="nb">set </span>k8s-demo-deployment-696fc9dc4b to 5
+  Normal  ScalingReplicaSet  42m                 deployment-controller  Scaled up replica <span class="nb">set </span>k8s-demo-deployment-5554dd9f7c to 6
+  Normal  ScalingReplicaSet  42m                 deployment-controller  Scaled down replica <span class="nb">set </span>k8s-demo-deployment-696fc9dc4b to 3
+  Normal  ScalingReplicaSet  42m                 deployment-controller  Scaled up replica <span class="nb">set </span>k8s-demo-deployment-5554dd9f7c to 8
+  Normal  ScalingReplicaSet  32m <span class="o">(</span>x17 over 42m<span class="o">)</span>  deployment-controller  <span class="o">(</span>combined from similar events<span class="o">)</span>: Scaled up replica <span class="nb">set </span>k8s-demo-deployment-854d54b68 to 1
+  Normal  ScalingReplicaSet  32m                 deployment-controller  Scaled down replica <span class="nb">set </span>k8s-demo-deployment-5554dd9f7c to 9
+</code></pre></div></div>
+
+<p><strong>结论：deploy控制RS，RS控制Pod，这一整套，向外提供稳定可靠的Service</strong></p>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20191030113207.png" alt="" /></p>
+
+<h2 id="end"><strong>End</strong></h2>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <!-- <img src="http://noteimg.luoren.top/markdown_img/20190428084026.png" alt=""> -->
+        <img src="http://noteimg.luoren.top/markdown_img/20190428084026.png" alt="">
+      </div>
+      <div class="author-name" rel="author">REN</div>
+      <div class="bio">
+        <p>码农，JAVA程序员，爱下厨，假装热爱技术&生活稍微过过也能活下去，哪有那么多要求</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/lawren18" target="_blank">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="mailto:luoren96@gmail.com" target="_blank">
+            <i class="iconfont icon-email"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//twitter.com/kaiorren" target="_blank">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/luoren18" target="_blank">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/10/24/%E9%9C%9C%E9%99%8D.html" class="read-next-link"></a>
+        <section>
+          <span>霜降</span>
+          <p></p>
+        </section>
+        
+      </div>
+      
+    </section>
+    
+  </section>
+
+  <footer class="g-footer">
+  <section>REN博客 ©
+  
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+      socialShare('.social-share', {
+        sites: [
+          
+            'wechat'
+            ,
+            
+          
+            'weibo'
+            ,
+            
+          
+            'douban'
+            ,
+            
+          
+            'twitter'
+            
+          
+        ],
+        wechatQrcodeTitle: "分享到微信朋友圈",
+        wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+      });
+    </script>
+
+  <!--  -->
+  
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+</body>
+
+</html>
