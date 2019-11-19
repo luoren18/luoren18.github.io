@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kubernetes - Pod - REN博客</title>
+    <meta name="author"  content="REN">
+    <meta name="description" content="Kubernetes - Pod">
+    <meta name="keywords"  content="other">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Kubernetes - Pod - REN博客">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/11/19/kubernetes-Pod.html">
+    <meta property="og:description" content="个人博客,REN博客,JAVA,PYTHON,JEKYLL,JAVA程序员,JAVA程序猿,后台开发。">
+    <meta property="og:site_name" content="REN博客">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">home</a></li>
+            
+            <li><a href="/tags.html">tags</a></li>
+            
+            <li><a href="/rss.xml" target="_blank">RSS</a></li>
+            <li><a href="https://wangchujiang.com/linux-command/" target="_blank">COMMAND LINUX</a></li>
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-overlappingCircles bgcolor-default "
+    data-theme="default">
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+        
+        <a href=/tags.html#other class="post-tag">other</a>
+        
+        
+      </div>
+      <h1>Kubernetes - Pod</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i
+            class="iconfont icon-author"></i>luoren</span>
+        <time class="post-meta-item" datetime="19-11-19"><i
+            class="iconfont icon-date"></i>19 Nov 2019</time>
+      </div>
+    </div>
+    
+    <div class="filter"></div>
+    <div class="post-cover" style="background: url('http://noteimg.luoren.top/markdown_img/20191119110905.png') center no-repeat; background-size: cover;"></div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+    <h2 class="post-subtitle">Pod</h2>
+    
+
+    <article class="markdown-body">
+      <h1 id="kubernetes--pod">Kubernetes -Pod</h1>
+
+<h2 id="pod-必须存在的属性">Pod 必须存在的属性</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数名</th>
+      <th>字段类型</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>必须存在的属性</strong></td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>version</td>
+      <td>String</td>
+      <td>这里指k8s api 的版本，可以通过 kubectl api-versions 查看</td>
+    </tr>
+    <tr>
+      <td>kind</td>
+      <td>String</td>
+      <td>这里指yaml定义的资源类型和角色，比如 Pod</td>
+    </tr>
+    <tr>
+      <td>metadata</td>
+      <td>obj</td>
+      <td>元数据对象</td>
+    </tr>
+    <tr>
+      <td>metadata.name</td>
+      <td>String</td>
+      <td>元数据对象的名字</td>
+    </tr>
+    <tr>
+      <td>metadata.namespace</td>
+      <td>String</td>
+      <td>元数据的命名空间</td>
+    </tr>
+    <tr>
+      <td>metadata.labels</td>
+      <td>String</td>
+      <td>pod的标签</td>
+    </tr>
+    <tr>
+      <td>metadata.labels.app</td>
+      <td>String</td>
+      <td>自定义名称</td>
+    </tr>
+    <tr>
+      <td>metadata.labels.version</td>
+      <td>String</td>
+      <td>版本</td>
+    </tr>
+    <tr>
+      <td>spec</td>
+      <td>obj</td>
+      <td>详细定义对象</td>
+    </tr>
+    <tr>
+      <td>spec.containers[]</td>
+      <td>list</td>
+      <td>spec对象容器列表定义</td>
+    </tr>
+    <tr>
+      <td>spec.containers[].name</td>
+      <td>String</td>
+      <td>定义容器的名字</td>
+    </tr>
+    <tr>
+      <td>spec.containers[].image</td>
+      <td>String</td>
+      <td>定义容器的镜像名字</td>
+    </tr>
+    <tr>
+      <td><strong>主要对象</strong></td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>spec.containers[].imagePullpoilcy</td>
+      <td>String</td>
+      <td>定义镜像的拉取策略。Always:每次都尝试在线上重新拉取；Never:表示且使用本地镜像；IfNotPresent:表示本地有就使用本地镜像，本地没有就从线上拉取。默认值为Always</td>
+    </tr>
+    <tr>
+      <td>spec.containers[].command[]</td>
+      <td>list</td>
+      <td>指定容器的启动命令</td>
+    </tr>
+    <tr>
+      <td>spec.containers[].args[]</td>
+      <td>list</td>
+      <td>指定启动命令参数</td>
+    </tr>
+    <tr>
+      <td>spec.containers[].workingDir</td>
+      <td>String</td>
+      <td>docker 工作目录</td>
+    </tr>
+    <tr>
+      <td>spec.containers[].ports[]</td>
+      <td>list</td>
+      <td>指定容器需要用的端口列表</td>
+    </tr>
+    <tr>
+      <td>spec.containers[].ports[].name</td>
+      <td>String</td>
+      <td>指定端口名称</td>
+    </tr>
+    <tr>
+      <td>spec.containers[].ports[].containerPort</td>
+      <td>String</td>
+      <td>指定容器需要监听的端口号</td>
+    </tr>
+    <tr>
+      <td>spec.containers[].ports[].hostPort</td>
+      <td>String</td>
+      <td>指定容器所在主机需要监听的端口号，默认和containerPort相同。设置了hostPort 同一台主机无法启动相同的副本（端口冲突）</td>
+    </tr>
+    <tr>
+      <td>spec.containers[].ports[].protocol</td>
+      <td>String</td>
+      <td>指定端口协议。TCP 和 UDP 默认TCP</td>
+    </tr>
+    <tr>
+      <td>spec.containers[].evn[]</td>
+      <td>list</td>
+      <td>指定当前容器运行需要设置的环境变量列表</td>
+    </tr>
+    <tr>
+      <td>spec.containers[].evn[].name</td>
+      <td>String</td>
+      <td>变量名称</td>
+    </tr>
+    <tr>
+      <td>spec.containers[].evn[].value</td>
+      <td>String</td>
+      <td>变量值</td>
+    </tr>
+    <tr>
+      <td>spec.containers[].resources</td>
+      <td>Object</td>
+      <td>指定资源限制和资源请求的值（这里开始就是设置容器的资源上限）</td>
+    </tr>
+    <tr>
+      <td>spec.containers[].resources.limit</td>
+      <td>Object</td>
+      <td>指定容器运行时资源上限</td>
+    </tr>
+    <tr>
+      <td>spec.containers[].resources.limit.cpu</td>
+      <td>String</td>
+      <td>设置cpu核心数上限</td>
+    </tr>
+    <tr>
+      <td>spec.containers[].resources.limit.memory</td>
+      <td>String</td>
+      <td>指定内存上限。单位MIB,GIB</td>
+    </tr>
+    <tr>
+      <td>spec.restartPolicy</td>
+      <td>String</td>
+      <td>重启策略。Always;onFailure;Never</td>
+    </tr>
+    <tr>
+      <td>spec.nodeSelector</td>
+      <td>String</td>
+      <td>定义Node的label过滤标签</td>
+    </tr>
+    <tr>
+      <td>spec.imagePullSecrets</td>
+      <td>String</td>
+      <td>定义pull image时使用的secret名称</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>kubectl  查看pod下 各个字段的配置详情  <code class="highlighter-rouge">kubectl explain pod</code>                 <code class="highlighter-rouge">kubectl explain pod.spec</code></p>
+
+<p><code class="highlighter-rouge">kubectl describe pod  podname</code>  查看pod的启动信息</p>
+
+<p><code class="highlighter-rouge">kubectl logs podname -c containerName</code> 可以查看容器的启动日志</p>
+
+<h2 id="pod的生命周期">Pod的生命周期</h2>
+
+<p><img src="http://noteimg.luoren.top/markdown_img/20191114164035.jpg" alt="" /></p>
+
+<h3 id="initcontainers">initContainers</h3>
+
+<p>Pod 能够具有多个容器，应用运行在容器里，但他也可能有一个或者多个先与应用容器启动的Init容器</p>
+
+<p>init容器和普通容器有两点不同：</p>
+
+<ul>
+  <li>
+    <p>Init 容器总是能运行到成功完成为止</p>
+  </li>
+  <li>每个Init 容器必须在下一个容器启动之前成功完成。</li>
+  <li>initContainers 具有 应用 Containers 的所有字段。除了 readiessProbe（就绪检测） ,因为Init 容器无法定义不同于完成（completion） 的就绪（readiness） 之外的其他状态。这会在验证过程中强制执行</li>
+  <li>在pod中每个APP和Init容器的名称必须是唯一的；不能与其他容器共享同一个名称，在验证时会报错</li>
+</ul>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Pod</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">init-containers</span>
+  <span class="na">labels</span><span class="pi">:</span>
+    <span class="na">app</span><span class="pi">:</span> <span class="s">my-init-containers</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">containers</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">main-c</span>
+      <span class="na">image</span><span class="pi">:</span> <span class="s">busybox</span>
+      <span class="na">imagePullPolicy</span><span class="pi">:</span> <span class="s">Never</span>
+      <span class="na">command</span><span class="pi">:</span> <span class="pi">[</span><span class="s1">'</span><span class="s">sh'</span><span class="pi">,</span><span class="s1">'</span><span class="s">-c'</span><span class="pi">,</span><span class="s1">'</span><span class="s">echo</span><span class="nv"> </span><span class="s">The</span><span class="nv"> </span><span class="s">app</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">running!</span><span class="nv"> </span><span class="s">&amp;&amp;</span><span class="nv"> </span><span class="s">sleep</span><span class="nv"> </span><span class="s">3600'</span><span class="pi">]</span>
+  <span class="na">initContainers</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">init-service</span>
+      <span class="na">image</span><span class="pi">:</span> <span class="s">busybox</span>
+      <span class="na">imagePullPolicy</span><span class="pi">:</span> <span class="s">Never</span>
+      <span class="na">command</span><span class="pi">:</span> <span class="pi">[</span><span class="s1">'</span><span class="s">sh'</span><span class="pi">,</span> <span class="s1">'</span><span class="s">-c'</span><span class="pi">,</span> <span class="s1">'</span><span class="s">until</span><span class="nv"> </span><span class="s">nslookup</span><span class="nv"> </span><span class="s">myservice;</span><span class="nv"> </span><span class="s">do</span><span class="nv"> </span><span class="s">echo</span><span class="nv"> </span><span class="s">waiting</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">myservice;</span><span class="nv"> </span><span class="s">sleep</span><span class="nv"> </span><span class="s">2;</span><span class="nv"> </span><span class="s">done;'</span><span class="pi">]</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">init-db</span>
+      <span class="na">image</span><span class="pi">:</span> <span class="s">busybox</span>
+      <span class="na">command</span><span class="pi">:</span> <span class="pi">[</span><span class="s1">'</span><span class="s">sh'</span><span class="pi">,</span> <span class="s1">'</span><span class="s">-c'</span><span class="pi">,</span> <span class="s1">'</span><span class="s">until</span><span class="nv"> </span><span class="s">nslookup</span><span class="nv"> </span><span class="s">mydb;</span><span class="nv"> </span><span class="s">do</span><span class="nv"> </span><span class="s">echo</span><span class="nv"> </span><span class="s">waiting</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">mydb;</span><span class="nv"> </span><span class="s">sleep</span><span class="nv"> </span><span class="s">2;</span><span class="nv"> </span><span class="s">done;'</span><span class="pi">]</span>
+</code></pre></div></div>
+
+<h3 id="检测探针--就绪检测">检测探针 -就绪检测</h3>
+
+<h4 id="readinessprobe-httpget">readinessProbe-httpget</h4>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Pod</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">readiness-httpget-pod</span>
+  <span class="na">namespace</span><span class="pi">:</span> <span class="s">default</span>
+  <span class="na">labels</span><span class="pi">:</span>
+    <span class="na">app</span><span class="pi">:</span> <span class="s">nginx-demo</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">containers</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">readiness-httpget-containers</span>
+      <span class="na">image</span><span class="pi">:</span> <span class="s">luoren96/nginx-demo:0.1</span>
+      <span class="na">imagePullPolicy</span><span class="pi">:</span> <span class="s">Never</span>
+      <span class="na">readinessProbe</span><span class="pi">:</span>
+        <span class="na">httpGet</span><span class="pi">:</span>
+          <span class="na">port</span><span class="pi">:</span> <span class="s">80</span>
+          <span class="na">path</span><span class="pi">:</span> <span class="s">/index2.html</span>
+        <span class="na">initialDelaySeconds</span><span class="pi">:</span> <span class="s">1</span>  <span class="c1">#initialDelaySeconds 告诉kubelet在第一次执行probe之前要的等待5秒钟</span>
+        <span class="na">periodSeconds</span><span class="pi">:</span> <span class="s">3</span>  <span class="c1">#periodSeconds 规定kubelet要每隔5秒执行一次readiness probe。</span>
+</code></pre></div></div>
+
+<p>通过http-get 的方式请求loaclhost:80/index2.html  如果请求成功则表示就绪</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$kubernetes chenyuliao$ kubectl get pods
+NAME                    READY   STATUS    RESTARTS   AGE
+init-containers         1/1     Running   2          3h45m
+readiness-httpget-pod   1/1     Running   0          3m54s
+</code></pre></div></div>
+
+<h3 id="检测探针-存活检测">检测探针-存活检测</h3>
+
+<h4 id="livenessprobe-exec">livenessProbe-exec</h4>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">kind</span><span class="pi">:</span> <span class="s">Pod</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">liveness-exec-pod</span>
+  <span class="na">namespace</span><span class="pi">:</span> <span class="s">default</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">containers</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">liveness-exec-container</span>
+      <span class="na">imagePullPolicy</span><span class="pi">:</span> <span class="s">IfNotPresent</span>
+      <span class="na">image</span><span class="pi">:</span> <span class="s">luoren96/busybox:1.0</span>
+      <span class="na">args</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">/bin/sh</span>
+        <span class="pi">-</span> <span class="s">-c</span>
+        <span class="pi">-</span> <span class="s">touch /tmp/healthy; sleep 30; rm -rf /tmp/healthy; sleep 600</span>
+      <span class="na">livenessProbe</span><span class="pi">:</span>
+        <span class="na">exec</span><span class="pi">:</span>
+          <span class="na">command</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="s">cat</span>
+            <span class="pi">-</span> <span class="s">/tmp/healthy</span>
+        <span class="na">initialDelaySeconds</span><span class="pi">:</span> <span class="s">5</span>
+        <span class="na">periodSeconds</span><span class="pi">:</span> <span class="s">5</span>
+</code></pre></div></div>
+
+<p>在mainC 运行的过程中 检测<code class="highlighter-rouge"> /tmp/healthy</code>  是否存在，而mainC 在创建这个文件30秒后就将这个文件删除，</p>
+
+<p>所以生存检测返回非0值，kubelet就会杀掉这个容器并重启它。</p>
+
+<div class="language-tex highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Events:
+  Type     Reason     Age                    From               Message
+  ----     ------     ----                   ----               -------
+  Normal   Scheduled  7m37s                  default-scheduler  Successfully assigned default/liveness-exec-pod to minikube
+  Normal   Pulling    7m36s                  kubelet, minikube  Pulling image "luoren96/busybox:1.0"
+  Normal   Pulled     7m15s                  kubelet, minikube  Successfully pulled image "luoren96/busybox:1.0"
+  Warning  Unhealthy  4m3s (x9 over 6m43s)   kubelet, minikube  Liveness probe failed: cat: can't open '/tmp/healthy': No such file or directory
+  Normal   Killing    4m3s (x3 over 6m33s)   kubelet, minikube  Container liveness-exec-container failed liveness probe, will be restarted
+  Normal   Created    3m33s (x4 over 7m15s)  kubelet, minikube  Created container liveness-exec-container
+  Normal   Started    3m33s (x4 over 7m15s)  kubelet, minikube  Started container liveness-exec-container
+  Normal   Pulled     2m18s (x4 over 6m3s)   kubelet, minikube  Container image "luoren96/busybox:1.0" already present on machine
+
+</code></pre></div></div>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl get pods
+NAME                    READY   STATUS             RESTARTS   AGE
+init-containers         1/1     Running            3          4h20m
+liveness-exec-pod       0/1     CrashLoopBackOff   5          8m11s
+readiness-httpget-pod   1/1     Running            0          39m
+</code></pre></div></div>
+
+<h4 id="tcp-方式">Tcp 方式</h4>
+
+<p>检测端口是否是通的</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">livenessProbe</span><span class="pi">:</span>
+   <span class="na">tcpSocket</span><span class="pi">:</span>
+       <span class="na">port</span><span class="pi">:</span> <span class="s">8080</span>
+</code></pre></div></div>
+
+<h3 id="启动和退出动作">启动和退出动作</h3>
+
+<p>在容器启动和结束时执行的操作</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">kind</span><span class="pi">:</span> <span class="s">Pod</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">lifecycle-demo</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">containers</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">lifecycle-demo-container</span>
+      <span class="na">image</span><span class="pi">:</span> <span class="s">luoren96/nginx-demo:0.1</span>
+      <span class="na">lifecycle</span><span class="pi">:</span>
+        <span class="na">postStart</span><span class="pi">:</span>
+          <span class="na">exec</span><span class="pi">:</span>
+            <span class="na">command</span><span class="pi">:</span>
+              <span class="pi">-</span> <span class="s">/bin/sh</span>
+              <span class="pi">-</span> <span class="s">-c</span>
+              <span class="pi">-</span> <span class="s">echo Hello from the postStart handler &gt; /usr/share/nginx/html/message.html</span>
+        <span class="na">preStop</span><span class="pi">:</span>
+          <span class="na">exec</span><span class="pi">:</span>
+            <span class="na">command</span><span class="pi">:</span>
+              <span class="pi">-</span> <span class="s">/usr/sbin/nginx</span>
+              <span class="pi">-</span> <span class="s">-s</span>
+              <span class="pi">-</span> <span class="s">quit</span>
+
+</code></pre></div></div>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <!-- <img src="http://noteimg.luoren.top/markdown_img/20190428084026.png" alt=""> -->
+        <img src="http://noteimg.luoren.top/markdown_img/20190428084026.png" alt="">
+      </div>
+      <div class="author-name" rel="author">REN</div>
+      <div class="bio">
+        <p>码农，JAVA程序员，爱下厨，假装热爱技术&生活稍微过过也能活下去，哪有那么多要求</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/lawren18" target="_blank">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="mailto:luoren96@gmail.com" target="_blank">
+            <i class="iconfont icon-email"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//twitter.com/kaiorren" target="_blank">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/luoren18" target="_blank">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/10/30/Docker-%E5%92%8C-Kubernetes-%E8%AF%95%E7%9D%80%E5%AD%A6%E5%AD%A6.html" class="read-next-link"></a>
+        <section>
+          <span>Docker 和 Kubernetes  试着学学</span>
+          <p>快速部署一个简单的docker 应用</p>
+        </section>
+        
+        <div class="filter"></div>
+        <img src="http://noteimg.luoren.top/markdown_img/20191030115313.png" alt="">
+        
+      </div>
+      
+    </section>
+    
+  </section>
+
+  <footer class="g-footer">
+  <section>REN博客 ©
+  
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+      socialShare('.social-share', {
+        sites: [
+          
+            'wechat'
+            ,
+            
+          
+            'weibo'
+            ,
+            
+          
+            'douban'
+            ,
+            
+          
+            'twitter'
+            
+          
+        ],
+        wechatQrcodeTitle: "分享到微信朋友圈",
+        wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+      });
+    </script>
+
+  <!--  -->
+  
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+</body>
+
+</html>
